@@ -23,6 +23,9 @@ public class CmdTool {
                 sb.append(i);
                 sb.append("/:/");
                 sb.append(f.getName());
+                sb.append(" ");
+                sb.append(f.length() / 1024f / 1024f);
+                sb.append("MB");
                 sb.append("\n");
                 i++;
             }
