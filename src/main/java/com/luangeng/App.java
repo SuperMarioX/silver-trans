@@ -14,7 +14,5 @@ public class App {
         } else if (mode.equals("client")) {
             TransClient.start();
         }
-
-        System.out.println("Hello World!");
     }
 }

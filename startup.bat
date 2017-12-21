@@ -1,0 +1,1 @@
+java -jar silver-trans-1.0-SNAPSHOT.jar

@@ -1,5 +1,6 @@
 package com.luangeng;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -9,9 +10,9 @@ import java.util.Properties;
  */
 public class AppConfig {
 
-    //private static final String CONFIG_PATH = System.getProperty("user.dir") + File.separator + "config" + File.separator + "app.properties";
+    private static final String CONFIG_PATH = System.getProperty("user.dir") + File.separator + "config" + File.separator + "app.properties";
 
-    private static final String CONFIG_PATH = "/Users/LG/Dev/workshop/wifitrans/src/main/resources/app.properties";
+    //private static final String CONFIG_PATH = "/Users/LG/Dev/silver-trans/src/main/resources/app.properties";
 
     private static Properties ppt = new Properties();
 

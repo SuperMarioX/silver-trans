@@ -23,9 +23,8 @@ public class CmdTool {
                 sb.append(i);
                 sb.append("/:/");
                 sb.append(f.getName());
-                sb.append(" ");
-                sb.append(f.length() / 1024f / 1024f);
-                sb.append("MB");
+                sb.append("/:/");
+                sb.append(size(f.length()));
                 sb.append("\n");
                 i++;
             }
@@ -34,8 +33,9 @@ public class CmdTool {
     }
 
     public static String getCmd(ByteBuf data) {
+
         StringBuilder sb = new StringBuilder();
-        int length = Math.min(100, data.readableBytes());
+        int length = Math.min(50, data.readableBytes());
         for (int i = 0; i < length; i++) {
             byte b = data.getByte(i);
             sb.append((char) b);
@@ -56,8 +56,13 @@ public class CmdTool {
     public static String getMsg(ByteBuf bf) {
         CharBuffer cb = CHARSET.decode(bf.nioBuffer());
         return cb.toString().trim();
-//        byte[] request = new byte[data.readableBytes()];
-//        data.readBytes(request);
-//        System.out.println(request);;
+    }
+
+    private static String size(long num) {
+        long m = 1 << 20;
+        if (num / m == 0) {
+            return (num / 1024) + "KB";
+        }
+        return num / m + "MB";
     }
 }

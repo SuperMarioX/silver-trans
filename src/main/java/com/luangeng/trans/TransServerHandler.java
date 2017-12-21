@@ -12,12 +12,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.TimeUnit;
 
 public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     private String path = AppConfig.getValue("server.path");
 
     public static void sent(Channel channel, String name, String filePath) throws Exception {
+        String delays = AppConfig.getValue("server.delay");
+        int delay = Integer.valueOf(delays);
         File f = new File(filePath);
         if (f.isFile() && f.canRead()) {
             CmdTool.sendMsg(channel, "begin " + f.getName() + "/:/" + f.length());
@@ -25,15 +28,15 @@ public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
             FileInputStream in = new FileInputStream(f);
             FileChannel ch = in.getChannel();
-            ByteBuffer bf = ByteBuffer.allocate(10240);
+            ByteBuffer bf = ByteBuffer.allocate(40960);
 
             while (ch.read(bf) != -1) {
                 bf.flip();
-                ByteBuf nbf = Unpooled.copiedBuffer(bf);
+                ByteBuf nbf = Unpooled.wrappedBuffer(bf);
                 channel.writeAndFlush(nbf);
                 bf.clear();
                 nbf.clear();
-                Thread.sleep(5);
+                TimeUnit.MILLISECONDS.sleep(delay);
             }
 
             in.close();
