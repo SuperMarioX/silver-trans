@@ -19,6 +19,8 @@ public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
     private String path = AppConfig.getValue("server.path");
 
     private File f = new File(path);
+    static int k=0;
+    static long co = 0;
 
     public static void sent(Channel channel, String name, String filePath) throws Exception {
         String delays = AppConfig.getValue("server.delay");
@@ -37,9 +39,12 @@ public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
                 ByteBuf nbf = Unpooled.wrappedBuffer(bf);
                 channel.writeAndFlush(nbf);
                 bf.clear();
+                co+= bf.capacity();
                 nbf.clear();
                 TimeUnit.MILLISECONDS.sleep(delay);
+                System.out.println(k+++ "   ");
             }
+            System.out.println(co+"byte");
 
             in.close();
             CmdTool.sendMsg(channel, "end");
