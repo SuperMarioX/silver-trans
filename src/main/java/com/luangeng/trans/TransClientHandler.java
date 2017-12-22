@@ -28,6 +28,9 @@ public class TransClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     private String msg;
     private long t1;
 
+    int count = 0;
+    long lasttime = 0;
+
     public static String getName(int i) {
         return map.get(Integer.valueOf(i));
     }
@@ -39,7 +42,8 @@ public class TransClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf data) throws Exception {
-
+        long tt1 = System.currentTimeMillis();
+        System.err.println("from last " + (tt1 - lasttime));
         String cmd = CmdTool.getCmd(data);
 
         if (cmd.startsWith("begin ")) {
@@ -67,7 +71,10 @@ public class TransClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
             now += data.readableBytes();
             printProcess();
         }
+        long tt2 = System.currentTimeMillis();
+        System.out.println("Cost " + count++ + " of " + (tt2 - tt1));
 
+        lasttime = tt2;
     }
 
     private void clear() throws IOException {
