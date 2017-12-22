@@ -11,6 +11,7 @@ logs/
 out/
 target/
 temp/
+download/
 .settings/
 
 .classpath

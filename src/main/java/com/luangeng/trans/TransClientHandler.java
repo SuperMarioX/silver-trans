@@ -39,13 +39,16 @@ public class TransClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf data) throws Exception {
-
+//    	System.out.println("capacity"+data.capacity());
+//    	System.out.println("readableBytes"+data.readableBytes());
+//    	System.out.println("maxCapacity"+data.maxCapacity());
         String cmd = CmdTool.getCmd(data);
 
         if (cmd.startsWith("begin ")) {
             String[] ss = CmdTool.getMsg(data).substring(6).trim().split("/:/");
             name = ss[0].trim();
             length = Long.valueOf(ss[1].trim());
+            new File(path).mkdirs();
             File f = new File(path + File.separator + name);
             if (f.exists()) {
                 f.delete();
