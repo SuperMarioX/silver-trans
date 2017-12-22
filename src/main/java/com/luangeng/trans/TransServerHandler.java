@@ -18,6 +18,8 @@ public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     private String path = AppConfig.getValue("server.path");
 
+    private File f = new File(path);
+
     public static void sent(Channel channel, String name, String filePath) throws Exception {
         String delays = AppConfig.getValue("server.delay");
         int delay = Integer.valueOf(delays);
@@ -52,7 +54,22 @@ public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
         if (cmd.equalsIgnoreCase("ls")) {
             CmdTool.sendMsg(ctx, "ls " + CmdTool.ls(path));
         } else if (cmd.startsWith("cd ")) {
-            //System.out.println("cd");
+            String dir = cmd.substring(3).trim();
+            if (dir.equals("..")) {
+                f = f.getParentFile();
+                path = f.getCanonicalPath();
+                CmdTool.sendMsg(ctx, "msg new path " + path);
+            } else {
+                String path1 = path + File.separator + dir;
+                File f1 = new File(path1);
+                if (f1.exists()) {
+                    path = path1;
+                    f = f1;
+                    CmdTool.sendMsg(ctx, "msg new path " + path);
+                } else {
+                    CmdTool.sendMsg(ctx, "msg error, path not found");
+                }
+            }
         } else if (cmd.startsWith("get ")) {
             String name = cmd.substring(4);
             sent(ctx.channel(), name, path + File.separator + name);

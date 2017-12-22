@@ -43,13 +43,14 @@ public class TransClient {
                 String cmd = sc.nextLine().trim();
                 if (cmd.equalsIgnoreCase("exit")) {
                     return;
-                }
-                if (cmd.startsWith("get ")) {
+                } else if (cmd.startsWith("get ")) {
                     int i = Integer.valueOf(cmd.substring(4).trim());
                     cmd = "get " + TransClientHandler.getName(i);
+                } else if (cmd.startsWith("cd ")) {
+                    int i = Integer.valueOf(cmd.substring(3).trim());
+                    cmd = "cd " + TransClientHandler.getName(i);
                 }
                 CmdTool.sendMsg(f.channel(), cmd);
-                System.out.println(cmd);
             }
 
             //f.channel().closeFuture().sync();

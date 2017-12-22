@@ -15,18 +15,29 @@ public class CmdTool {
     private static final Charset CHARSET = Charset.forName("UTF8");
 
     public static String ls(String path) {
-        int i = 0;
+        int k = 0;
         StringBuilder sb = new StringBuilder();
         File file = new File(path);
         for (File f : file.listFiles()) {
-            if (f.isFile()) {
-                sb.append(i);
+            if (f.isDirectory()) {
+                sb.append(k);
+                sb.append("/:/");
+                sb.append("目录");
                 sb.append("/:/");
                 sb.append(f.getName());
+                sb.append("\n");
+                k++;
+            }
+        }
+        for (File f : file.listFiles()) {
+            if (f.isFile()) {
+                sb.append(k);
                 sb.append("/:/");
                 sb.append(size(f.length()));
+                sb.append("/:/");
+                sb.append(f.getName());
                 sb.append("\n");
-                i++;
+                k++;
             }
         }
         return sb.toString();

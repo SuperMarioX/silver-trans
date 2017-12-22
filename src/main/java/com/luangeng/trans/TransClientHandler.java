@@ -89,7 +89,7 @@ public class TransClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
             String[] dd = p.split("/:/");
             if (dd.length == 3) {
                 System.out.println(dd[0] + " " + dd[1] + " " + dd[2]);
-                map.put(Integer.valueOf(dd[0].trim()), dd[1].trim());
+                map.put(Integer.valueOf(dd[0].trim()), dd[2].trim());
             }
         }
     }
