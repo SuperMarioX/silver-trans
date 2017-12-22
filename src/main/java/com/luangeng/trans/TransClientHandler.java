@@ -43,7 +43,7 @@ public class TransClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf data) throws Exception {
         long tt1 = System.currentTimeMillis();
-        System.err.println("from last " + (tt1 - lasttime));
+
         String cmd = CmdTool.getCmd(data);
 
         if (cmd.startsWith("begin ")) {
@@ -72,8 +72,7 @@ public class TransClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
             printProcess();
         }
         long tt2 = System.currentTimeMillis();
-        System.out.println("Cost " + count++ + " of " + (tt2 - tt1));
-
+        System.err.println(count++ + " cost " + (tt2 - tt1) + "    delay " + (tt1 - lasttime));
         lasttime = tt2;
     }
 
