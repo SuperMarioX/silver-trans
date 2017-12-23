@@ -1,6 +1,5 @@
 package com.luangeng.trans;
 
-import com.luangeng.support.IndexGenerater;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -35,7 +34,7 @@ public class TransServer extends Thread {
                     ChannelPipeline pipeline = ch.pipeline();
                     pipeline.addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4));
                     pipeline.addLast(new LengthFieldPrepender(4));
-                    pipeline.addLast(new OrderEncoder(IndexGenerater.instance()));
+                    //pipeline.addLast(new OrderEncoder(IndexGenerater.instance()));
                     pipeline.addLast(new TransServerHandler());
                 }
             });

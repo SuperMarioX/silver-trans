@@ -20,6 +20,6 @@ public class IndexGenerater {
     }
 
     public void reset() {
-        index.set(1);
+        index.set(0);
     }
 }

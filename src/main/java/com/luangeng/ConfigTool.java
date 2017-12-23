@@ -45,5 +45,10 @@ public class ConfigTool {
         return null;
     }
 
+    public static int getInt(String key) {
+        String s = getValue(key);
+        return Integer.valueOf(s);
+    }
+
 
 }

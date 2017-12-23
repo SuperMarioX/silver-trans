@@ -17,6 +17,7 @@ public class Receiver {
 
     private String path = System.getProperty("user.dir") + File.separator + "download";
     private String name;
+    private long nowsize = 0;
     private long length = 0;
     private int index = 0;
     private FileOutputStream out;
@@ -31,27 +32,6 @@ public class Receiver {
         return instance;
     }
 
-    private Thread t = new Thread() {
-        public void run() {
-            try {
-                while (true) {
-                    ByteBuf bfn = queue.offer(index++).getBf();
-                    if (bfn.capacity() == 0) {
-                        //
-                        clear();
-                        return;
-                    }
-                    ByteBuffer bf = bfn.nioBuffer();
-                    ch.write(bf);
-                    //index += data.readableBytes();
-                    printProcess();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
     public void init(String msg) throws FileNotFoundException {
         String[] ss = msg.substring(6).trim().split("/:/");
         name = ss[0].trim();
@@ -63,8 +43,9 @@ public class Receiver {
         }
         out = new FileOutputStream(f);
         ch = out.getChannel();
-        //t.start();
-
+        queue.clear();
+        new MyThread().start();
+        index = 0;
     }
 
     public void clear() throws IOException {
@@ -75,13 +56,35 @@ public class Receiver {
         index = 0;
         msg = "";
         length = 0;
+        nowsize = 0;
     }
 
     private void printProcess() {
-        String process = index * 100 / length + "%";
+        String process = nowsize * 100 / length + "%";
         if (!process.equals(msg)) {
             System.out.println(process);
             msg = process;
+        }
+    }
+
+    private class MyThread extends Thread {
+        public void run() {
+            try {
+                while (true) {
+                    ByteBuf bfn = queue.offer(index++).getBf();
+                    printProcess();
+                    nowsize += bfn.readableBytes();
+                    if (bfn.readableBytes() == 0) {
+                        clear();
+                        return;
+                    }
+                    ByteBuffer bf = bfn.nioBuffer();
+                    ch.write(bf);
+                    bfn.release();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

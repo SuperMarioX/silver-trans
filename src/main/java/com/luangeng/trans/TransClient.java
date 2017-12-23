@@ -1,6 +1,7 @@
 package com.luangeng.trans;
 
 import com.luangeng.CmdTool;
+import com.luangeng.ConfigTool;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -39,7 +40,8 @@ public class TransClient {
                 bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
 
                 //ChannelFuture f
-                for (int k = 0; k < 1; k++) {
+                int count = ConfigTool.getInt("connection.count");
+                for (int k = 0; k < count; k++) {
                     Channel c = bootstrap.connect(ip, port).sync().channel();
                     channels.add(c);
                 }

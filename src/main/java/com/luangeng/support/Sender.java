@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Sender {
@@ -19,7 +20,6 @@ public class Sender {
     FileChannel ch;
     ByteBuffer bf;
 
-    private static int i = 0;
     private ReentrantLock lock = new ReentrantLock();
 
     private Sender() {
@@ -42,16 +42,25 @@ public class Sender {
 
     public void send(Channel channel) throws IOException {
         lock.lock();
-        bf.clear();
-        if (ch.read(bf) != -1) {
-            bf.flip();
-            ByteBuf nbf = Unpooled.wrappedBuffer(bf);
-            channel.writeAndFlush(nbf);
-            nbf.clear();
-            i++;
-            System.out.println("send:" + i);
+        try {
+            bf.clear();
+            if (ch.read(bf) != -1) {
+                while (!channel.isWritable()) {
+                    TimeUnit.MILLISECONDS.sleep(10);
+                }
+                bf.flip();
+                ByteBuf nbf = Unpooled.wrappedBuffer(Unpooled.copyInt(IndexGenerater.instance().get()).nioBuffer(), bf);
+                channel.writeAndFlush(nbf);
+                //nbf.release();
+            } else {
+                channel.writeAndFlush(Unpooled.wrappedBuffer(Unpooled.copyInt(IndexGenerater.instance().get())));
+                IndexGenerater.instance().reset();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
         }
-        lock.unlock();
     }
 
 

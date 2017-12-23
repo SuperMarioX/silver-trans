@@ -53,4 +53,9 @@ public class SortedBlockingQueue {
     public int size() {
         return count.get();
     }
+
+    public void clear() {
+        list.clear();
+        count.set(0);
+    }
 }
