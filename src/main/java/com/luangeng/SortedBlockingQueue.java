@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.LinkedList;
 
-public class SortedQueue extends LinkedList<ByteBuf> {
+public class SortedBlockingQueue extends LinkedList<ByteBuf> {
 
     public void put(ByteBuf bf) {
         //super.
