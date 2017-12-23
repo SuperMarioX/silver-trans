@@ -34,7 +34,7 @@ public class Sender {
         if (f.exists() && f.isFile() && f.canRead()) {
             in = new FileInputStream(f);
             ch = in.getChannel();
-            bf = ByteBuffer.allocate(4096);
+            bf = ByteBuffer.allocate(40960);
             return;
         }
         throw new Exception("file can not read.");

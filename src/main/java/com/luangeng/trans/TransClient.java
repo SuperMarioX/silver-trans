@@ -31,7 +31,7 @@ public class TransClient {
                     protected void initChannel(Channel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addLast(new OrderDecoder(65535, 4));
-                        //                  pipeline.addLast(new LengthFieldBasedFrameDecoder(65535,0,4,0,4));
+                        //pipeline.addLast(new LengthFieldBasedFrameDecoder(65535,0,4,0,4));
                         pipeline.addLast(new LengthFieldPrepender(4));
                         pipeline.addLast(new TransClientHandler());
                     }
