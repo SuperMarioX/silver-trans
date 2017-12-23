@@ -1,18 +1,24 @@
 package com.luangeng;
 
-import com.luangeng.trans.TransClient;
-import com.luangeng.trans.TransServer;
+import com.luangeng.cmd.CmdClient;
+import com.luangeng.cmd.CmdServer;
 
 /**
  * Hello world!
  */
 public class App {
     public static void main(String[] args) {
+
+        String ip = AppConfig.getValue("server.ip");
+        int port = Integer.valueOf(AppConfig.getValue("server.port"));
+
         String mode = AppConfig.getValue("mode");
         if (mode.equals("server")) {
-            TransServer.start();
+            new CmdServer(port).start();
+            //TransServer.start();
         } else if (mode.equals("client")) {
-            TransClient.start();
+            new CmdClient(ip, port).start();
+            //TransClient.start();
         }
     }
 }

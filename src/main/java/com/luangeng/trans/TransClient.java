@@ -1,24 +1,26 @@
 package com.luangeng.trans;
 
-import com.luangeng.AppConfig;
-import com.luangeng.CmdTool;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.LengthFieldPrepender;
-
-import java.util.Scanner;
+import io.netty.handler.codec.FixedLengthFrameDecoder;
 
 /**
  * Created by LG on 2017/9/30.
  */
-public class TransClient {
+public class TransClient extends Thread {
 
-    public static final void start() {
-        String HOST = AppConfig.getValue("server.ip");
-        int PORT = Integer.valueOf(AppConfig.getValue("server.port"));
+    private String ip;
+    private int port;
+
+    TransClient(String ip, int port) {
+        this.ip = ip;
+        this.port = port;
+    }
+
+    @Override
+    public void run() {
 
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup group = new NioEventLoopGroup();
@@ -28,32 +30,15 @@ public class TransClient {
                 @Override
                 protected void initChannel(Channel ch) throws Exception {
                     ChannelPipeline pipeline = ch.pipeline();
-                    pipeline.addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4));
-                    pipeline.addLast(new LengthFieldPrepender(4));
+                    pipeline.addLast(new FixedLengthFrameDecoder(40960));
                     pipeline.addLast(new TransClientHandler());
                 }
             });
             bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
 
-            ChannelFuture f = bootstrap.connect(HOST, PORT).sync();
-            System.out.println("Client started.");
+            ChannelFuture f = bootstrap.connect(ip, port).sync();
 
-            Scanner sc = new Scanner(System.in);
-            while (sc.hasNextLine()) {
-                String cmd = sc.nextLine().trim();
-                if (cmd.equalsIgnoreCase("exit")) {
-                    return;
-                } else if (cmd.startsWith("get ")) {
-                    int i = Integer.valueOf(cmd.substring(4).trim());
-                    cmd = "get " + TransClientHandler.getName(i);
-                } else if (cmd.startsWith("cd ")) {
-                    int i = Integer.valueOf(cmd.substring(3).trim());
-                    cmd = "cd " + TransClientHandler.getName(i);
-                }
-                CmdTool.sendMsg(f.channel(), cmd);
-            }
-
-            //f.channel().closeFuture().sync();
+            f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
@@ -61,10 +46,5 @@ public class TransClient {
             System.out.println("Client stoped.");
         }
     }
-
-    public static void main(String[] args) {
-        TransClient.start();
-    }
-
 
 }

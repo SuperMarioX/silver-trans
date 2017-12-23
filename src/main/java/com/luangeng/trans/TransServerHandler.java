@@ -16,9 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
-    private String path = AppConfig.getValue("server.path");
 
-    private File f = new File(path);
     static int k=0;
     static long co = 0;
 
@@ -54,38 +52,7 @@ public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf data) throws Exception {
-        String cmd = CmdTool.getMsg(data);
 
-        if (cmd.equalsIgnoreCase("ls")) {
-            CmdTool.sendMsg(ctx, "ls " + CmdTool.ls(path));
-        } else if (cmd.startsWith("cd ")) {
-            String dir = cmd.substring(3).trim();
-            if (dir.equals("..")) {
-                f = f.getParentFile();
-                path = f.getCanonicalPath();
-                CmdTool.sendMsg(ctx, "msg new path " + path);
-            } else {
-                String path1 = path + File.separator + dir;
-                File f1 = new File(path1);
-                if (f1.exists()) {
-                    path = path1;
-                    f = f1;
-                    CmdTool.sendMsg(ctx, "msg new path " + path);
-                } else {
-                    CmdTool.sendMsg(ctx, "msg error, path not found");
-                }
-            }
-        } else if (cmd.startsWith("get ")) {
-            String name = cmd.substring(4);
-            sent(ctx.channel(), name, path + File.separator + name);
-        } else if (cmd.equalsIgnoreCase("hi")) {
-            CmdTool.sendMsg(ctx, "msg hi");
-            System.out.println("hi");
-        } else if (cmd.equalsIgnoreCase("pwd")) {
-            CmdTool.sendMsg(ctx, "msg " + path);
-        } else {
-            CmdTool.sendMsg(ctx, "msg wrong cmd!");
-        }
     }
 
     @Override

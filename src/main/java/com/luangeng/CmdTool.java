@@ -12,7 +12,11 @@ import java.nio.charset.Charset;
 
 public class CmdTool {
 
-    private static final Charset CHARSET = Charset.forName("UTF8");
+    public static final Charset CHARSET = Charset.forName("UTF8");
+
+    public static final String delimiterString = "§";
+
+    public static final ByteBuf delimiter = Unpooled.copiedBuffer("§".getBytes());
 
     public static String ls(String path) {
         int k = 0;
@@ -43,20 +47,9 @@ public class CmdTool {
         return sb.toString();
     }
 
-    public static String getCmd(ByteBuf data) {
-
-        StringBuilder sb = new StringBuilder();
-        int length = Math.min(50, data.readableBytes());
-        for (int i = 0; i < length; i++) {
-            byte b = data.getByte(i);
-            sb.append((char) b);
-        }
-        return sb.toString().trim();
-    }
-
     public static void sendMsg(Channel ch, String msg) {
-        ByteBuffer bf = CHARSET.encode(msg);
-        ByteBuf bfn = Unpooled.copiedBuffer(bf);
+        ByteBuffer bf = CHARSET.encode(msg + delimiterString);
+        ByteBuf bfn = Unpooled.wrappedBuffer(bf);
         ch.writeAndFlush(bfn);
     }
 

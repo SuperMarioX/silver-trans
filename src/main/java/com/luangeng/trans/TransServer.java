@@ -9,15 +9,20 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.FixedLengthFrameDecoder;
 
 /**
  * Created by LG on 2017/9/30.
  */
-public class TransServer {
+public class TransServer extends Thread {
 
-    public static void start() {
+    private int port;
+
+    public TransServer(int port) {
+        this.port = port;
+    }
+
+    public void run() {
         int PORT = Integer.valueOf(AppConfig.getValue("server.port"));
 
         final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
@@ -29,8 +34,7 @@ public class TransServer {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
                     ChannelPipeline pipeline = ch.pipeline();
-                    pipeline.addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4));
-                    pipeline.addLast(new LengthFieldPrepender(4));
+                    pipeline.addLast(new FixedLengthFrameDecoder(40960));
                     pipeline.addLast(new TransServerHandler());
                 }
             });
@@ -46,10 +50,6 @@ public class TransServer {
         } finally {
             bossGroup.shutdownGracefully();
         }
-    }
-
-    public static void main(String[] args) {
-        TransServer.start();
     }
 
 }
