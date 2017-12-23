@@ -1,11 +1,11 @@
 package com.luangeng.trans;
 
+import com.luangeng.CmdTool;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.FixedLengthFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,24 +30,25 @@ public class TransClient {
                     @Override
                     protected void initChannel(Channel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        //pipeline.addLast(new LengthFieldBasedFrameDecoder());
-                        pipeline.addLast(new FixedLengthFrameDecoder(40960));
+                        pipeline.addLast(new OrderDecoder(65535, 4));
+                        //                  pipeline.addLast(new LengthFieldBasedFrameDecoder(65535,0,4,0,4));
+                        pipeline.addLast(new LengthFieldPrepender(4));
                         pipeline.addLast(new TransClientHandler());
                     }
                 });
                 bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
 
                 //ChannelFuture f
-                for (int k = 0; k < 5; k++) {
+                for (int k = 0; k < 1; k++) {
                     Channel c = bootstrap.connect(ip, port).sync().channel();
                     channels.add(c);
                 }
 
-//            f.channel().closeFuture().sync();
+                //channels.get(0).closeFuture().sync();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                group.shutdownGracefully();
+                //group.shutdownGracefully();
                 System.out.println("Client stoped.");
             }
         }
@@ -68,7 +69,8 @@ public class TransClient {
 
     public void send() {
         for (Channel c : channels) {
-            c.writeAndFlush(Unpooled.buffer());
+            CmdTool.sendMsg(c, "hahahah");
+            //c.writeAndFlush(Unpooled.buffer());
         }
     }
 

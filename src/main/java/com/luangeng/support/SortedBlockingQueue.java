@@ -34,7 +34,7 @@ public class SortedBlockingQueue {
         lock.unlock();
     }
 
-    public OrderData offer(long index) {
+    public OrderData offer(int index) {
         lock.lock();
         try {
             while (list.isEmpty() || list.get(0).getIndex() != index) {

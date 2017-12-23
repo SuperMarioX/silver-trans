@@ -1,5 +1,6 @@
 package com.luangeng.trans;
 
+import com.luangeng.CmdTool;
 import com.luangeng.support.OrderData;
 import com.luangeng.support.Receiver;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,7 +13,9 @@ public class TransClientHandler extends SimpleChannelInboundHandler<OrderData> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, OrderData data) throws Exception {
-        Receiver.instance().receiver(ctx, data);
+        System.out.println("client read: " + data.getIndex());
+        Receiver.instance().receiver(data);
+        CmdTool.sendMsg(ctx.channel(), "kk");
     }
 
 }

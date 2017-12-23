@@ -26,7 +26,7 @@ public class CmdServer extends Thread {
 
     public static void main(String[] args) {
         new CmdServer(9000).start();
-        new TransServer(9000).start();
+        new TransServer(9001).start();
     }
 
     @Override
@@ -48,12 +48,12 @@ public class CmdServer extends Thread {
                         }
                     });
             ChannelFuture future = bootstrap.bind(port).sync();
-            System.out.println("server started");
+            System.out.println("cmd server started");
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            System.out.println("server shuting down");
+            System.out.println("cmd server shuting down");
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }

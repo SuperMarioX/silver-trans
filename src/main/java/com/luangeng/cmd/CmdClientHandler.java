@@ -28,15 +28,7 @@ public class CmdClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object data) throws Exception {
-
-//    	System.out.println("capacity"+data.capacity());
-//    	System.out.println("readableBytes"+data.readableBytes());
-//    	System.out.println("maxCapacity"+data.maxCapacity());
-
-        long tt1 = System.currentTimeMillis();
-
         String msg = (String) data;
-
         if (msg.startsWith("begin ")) {
             Receiver receiver = Receiver.instance();
             receiver.init(msg);

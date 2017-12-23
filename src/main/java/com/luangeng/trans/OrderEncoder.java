@@ -17,7 +17,7 @@ public class OrderEncoder extends MessageToMessageEncoder<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) throws Exception {
-        out.add(ctx.alloc().buffer(8).writeLong(gen.get()));
+        out.add(ctx.alloc().buffer(4).writeInt(gen.get()));
         out.add(byteBuf.retain());
     }
 }

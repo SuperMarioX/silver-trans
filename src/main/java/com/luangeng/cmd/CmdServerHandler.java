@@ -43,8 +43,9 @@ public class CmdServerHandler extends ChannelInboundHandlerAdapter {
             }
         } else if (cmd.startsWith("get ")) {
             String name = cmd.substring(4);
-            Sender.instance().init(name);
-            CmdTool.sendMsg(ctx, "begin " + f.getName() + "/:/" + f.length());
+            Sender.instance().init(path, name);
+            f = new File(path + File.separator + name);
+            CmdTool.sendMsg(ctx, "begin " + name + "/:/" + f.length());
         } else if (cmd.equalsIgnoreCase("pwd")) {
             CmdTool.sendMsg(ctx, "now at: " + path);
         } else {

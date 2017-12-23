@@ -4,20 +4,20 @@ import io.netty.buffer.ByteBuf;
 
 public class OrderData {
 
-    private long index;
+    private int index;
 
     private ByteBuf bf;
 
-    public OrderData(long index, ByteBuf bf) {
+    public OrderData(int index, ByteBuf bf) {
         this.index = index;
         this.bf = bf;
     }
 
-    public long getIndex() {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(long index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 

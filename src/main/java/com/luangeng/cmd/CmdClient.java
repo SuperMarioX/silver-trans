@@ -30,7 +30,7 @@ public class CmdClient extends Thread {
 
     public static void main(String[] args) {
         new CmdClient("127.0.0.1", 9000).start();
-        TransClient.instance().start("127.0.0.1", 9000);
+        TransClient.instance().start("127.0.0.1", 9001);
     }
 
     @Override
@@ -61,8 +61,14 @@ public class CmdClient extends Thread {
                 } else if (cmd.startsWith("cd ")) {
                     String p = cmd.substring(3).trim();
                     if (!p.equals("..")) {
-                        int i = Integer.valueOf(p);
-                        cmd = "cd " + CmdClientHandler.getName(i);
+                        int i = 0;
+                        try {
+                            i = Integer.valueOf(p);
+                            cmd = "cd " + CmdClientHandler.getName(i);
+                        } catch (Exception e) {
+                            System.out.println("");
+                            continue;
+                        }
                     }
                 }
                 CmdTool.sendMsg(future.channel(), cmd);

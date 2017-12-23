@@ -1,7 +1,6 @@
 package com.luangeng.support;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +18,7 @@ public class Receiver {
     private String path = System.getProperty("user.dir") + File.separator + "download";
     private String name;
     private long length = 0;
-    private long index = 0;
+    private int index = 0;
     private FileOutputStream out;
     private FileChannel ch;
 
@@ -64,7 +63,8 @@ public class Receiver {
         }
         out = new FileOutputStream(f);
         ch = out.getChannel();
-        t.start();
+        //t.start();
+
     }
 
     public void clear() throws IOException {
@@ -85,7 +85,7 @@ public class Receiver {
         }
     }
 
-    public void receiver(ChannelHandlerContext ctx, OrderData data) throws IOException {
+    public void receiver(OrderData data) {
         queue.put(data);
     }
 
