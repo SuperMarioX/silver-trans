@@ -1,6 +1,6 @@
 package com.luangeng.trans;
 
-import com.luangeng.AppConfig;
+import com.luangeng.ConfigTool;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -23,7 +23,7 @@ public class TransServer extends Thread {
     }
 
     public void run() {
-        int PORT = Integer.valueOf(AppConfig.getValue("server.port"));
+        int PORT = Integer.valueOf(ConfigTool.getValue("server.port"));
 
         final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         try {

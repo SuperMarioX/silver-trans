@@ -1,6 +1,7 @@
 package com.luangeng.cmd;
 
 import com.luangeng.CmdTool;
+import com.luangeng.trans.TransClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -29,6 +30,7 @@ public class CmdClient extends Thread {
 
     public static void main(String[] args) {
         new CmdClient("127.0.0.1", 9000).start();
+        TransClient.instance().start("127.0.0.1", 9000);
     }
 
     @Override

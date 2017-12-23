@@ -1,6 +1,7 @@
 package com.luangeng.cmd;
 
 import com.luangeng.CmdTool;
+import com.luangeng.trans.TransServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -25,6 +26,7 @@ public class CmdServer extends Thread {
 
     public static void main(String[] args) {
         new CmdServer(9000).start();
+        new TransServer(9000).start();
     }
 
     @Override

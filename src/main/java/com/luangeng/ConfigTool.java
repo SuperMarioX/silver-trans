@@ -8,7 +8,7 @@ import java.util.Properties;
 /**
  * Created by LG on 2017/9/23.
  */
-public class AppConfig {
+public class ConfigTool {
 
     private static final String CONFIG_PATH = System.getProperty("user.dir") + File.separator + "config" + File.separator + "app.properties";
 

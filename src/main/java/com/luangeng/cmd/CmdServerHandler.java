@@ -1,7 +1,8 @@
 package com.luangeng.cmd;
 
-import com.luangeng.AppConfig;
 import com.luangeng.CmdTool;
+import com.luangeng.ConfigTool;
+import com.luangeng.Sender;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -12,7 +13,7 @@ import java.io.File;
  */
 public class CmdServerHandler extends ChannelInboundHandlerAdapter {
 
-    private String path = AppConfig.getValue("server.path");
+    private String path = ConfigTool.getValue("server.path");
 
     private File f = new File(path);
 
@@ -42,11 +43,12 @@ public class CmdServerHandler extends ChannelInboundHandlerAdapter {
             }
         } else if (cmd.startsWith("get ")) {
             String name = cmd.substring(4);
-            //sent(ctx.channel(), name, path + File.separator + name);
+            Sender.instance().init(name);
+            CmdTool.sendMsg(ctx, "begin " + f.getName() + "/:/" + f.length());
         } else if (cmd.equalsIgnoreCase("pwd")) {
             CmdTool.sendMsg(ctx, "now at: " + path);
         } else {
-            CmdTool.sendMsg(ctx, "unknow cmomand!");
+            CmdTool.sendMsg(ctx, "unknow command!");
         }
     }
 

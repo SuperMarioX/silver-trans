@@ -9,10 +9,10 @@ import com.luangeng.cmd.CmdServer;
 public class App {
     public static void main(String[] args) {
 
-        String ip = AppConfig.getValue("server.ip");
-        int port = Integer.valueOf(AppConfig.getValue("server.port"));
+        String ip = ConfigTool.getValue("server.ip");
+        int port = Integer.valueOf(ConfigTool.getValue("server.port"));
 
-        String mode = AppConfig.getValue("mode");
+        String mode = ConfigTool.getValue("mode");
         if (mode.equals("server")) {
             new CmdServer(port).start();
             //TransServer.start();
