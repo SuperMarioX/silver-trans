@@ -34,6 +34,7 @@ public class TransServer extends Thread {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
                     ChannelPipeline pipeline = ch.pipeline();
+
                     pipeline.addLast(new FixedLengthFrameDecoder(40960));
                     pipeline.addLast(new TransServerHandler());
                 }

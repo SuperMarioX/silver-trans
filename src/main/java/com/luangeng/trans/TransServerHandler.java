@@ -1,6 +1,6 @@
 package com.luangeng.trans;
 
-import com.luangeng.Sender;
+import com.luangeng.support.Sender;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

@@ -1,4 +1,4 @@
-package com.luangeng;
+package com.luangeng.support;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,6 +14,8 @@ public class Receiver {
 
     private static Receiver instance = new Receiver();
 
+    private SortedBlockingQueue queue = new SortedBlockingQueue();
+
     private String path = System.getProperty("user.dir") + File.separator + "download";
     private String name;
     private long length = 0;
@@ -22,7 +24,6 @@ public class Receiver {
     private FileChannel ch;
 
     private String msg;
-    private long t1;
 
     private Receiver() {
     }
@@ -30,6 +31,27 @@ public class Receiver {
     public static Receiver instance() {
         return instance;
     }
+
+    private Thread t = new Thread() {
+        public void run() {
+            try {
+                while (true) {
+                    ByteBuf bfn = queue.offer(index++).getBf();
+                    if (bfn.capacity() == 0) {
+                        //
+                        clear();
+                        return;
+                    }
+                    ByteBuffer bf = bfn.nioBuffer();
+                    ch.write(bf);
+                    //index += data.readableBytes();
+                    printProcess();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     public void init(String msg) throws FileNotFoundException {
         String[] ss = msg.substring(6).trim().split("/:/");
@@ -42,19 +64,7 @@ public class Receiver {
         }
         out = new FileOutputStream(f);
         ch = out.getChannel();
-        t1 = System.currentTimeMillis();
-    }
-
-    public void receiver(ChannelHandlerContext ctx, ByteBuf data) throws IOException {
-        if (data.capacity() == 0) {
-            //
-            clear();
-            return;
-        }
-        ByteBuffer bf = data.nioBuffer();
-        ch.write(bf);
-        index += data.readableBytes();
-        printProcess();
+        t.start();
     }
 
     public void clear() throws IOException {
@@ -74,4 +84,10 @@ public class Receiver {
             msg = process;
         }
     }
+
+    public void receiver(ChannelHandlerContext ctx, OrderData data) throws IOException {
+        queue.put(data);
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.luangeng;
+package com.luangeng.support;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -6,7 +6,7 @@ public class IndexGenerater {
 
     private static IndexGenerater gen = new IndexGenerater();
 
-    private static AtomicLong index = new AtomicLong(1);
+    private static AtomicLong index = new AtomicLong(0);
 
     private IndexGenerater() {
     }

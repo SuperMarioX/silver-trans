@@ -2,7 +2,7 @@ package com.luangeng.cmd;
 
 import com.luangeng.CmdTool;
 import com.luangeng.ConfigTool;
-import com.luangeng.Sender;
+import com.luangeng.support.Sender;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 

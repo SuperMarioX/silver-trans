@@ -1,6 +1,6 @@
 package com.luangeng.trans;
 
-import com.luangeng.IndexGenerater;
+import com.luangeng.support.IndexGenerater;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
