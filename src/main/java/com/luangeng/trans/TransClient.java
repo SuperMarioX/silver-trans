@@ -51,7 +51,7 @@ public class TransClient {
                 e.printStackTrace();
             } finally {
                 //group.shutdownGracefully();
-                System.out.println("Client stoped.");
+                //System.out.println("trans client stoped.");
             }
         }
     };
