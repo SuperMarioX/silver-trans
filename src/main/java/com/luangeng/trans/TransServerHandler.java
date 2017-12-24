@@ -1,5 +1,6 @@
 package com.luangeng.trans;
 
+import com.luangeng.CmdTool;
 import com.luangeng.support.Sender;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -9,7 +10,7 @@ public class TransServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf data) throws Exception {
-        //System.out.println(this.hashCode()+"  server read: " + CmdTool.getMsg(data));
+        System.out.println(this.hashCode() + "  server read: " + CmdTool.getMsg(data));
         Sender.instance().send(ctx.channel());
     }
 
