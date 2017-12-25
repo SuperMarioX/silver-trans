@@ -40,7 +40,7 @@ public class TransClient {
                 bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
 
                 //ChannelFuture f
-                int count = ConfigTool.getInt("connection.count");
+                int count = ConfigTool.getInt("client.connection.count");
                 for (int k = 0; k < count; k++) {
                     Channel c = bootstrap.connect(ip, port).sync().channel();
                     channels.add(c);
