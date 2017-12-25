@@ -61,12 +61,11 @@ public class CmdClient extends Thread {
                 } else if (cmd.startsWith("cd ")) {
                     String p = cmd.substring(3).trim();
                     if (!p.equals("..")) {
-                        int i = 0;
                         try {
-                            i = Integer.valueOf(p);
+                            int i = Integer.valueOf(p);
                             cmd = "cd " + CmdClientHandler.getName(i);
                         } catch (Exception e) {
-                            System.out.println("");
+                            System.out.println("should input a num");
                             continue;
                         }
                     }
