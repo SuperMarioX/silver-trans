@@ -23,7 +23,7 @@ public class Receiver {
     private FileOutputStream out;
     private FileChannel ch;
 
-    private String msg;
+    private String processMsg;
 
     private Receiver() {
     }
@@ -54,16 +54,16 @@ public class Receiver {
         ch = null;
         name = null;
         index = 0;
-        msg = "";
+        processMsg = "";
         length = 0;
         nowsize = 0;
     }
 
     private void printProcess() {
         String process = nowsize * 100 / length + "%";
-        if (!process.equals(msg)) {
+        if (!process.equals(processMsg)) {
             System.out.println(process);
-            msg = process;
+            processMsg = process;
         }
     }
 
@@ -75,8 +75,13 @@ public class Receiver {
                     printProcess();
                     nowsize += bfn.readableBytes();
                     if (bfn.readableBytes() == 0) {
-                        clear();
-                        return;
+                        if (nowsize == length) {
+                            System.out.println("receive Over: " + name);
+                            clear();
+                            return;
+                        } else {
+                            continue;
+                        }
                     }
                     ByteBuffer bf = bfn.nioBuffer();
                     ch.write(bf);

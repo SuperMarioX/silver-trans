@@ -53,14 +53,22 @@ public class Sender {
                 channel.writeAndFlush(nbf);
                 //nbf.release();
             } else {
-                channel.writeAndFlush(Unpooled.wrappedBuffer(Unpooled.copyInt(IndexGenerater.instance().get())));
+                channel.writeAndFlush(Unpooled.copyInt(IndexGenerater.instance().get()));
                 IndexGenerater.instance().reset();
+                System.out.println("sending over: " + f.getName());
+                clear();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             lock.unlock();
         }
+    }
+
+    private void clear() throws IOException {
+        in.close();
+        bf.clear();
+        f = null;
     }
 
 

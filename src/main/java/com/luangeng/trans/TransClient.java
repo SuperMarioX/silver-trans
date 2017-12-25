@@ -71,8 +71,7 @@ public class TransClient {
 
     public void send() {
         for (Channel c : channels) {
-            CmdTool.sendMsg(c, "hahahah");
-            //c.writeAndFlush(Unpooled.buffer());
+            CmdTool.sendMsg(c, c.toString() + " ready");
         }
     }
 

@@ -13,12 +13,12 @@ public class TransClientHandler extends SimpleChannelInboundHandler<OrderData> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, OrderData data) throws Exception {
-        System.out.println(this.hashCode()+" client read: " + data.getIndex());
+        System.out.println(this.hashCode() + " client read: " + data.getIndex());
         Receiver.instance().receiver(data);
         if (data.getBf().readableBytes() == 0) {
             return;
         }
-        CmdTool.sendMsg(ctx.channel(), "kk");
+        CmdTool.sendMsg(ctx.channel(), "go on");
     }
 
 }
