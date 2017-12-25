@@ -61,7 +61,7 @@ public class Sender {
             } else {
                 channel.writeAndFlush(Unpooled.copyInt(IndexGenerater.instance().get()));
                 IndexGenerater.instance().reset();
-                long cost = Math.round(System.currentTimeMillis() - t1 / 1000f);
+                long cost = Math.round((System.currentTimeMillis() - t1) / 1000f);
                 System.out.println("send over: " + f.getName() + "   Cost Time: " + cost + "s");
                 clear();
             }

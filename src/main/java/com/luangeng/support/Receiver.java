@@ -25,6 +25,8 @@ public class Receiver {
 
     private long t1;
 
+    private int count = 0;
+
     private String processMsg;
 
     private Receiver() {
@@ -65,8 +67,13 @@ public class Receiver {
     private void printProcess() {
         String process = nowsize * 100 / length + "%";
         if (!process.equals(processMsg)) {
+            count++;
             System.out.print(process + " ");
             processMsg = process;
+            if (count == 10) {
+                System.out.println();
+                count = 0;
+            }
         }
     }
 
@@ -79,7 +86,7 @@ public class Receiver {
                     nowsize += bfn.readableBytes();
                     if (bfn.readableBytes() == 0) {
                         if (nowsize == length) {
-                            long cost = Math.round(System.currentTimeMillis() - t1 / 1000f);
+                            long cost = Math.round((System.currentTimeMillis() - t1) / 1000f);
                             System.out.println("receive over: " + name + "   Cost Time: " + cost + "s");
                             clear();
                             return;
