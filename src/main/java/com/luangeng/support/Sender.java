@@ -19,6 +19,7 @@ public class Sender {
     FileInputStream in;
     FileChannel ch;
     ByteBuffer bf;
+    private long t1;
 
     private ReentrantLock lock = new ReentrantLock();
 
@@ -35,6 +36,8 @@ public class Sender {
             in = new FileInputStream(f);
             ch = in.getChannel();
             bf = ByteBuffer.allocate(40960);
+            t1 = System.currentTimeMillis();
+            System.out.println("send begin: " + name);
             return;
         }
         throw new Exception("file can not read.");
@@ -42,6 +45,9 @@ public class Sender {
 
     public void send(Channel channel) throws IOException {
         lock.lock();
+        if (in == null) {
+            return;
+        }
         try {
             bf.clear();
             if (ch.read(bf) != -1) {
@@ -55,7 +61,8 @@ public class Sender {
             } else {
                 channel.writeAndFlush(Unpooled.copyInt(IndexGenerater.instance().get()));
                 IndexGenerater.instance().reset();
-                System.out.println("sending over: " + f.getName());
+                long cost = Math.round(System.currentTimeMillis() - t1 / 1000f);
+                System.out.println("send over: " + f.getName() + "   Cost Time: " + cost + "s");
                 clear();
             }
         } catch (InterruptedException e) {
@@ -69,6 +76,7 @@ public class Sender {
         in.close();
         bf.clear();
         f = null;
+        in = null;
     }
 
 

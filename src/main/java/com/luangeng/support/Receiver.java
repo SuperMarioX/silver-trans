@@ -23,6 +23,8 @@ public class Receiver {
     private FileOutputStream out;
     private FileChannel ch;
 
+    private long t1;
+
     private String processMsg;
 
     private Receiver() {
@@ -46,6 +48,7 @@ public class Receiver {
         queue.clear();
         new MyThread().start();
         index = 0;
+        t1 = System.currentTimeMillis();
     }
 
     public void clear() throws IOException {
@@ -62,7 +65,7 @@ public class Receiver {
     private void printProcess() {
         String process = nowsize * 100 / length + "%";
         if (!process.equals(processMsg)) {
-            System.out.println(process);
+            System.out.print(process + " ");
             processMsg = process;
         }
     }
@@ -76,7 +79,8 @@ public class Receiver {
                     nowsize += bfn.readableBytes();
                     if (bfn.readableBytes() == 0) {
                         if (nowsize == length) {
-                            System.out.println("receive Over: " + name);
+                            long cost = Math.round(System.currentTimeMillis() - t1 / 1000f);
+                            System.out.println("receive over: " + name + "   Cost Time: " + cost + "s");
                             clear();
                             return;
                         } else {
