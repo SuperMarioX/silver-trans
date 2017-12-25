@@ -41,10 +41,8 @@ public class TransClient {
 
                 //ChannelFuture f
                 int count = ConfigTool.getInt("client.connection.count");
-                for (int k = 0; k < count; k++) {
                     Channel c = bootstrap.connect(ip, port).sync().channel();
                     channels.add(c);
-                }
 
                 //channels.get(0).closeFuture().sync();
             } catch (InterruptedException e) {
@@ -66,7 +64,11 @@ public class TransClient {
     public void start(String ip, int port) {
         client.ip = ip;
         client.port = port;
-        t.start();
+        for (int k = 0; k < 10; k++) {
+
+            t.start();
+            port++;
+        }
     }
 
     public void send() {
