@@ -2,6 +2,7 @@ package com.luangeng;
 
 import com.luangeng.cmd.CmdClient;
 import com.luangeng.cmd.CmdServer;
+import com.luangeng.support.ConfigTool;
 import com.luangeng.trans.TransClient;
 import com.luangeng.trans.TransServer;
 

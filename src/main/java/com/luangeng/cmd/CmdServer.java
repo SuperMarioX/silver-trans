@@ -1,6 +1,6 @@
 package com.luangeng.cmd;
 
-import com.luangeng.CmdTool;
+import com.luangeng.support.CmdTool;
 import com.luangeng.trans.TransServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
