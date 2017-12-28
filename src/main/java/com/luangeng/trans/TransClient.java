@@ -64,11 +64,7 @@ public class TransClient {
     public void start(String ip, int port) {
         client.ip = ip;
         client.port = port;
-        for (int k = 0; k < 10; k++) {
-
-            t.start();
-            port++;
-        }
+        t.start();
     }
 
     public void send() {
