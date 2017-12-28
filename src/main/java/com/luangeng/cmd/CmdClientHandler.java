@@ -1,6 +1,6 @@
 package com.luangeng.cmd;
 
-import com.luangeng.CmdTool;
+import com.luangeng.support.CmdTool;
 import com.luangeng.support.Receiver;
 import com.luangeng.trans.TransClient;
 import io.netty.channel.ChannelHandlerContext;

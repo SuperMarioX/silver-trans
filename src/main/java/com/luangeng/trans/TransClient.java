@@ -1,7 +1,7 @@
 package com.luangeng.trans;
 
-import com.luangeng.CmdTool;
-import com.luangeng.ConfigTool;
+import com.luangeng.support.CmdTool;
+import com.luangeng.support.ConfigTool;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
