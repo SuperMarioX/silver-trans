@@ -1,28 +1,27 @@
 package com.luangeng;
 
-import com.luangeng.cmd.CmdClient;
-import com.luangeng.cmd.CmdServer;
+import com.luangeng.client.TransClient;
+import com.luangeng.server.TransServer;
 import com.luangeng.support.ConfigTool;
-import com.luangeng.trans.TransClient;
-import com.luangeng.trans.TransServer;
 
-/**
- * Hello world!
- */
 public class App {
     public static void main(String[] args) {
 
         String ip = ConfigTool.getValue("server.ip");
         int port = ConfigTool.getInt("server.port");
-        int port2 = ConfigTool.getInt("server.port2");
 
         String mode = ConfigTool.getValue("mode");
-        if (mode.equals("server")) {
-            new CmdServer(port).start();
-            new TransServer(port2).start();
+        if (mode == null) {
+            System.out.println("error");
+        } else if (mode.equals("server")) {
+            TransServer server = new TransServer(port);
+            server.start();
         } else if (mode.equals("client")) {
-            new CmdClient(ip, port).start();
-            TransClient.instance().start(ip, port2);
+            TransClient.instance().start(ip, port);
+        } else if (mode.equals("both")) {
+            TransServer server = new TransServer(port);
+            server.start();
+            TransClient.instance().start(ip, port);
         }
     }
 }

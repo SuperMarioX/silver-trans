@@ -12,8 +12,6 @@ public class ConfigTool {
 
     private static final String CONFIG_PATH = System.getProperty("user.dir") + File.separator + "config" + File.separator + "app.properties";
 
-    //private static final String CONFIG_PATH = "/Users/LG/Dev/silver-trans/src/main/resources/app.properties";
-
     private static Properties ppt = new Properties();
 
     static {

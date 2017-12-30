@@ -1,5 +1,7 @@
 package com.luangeng.support;
 
+import com.luangeng.model.TransData;
+
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
@@ -9,14 +11,14 @@ import java.util.concurrent.locks.ReentrantLock;
 /*
 按序列取出队列中的元素，如果序列缺失则阻塞
  */
-public class SortedBlockingQueue {
+public class SortedQueue {
 
     final Lock lock = new ReentrantLock();
     final Condition canTake = lock.newCondition();
     private final AtomicInteger count = new AtomicInteger();
-    private LinkedList<OrderData> list = new LinkedList<OrderData>();
+    private LinkedList<TransData> list = new LinkedList<TransData>();
 
-    public void put(OrderData node) {
+    public void put(TransData node) {
         lock.lock();
         boolean p = false;
         for (int i = 0; i < list.size(); i++) {
@@ -34,7 +36,7 @@ public class SortedBlockingQueue {
         lock.unlock();
     }
 
-    public OrderData offer(int index) {
+    public TransData offer(int index) {
         lock.lock();
         try {
             while (list.isEmpty() || list.get(0).getIndex() != index) {
