@@ -61,7 +61,7 @@ public class Sender implements Runnable {
         try {
             while (ch.read(bf) != -1) {
                 //while (!channel.isWritable()) {
-                TimeUnit.MILLISECONDS.sleep(2);
+                TimeUnit.MILLISECONDS.sleep(10);
                 //}
                 bf.flip();
                 Tool.sendData(channel, bf, index);
