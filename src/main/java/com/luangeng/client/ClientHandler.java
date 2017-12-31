@@ -21,7 +21,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        Tool.sendMsg(ctx.channel(), "pwd");
+        Tool.sendCmd(ctx.channel(), "pwd");
+        Tool.sendCmd(ctx.channel(), "ls");
     }
 
     @Override

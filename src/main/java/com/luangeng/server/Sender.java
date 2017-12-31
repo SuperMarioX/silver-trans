@@ -44,7 +44,7 @@ public class Sender implements Runnable {
         try {
             in = new FileInputStream(f);
             ch = in.getChannel();
-            bf = ByteBuffer.allocate(40960);
+            bf = ByteBuffer.allocate(20480);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -60,14 +60,13 @@ public class Sender implements Runnable {
         }
         try {
             while (ch.read(bf) != -1) {
-                //while (!channel.isWritable()) {
-                TimeUnit.MILLISECONDS.sleep(10);
-                //}
+                while (!channel.isWritable()) {
+                    TimeUnit.MILLISECONDS.sleep(5);
+                }
                 bf.flip();
                 Tool.sendData(channel, bf, index);
                 index++;
                 bf.clear();
-                //nbf.release();
             }
             Tool.sendEnd(channel, index);
 

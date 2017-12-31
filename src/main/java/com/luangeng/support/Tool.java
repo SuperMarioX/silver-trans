@@ -16,14 +16,14 @@ public class Tool {
 
     public static void sendMsg(Channel ch, String msg) {
         ByteBuffer bf = CHARSET.encode(msg);
-        ByteBuf bfn = Unpooled.wrappedBuffer(bf);
+        ByteBuf bfn = Unpooled.copiedBuffer(bf);
         TransData d = new TransData(TypeEnum.MSG, bfn);
         ch.writeAndFlush(d);
     }
 
     public static void sendCmd(Channel ch, String msg) {
         ByteBuffer bf = CHARSET.encode(msg);
-        ByteBuf bfn = Unpooled.wrappedBuffer(bf);
+        ByteBuf bfn = Unpooled.copiedBuffer(bf);
         TransData d = new TransData(TypeEnum.CMD, bfn);
         ch.writeAndFlush(d);
     }
@@ -36,7 +36,7 @@ public class Tool {
 
     public static void sendBegin(Channel ch, String msg) {
         ByteBuffer bf = CHARSET.encode(msg);
-        ByteBuf bfn = Unpooled.wrappedBuffer(bf);
+        ByteBuf bfn = Unpooled.copiedBuffer(bf);
         TransData d = new TransData(TypeEnum.BEGIN, bfn);
         ch.writeAndFlush(d);
     }
@@ -44,12 +44,11 @@ public class Tool {
     public static void sendData(Channel ch, ByteBuffer bf, int index) {
         TransData data = new TransData();
         data.setType(TypeEnum.DATA);
-        ByteBuf bfn = Unpooled.wrappedBuffer(bf);
+        ByteBuf bfn = Unpooled.copiedBuffer(bf);
         data.setData(bfn);
         data.setLength(bfn.readableBytes());
         data.setIndex(index);
         ch.writeAndFlush(data);
-        System.out.println("send: " + bfn.readableBytes());
     }
 
     public static void sendEnd(Channel ch, int index) {

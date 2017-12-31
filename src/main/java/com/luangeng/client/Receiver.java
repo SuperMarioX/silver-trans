@@ -87,13 +87,12 @@ public class Receiver {
             try {
                 while (true) {
                     TransData data = queue.offer(chunkIndex++);
-                    System.out.println(data.toString());
                     if (data.getType() == TypeEnum.END) {
                         end();
                         break;
                     }
                     ByteBuf bfn = data.getData();
-                    receivedSize += bfn.readableBytes();
+                    receivedSize += data.getLength();
                     ByteBuffer bf = bfn.nioBuffer();
                     ch.write(bf);
                     printProcess();

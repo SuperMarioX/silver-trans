@@ -11,7 +11,7 @@ public class Encode extends MessageToByteEncoder<TransData> {
     protected void encode(ChannelHandlerContext ctx, TransData msg, ByteBuf out) throws Exception {
         out.writeShort(msg.getType().value())
                 .writeInt(msg.getIndex())
-                .writeInt(msg.getData().readableBytes())
+                .writeInt(msg.getLength())
                 .writeBytes(msg.getData());
     }
 }
