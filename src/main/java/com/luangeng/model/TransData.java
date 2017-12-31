@@ -18,7 +18,6 @@ public class TransData {
     public TransData(TypeEnum type, ByteBuf data) {
         this.type = type;
         this.data = data;
-        this.length = data.readableBytes();
     }
 
     public TypeEnum getType() {

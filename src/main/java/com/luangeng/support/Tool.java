@@ -46,7 +46,6 @@ public class Tool {
         data.setType(TypeEnum.DATA);
         ByteBuf bfn = Unpooled.copiedBuffer(bf);
         data.setData(bfn);
-        data.setLength(bfn.readableBytes());
         data.setIndex(index);
         ch.writeAndFlush(data);
     }
