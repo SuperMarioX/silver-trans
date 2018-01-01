@@ -5,38 +5,34 @@ import com.luangeng.model.TypeEnum;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.util.CharsetUtil;
 
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
 public class Tool {
 
-    public static final Charset CHARSET = Charset.forName("UTF8");
+    public static final Charset CHARSET = CharsetUtil.UTF_8;
 
     public static void sendMsg(Channel ch, String msg) {
-        ByteBuffer bf = CHARSET.encode(msg);
-        ByteBuf bfn = Unpooled.copiedBuffer(bf);
+        ByteBuf bfn = Unpooled.copiedBuffer(msg, CHARSET);
         TransData d = new TransData(TypeEnum.MSG, bfn);
         ch.writeAndFlush(d);
     }
 
     public static void sendCmd(Channel ch, String msg) {
-        ByteBuffer bf = CHARSET.encode(msg);
-        ByteBuf bfn = Unpooled.copiedBuffer(bf);
+        ByteBuf bfn = Unpooled.copiedBuffer(msg, CHARSET);
         TransData d = new TransData(TypeEnum.CMD, bfn);
         ch.writeAndFlush(d);
     }
 
     public static String getMsg(TransData data) {
-        CharBuffer cb = CHARSET.decode(data.getData().nioBuffer());
-        return cb.toString().trim();
+        return data.getData().toString(CHARSET);
     }
 
 
     public static void sendBegin(Channel ch, String msg) {
-        ByteBuffer bf = CHARSET.encode(msg);
-        ByteBuf bfn = Unpooled.copiedBuffer(bf);
+        ByteBuf bfn = Unpooled.copiedBuffer(msg, CHARSET);
         TransData d = new TransData(TypeEnum.BEGIN, bfn);
         ch.writeAndFlush(d);
     }
