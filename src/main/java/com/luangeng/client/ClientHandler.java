@@ -15,7 +15,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
 
     Receiver receiver;
 
-    public static String getName(int i) {
+    public static String getFileNameByIndex(int i) {
         return map.get(Integer.valueOf(i));
     }
 

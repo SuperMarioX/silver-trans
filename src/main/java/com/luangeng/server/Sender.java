@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Sender implements Runnable {
 
+    //private static Logger logger = LoggerFactory.getLogger(Sender.class);
+
     String path;
     String name;
     File f;

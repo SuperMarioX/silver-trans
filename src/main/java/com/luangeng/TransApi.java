@@ -10,8 +10,8 @@ public class TransApi {
         TransClient.instance().start(ip, port);
     }
 
-    public void get() {
-
+    public void get(String path) {
+        TransClient.instance().getFile(path);
     }
 
 }

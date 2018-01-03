@@ -8,7 +8,7 @@ import io.netty.handler.codec.ReplayingDecoder;
 
 import java.util.List;
 
-public class Decode extends ReplayingDecoder<Void> {
+public class TransDecode extends ReplayingDecoder<Void> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {

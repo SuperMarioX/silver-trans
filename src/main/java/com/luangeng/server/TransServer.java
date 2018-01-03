@@ -1,7 +1,7 @@
 package com.luangeng.server;
 
-import com.luangeng.support.Decode;
-import com.luangeng.support.Encode;
+import com.luangeng.support.TransDecode;
+import com.luangeng.support.TransEncode;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -42,8 +42,8 @@ public class TransServer {
                         .childHandler(new ChannelInitializer<SocketChannel>() {
                             @Override
                             protected void initChannel(SocketChannel ch) throws Exception {
-                                ch.pipeline().addLast(new Decode());
-                                ch.pipeline().addLast(new Encode());
+                                ch.pipeline().addLast(new TransDecode());
+                                ch.pipeline().addLast(new TransEncode());
                                 ch.pipeline().addLast(new ServerHandler());
                             }
                         });

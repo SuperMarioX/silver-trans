@@ -41,7 +41,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
         int k = 0;
         StringBuilder sb = new StringBuilder();
         File file = new File(cpath);
-        for (File f : file.listFiles()) {
+        for (File f : file.listFiles(ff -> ff.isDirectory())) {
             if (f.isDirectory()) {
                 sb.append(k);
                 sb.append("/:/");
@@ -52,7 +52,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                 k++;
             }
         }
-        for (File f : file.listFiles()) {
+        for (File f : file.listFiles(ff -> ff.isFile())) {
             if (f.isFile()) {
                 sb.append(k);
                 sb.append("/:/");

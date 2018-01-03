@@ -21,6 +21,7 @@ public class CmdApp {
             TransClient.instance().readCmd();
         } else if (mode.equals("both")) {
             TransServer.instance().start(port);
+
             TransClient.instance().start(ip, port);
             TransClient.instance().readCmd();
         }
