@@ -46,7 +46,7 @@ public class Receiver {
         try {
             out = new FileOutputStream(f);
         } catch (FileNotFoundException e) {
-            logger.error(e.getMessage(), e);
+            logger.error("error: " + e.getMessage());
         }
         ch = out.getChannel();
         queue.clear();

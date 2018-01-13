@@ -10,17 +10,16 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Scanner;
-
 public class TransClient {
 
     private static Logger logger = LoggerFactory.getLogger(TransClient.class);
 
     private static TransClient client = new TransClient();
+
     private String ip;
     private int port;
-    private Channel channel = null;
-    private ClientThread t = new ClientThread();
+    private Channel channel;
+    private ClientThread t;
 
     private TransClient() {
     }
@@ -30,10 +29,13 @@ public class TransClient {
     }
 
     public void startup(String ip, int port) {
-        this.ip = ip;
-        this.port = port;
-        if (!t.isAlive()) {
+        if (t == null) {
+            t = new ClientThread();
+            this.ip = ip;
+            this.port = port;
             t.start();
+        } else {
+            logger.info("need disconnect first");
         }
     }
 
@@ -41,35 +43,35 @@ public class TransClient {
         Tool.sendCmd(channel, "get " + path);
     }
 
-    public void readCmd() {
-        Scanner sc = new Scanner(System.in);
-        while (sc.hasNextLine()) {
-            String cmd = sc.nextLine().trim();
-            if (cmd.equalsIgnoreCase("exit")) {
-                channel.closeFuture();
-                return;
-            } else if (cmd.startsWith("get ")) {
-                int i = Integer.valueOf(cmd.substring(4).trim());
-                cmd = "get " + ClientHandler.getFileNameByIndex(i);
-            } else if (cmd.startsWith("cd ")) {
-                String p = cmd;
-                p = p.substring(3).trim();
-                if (!p.equals("..")) {
-                    try {
-                        int i = Integer.valueOf(p);
-                        cmd = "cd " + ClientHandler.getFileNameByIndex(i);
-                    } catch (Exception e) {
-                        logger.info("Invalid input: " + p);
-                        return;
-                    }
-                }
-            }
-            Tool.sendCmd(channel, cmd);
+    public void shutdown() {
+        if (t != null) {
+            t.shutdown();
+            t = null;
         }
     }
 
-    public void shutdown() {
-        t.shutdown();
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void cmd(String cmd) {
+        if (t == null) {
+            logger.info("not connected");
+            return;
+        }
+        if (cmd.startsWith("get ")) {
+            int i = Integer.valueOf(cmd.substring(4).trim());
+            cmd = "get " + ClientHandler.getFileNameByIndex(i);
+        } else if (cmd.startsWith("cd ")) {
+            String p = cmd.substring(3).trim();
+            try {
+                int i = Integer.valueOf(p);
+                cmd = "cd " + ClientHandler.getFileNameByIndex(i);
+            } catch (Exception e) {
+                //nothing
+            }
+        }
+        Tool.sendCmd(TransClient.instance().getChannel(), cmd);
     }
 
     private class ClientThread extends Thread {
@@ -95,8 +97,10 @@ public class TransClient {
                 channel = bootstrap.connect(ip, port).sync().channel();
                 logger.info("Trans Client connect to " + ip + ":" + port);
                 channel.closeFuture().sync();
-            } catch (InterruptedException e) {
-                logger.error(e.getMessage(), e);
+            } catch (Exception e) {
+                logger.error("error: " + e.getMessage());
+                t = null;
+                channel = null;
             }
         }
 
@@ -104,7 +108,8 @@ public class TransClient {
             if (group != null) {
                 group.shutdownGracefully();
             }
-            logger.info("Trans Client stoped.");
+            channel = null;
+            logger.info("Trans Client disconnect");
         }
     }
 

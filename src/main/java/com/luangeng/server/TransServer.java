@@ -13,6 +13,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.lang.Thread.State.NEW;
+
 public class TransServer {
 
     private static Logger logger = LoggerFactory.getLogger(TransServer.class);
@@ -29,15 +31,17 @@ public class TransServer {
     }
 
     public void startup(int port) {
-        this.port = port;
-
-        if (!t.isAlive()) {
+        if (t.getState() == NEW) {
+            this.port = port;
             t.start();
         }
     }
 
     public void shutdown() {
-        t.shutdown();
+        if (t != null) {
+            t.shutdown();
+            t = null;
+        }
     }
 
     private class ServerThread extends Thread {
@@ -64,8 +68,8 @@ public class TransServer {
                 ChannelFuture future = bootstrap.bind(port).sync();
                 logger.info("Trans Server started, port: " + port);
                 future.channel().closeFuture().sync();
-            } catch (InterruptedException e) {
-                logger.error(e.getMessage(), e);
+            } catch (Exception e) {
+                logger.error("error: " + e.getMessage());
             }
         }
 

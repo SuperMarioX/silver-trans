@@ -50,6 +50,12 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
         }
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+        logger.info(cause.getMessage());
+    }
+
     private void praseLs(String msg) {
         map.clear();
         String ss = msg.substring(3).trim();

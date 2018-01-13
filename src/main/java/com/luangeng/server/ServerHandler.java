@@ -35,9 +35,9 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                 Sender sender = new Sender(cpath, name, ctx.channel());
                 SenderThreadPool.exe(sender);
             } else if (cmd.equalsIgnoreCase("pwd")) {
-                Tool.sendMsg(ctx.channel(), "now at: " + cpath);
+                Tool.sendMsg(ctx.channel(), "now at " + ctx.channel().localAddress().toString() + cpath);
             } else {
-                Tool.sendMsg(ctx.channel(), "unknow command!");
+                Tool.sendMsg(ctx.channel(), "unknow command");
             }
         }
     }
