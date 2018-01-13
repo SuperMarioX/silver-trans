@@ -1,8 +1,8 @@
-package com.luangeng.client;
+package com.luangeng.slivertrans.client;
 
-import com.luangeng.model.TransData;
-import com.luangeng.model.TypeEnum;
-import com.luangeng.support.Tool;
+import com.luangeng.slivertrans.model.TransData;
+import com.luangeng.slivertrans.model.TypeEnum;
+import com.luangeng.slivertrans.support.Tool;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;

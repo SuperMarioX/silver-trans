@@ -1,7 +1,7 @@
-package com.luangeng.server;
+package com.luangeng.slivertrans.server;
 
-import com.luangeng.support.TransDecode;
-import com.luangeng.support.TransEncode;
+import com.luangeng.slivertrans.support.TransDecode;
+import com.luangeng.slivertrans.support.TransEncode;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

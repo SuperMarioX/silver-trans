@@ -1,6 +1,6 @@
-package com.luangeng.server;
+package com.luangeng.slivertrans.server;
 
-import com.luangeng.support.Tool;
+import com.luangeng.slivertrans.support.Tool;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

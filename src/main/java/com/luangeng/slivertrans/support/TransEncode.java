@@ -1,6 +1,6 @@
-package com.luangeng.support;
+package com.luangeng.slivertrans.support;
 
-import com.luangeng.model.TransData;
+import com.luangeng.slivertrans.model.TransData;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;

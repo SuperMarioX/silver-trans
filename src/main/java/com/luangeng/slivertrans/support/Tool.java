@@ -1,7 +1,7 @@
-package com.luangeng.support;
+package com.luangeng.slivertrans.support;
 
-import com.luangeng.model.TransData;
-import com.luangeng.model.TypeEnum;
+import com.luangeng.slivertrans.model.TransData;
+import com.luangeng.slivertrans.model.TypeEnum;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;

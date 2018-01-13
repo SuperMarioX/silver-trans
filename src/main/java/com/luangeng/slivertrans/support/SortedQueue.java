@@ -1,6 +1,6 @@
-package com.luangeng.support;
+package com.luangeng.slivertrans.support;
 
-import com.luangeng.model.TransData;
+import com.luangeng.slivertrans.model.TransData;
 
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;

@@ -1,4 +1,4 @@
-package com.luangeng.model;
+package com.luangeng.slivertrans.model;
 
 public enum TypeEnum {
 

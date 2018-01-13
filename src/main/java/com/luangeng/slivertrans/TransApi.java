@@ -1,7 +1,7 @@
-package com.luangeng;
+package com.luangeng.slivertrans;
 
-import com.luangeng.client.TransClient;
-import com.luangeng.server.TransServer;
+import com.luangeng.slivertrans.client.TransClient;
+import com.luangeng.slivertrans.server.TransServer;
 
 public class TransApi {
 

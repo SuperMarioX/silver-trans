@@ -1,9 +1,9 @@
-package com.luangeng.client;
+package com.luangeng.slivertrans.client;
 
-import com.luangeng.model.TransData;
-import com.luangeng.model.TypeEnum;
-import com.luangeng.support.SortedQueue;
-import com.luangeng.support.Tool;
+import com.luangeng.slivertrans.model.TransData;
+import com.luangeng.slivertrans.model.TypeEnum;
+import com.luangeng.slivertrans.support.SortedQueue;
+import com.luangeng.slivertrans.support.Tool;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

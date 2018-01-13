@@ -1,8 +1,8 @@
-package com.luangeng;
+package com.luangeng.slivertrans;
 
-import com.luangeng.client.TransClient;
-import com.luangeng.server.TransServer;
-import com.luangeng.support.ConfigTool;
+import com.luangeng.slivertrans.client.TransClient;
+import com.luangeng.slivertrans.server.TransServer;
+import com.luangeng.slivertrans.support.ConfigTool;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.File;
@@ -48,6 +48,8 @@ public class CmdApp {
                 TransClient.instance().shutdown();
                 TransServer.instance().shutdown();
                 sc.close();
+            } else if(cmd.equals("help") || cmd.equals("?")){
+                System.out.println("");
             } else {
                 TransClient.instance().cmd(cmd);
             }

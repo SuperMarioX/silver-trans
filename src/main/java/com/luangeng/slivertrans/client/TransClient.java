@@ -1,8 +1,8 @@
-package com.luangeng.client;
+package com.luangeng.slivertrans.client;
 
-import com.luangeng.support.Tool;
-import com.luangeng.support.TransDecode;
-import com.luangeng.support.TransEncode;
+import com.luangeng.slivertrans.support.Tool;
+import com.luangeng.slivertrans.support.TransDecode;
+import com.luangeng.slivertrans.support.TransEncode;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
