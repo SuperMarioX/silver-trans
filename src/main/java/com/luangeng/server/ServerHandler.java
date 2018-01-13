@@ -6,16 +6,21 @@ import com.luangeng.support.Tool;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
+
+    private static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
 
     private String cpath = System.getProperty("user.dir");
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TransData data) throws Exception {
         handle(ctx, data);
+        //ctx.channel().writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
     }
 
     private void handle(ChannelHandlerContext ctx, TransData data) throws Exception {

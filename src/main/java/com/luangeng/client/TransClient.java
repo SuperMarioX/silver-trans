@@ -7,17 +7,20 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
 
 public class TransClient {
 
+    private static Logger logger = LoggerFactory.getLogger(TransClient.class);
+
     private static TransClient client = new TransClient();
     private String ip;
     private int port;
     private Channel channel = null;
-    private EventLoopGroup group;
-    private Thread t = new ClientThread();
+    private ClientThread t = new ClientThread();
 
     private TransClient() {
     }
@@ -26,13 +29,12 @@ public class TransClient {
         return client;
     }
 
-    public void start(String ip, int port) {
-        if (t.isAlive()) {
-            return;
-        }
+    public void startup(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        t.start();
+        if (!t.isAlive()) {
+            t.start();
+        }
     }
 
     public void getFile(String path) {
@@ -57,6 +59,8 @@ public class TransClient {
                         int i = Integer.valueOf(p);
                         cmd = "cd " + ClientHandler.getFileNameByIndex(i);
                     } catch (Exception e) {
+                        logger.info("Invalid input: " + p);
+                        return;
                     }
                 }
             }
@@ -65,11 +69,12 @@ public class TransClient {
     }
 
     public void shutdown() {
-        group.shutdownGracefully();
-        System.out.println("Trans Client stoped.");
+        t.shutdown();
     }
 
     private class ClientThread extends Thread {
+        private EventLoopGroup group;
+
         @Override
         public void run() {
             Bootstrap bootstrap = new Bootstrap();
@@ -88,13 +93,18 @@ public class TransClient {
                 bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
 
                 channel = bootstrap.connect(ip, port).sync().channel();
-                System.out.println("Trans Client connect to " + ip + ":" + port);
+                logger.info("Trans Client connect to " + ip + ":" + port);
                 channel.closeFuture().sync();
             } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                shutdown();
+                logger.error(e.getMessage(), e);
             }
+        }
+
+        public void shutdown() {
+            if (group != null) {
+                group.shutdownGracefully();
+            }
+            logger.info("Trans Client stoped.");
         }
     }
 

@@ -5,11 +5,15 @@ import com.luangeng.model.TypeEnum;
 import com.luangeng.support.Tool;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
+
+    private static Logger logger = LoggerFactory.getLogger(ClientHandler.class);
 
     private static Map<Integer, String> map = new HashMap();
 
@@ -33,16 +37,16 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
             if (msg.startsWith("ls ")) {
                 praseLs(msg);
             } else if (msg.startsWith("msg ")) {
-                System.out.println(msg.substring(4));
+                logger.info(msg.substring(4));
             } else {
-                System.out.println(msg);
+                logger.info(msg);
             }
         } else if (type == TypeEnum.DATA || type == TypeEnum.END) {
             receiver.receiver(data);
         } else if (type == TypeEnum.BEGIN) {
             receiver = new Receiver(data);
         } else {
-            System.out.println(Tool.getMsg(data));
+            logger.info(Tool.getMsg(data));
         }
     }
 
@@ -54,7 +58,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
             p = p.trim();
             String[] dd = p.split("/:/");
             if (dd.length == 3) {
-                System.out.println(dd[0] + " " + dd[1] + " " + dd[2]);
+                logger.info(dd[0] + " " + dd[1] + " " + dd[2]);
                 map.put(Integer.valueOf(dd[0].trim()), dd[2].trim());
             }
         }

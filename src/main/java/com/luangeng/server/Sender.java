@@ -2,6 +2,8 @@ package com.luangeng.server;
 
 import com.luangeng.support.Tool;
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Sender implements Runnable {
 
-    //private static Logger logger = LoggerFactory.getLogger(Sender.class);
+    private static Logger logger = LoggerFactory.getLogger(Sender.class);
 
     String path;
     String name;
@@ -52,7 +54,7 @@ public class Sender implements Runnable {
         }
 
         t0 = System.currentTimeMillis();
-        System.out.println("send begin: " + name + "  " + Tool.size(f.length()));
+        logger.info("send begin: " + name + "  " + Tool.size(f.length()));
         Tool.sendBegin(channel, name + "/:/" + f.length());
     }
 
@@ -73,12 +75,12 @@ public class Sender implements Runnable {
             Tool.sendEnd(channel, index);
 
             long cost = Math.round((System.currentTimeMillis() - t0) / 1000f);
-            System.out.println("send over: " + f.getName() + "   Cost Time: " + cost + "s");
+            logger.info("send over: " + f.getName() + "   Cost Time: " + cost + "s");
             clear();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 

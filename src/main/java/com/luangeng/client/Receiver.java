@@ -5,6 +5,8 @@ import com.luangeng.model.TypeEnum;
 import com.luangeng.support.SortedQueue;
 import com.luangeng.support.Tool;
 import io.netty.buffer.ByteBuf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +16,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class Receiver {
+
+    private static Logger logger = LoggerFactory.getLogger(Receiver.class);
 
     private SortedQueue queue = new SortedQueue();
     private String dstPath = System.getProperty("user.dir") + File.separator + "received";
@@ -42,11 +46,11 @@ public class Receiver {
         try {
             out = new FileOutputStream(f);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         ch = out.getChannel();
         queue.clear();
-        System.out.println("receive begin: " + fileName + "  " + Tool.size(totalSize));
+        logger.info("receive begin: " + fileName + "  " + Tool.size(totalSize));
         new MyThread().start();
         t1 = System.currentTimeMillis();
     }
@@ -57,7 +61,7 @@ public class Receiver {
 
     public void end() throws IOException {
         long cost = Math.round((System.currentTimeMillis() - t1) / 1000f);
-        System.out.println("receive over: " + fileName + "   Cost Time: " + cost + "s");
+        logger.info("receive over: " + fileName + "   Cost Time: " + cost + "s");
         if (out != null) {
             out.close();
             out = null;
@@ -75,9 +79,9 @@ public class Receiver {
         int ps = (int) (receivedSize * 100 / totalSize);
         if (ps != process) {
             this.process = ps;
-            System.out.print(process + "% ");
+            logger.info(process + "% ");
             if (this.process % 10 == 0 || process >= 100) {
-                System.out.println();
+                //System.out.println();
             }
         }
     }
@@ -99,7 +103,7 @@ public class Receiver {
                     bfn.release();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
     }

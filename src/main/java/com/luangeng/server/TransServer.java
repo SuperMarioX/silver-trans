@@ -10,12 +10,16 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TransServer {
 
+    private static Logger logger = LoggerFactory.getLogger(TransServer.class);
+
     private int port;
     private static TransServer server = new TransServer();
-    private Thread t = new ServerThread();
+    private ServerThread t = new ServerThread();
 
     private TransServer() {
     }
@@ -24,17 +28,27 @@ public class TransServer {
         return server;
     }
 
-    public void start(int port) {
+    public void startup(int port) {
         this.port = port;
-        t.start();
+
+        if (!t.isAlive()) {
+            t.start();
+        }
+    }
+
+    public void shutdown() {
+        t.shutdown();
     }
 
     private class ServerThread extends Thread {
+        private EventLoopGroup bossGroup;
+        private EventLoopGroup workerGroup;
+
         @Override
         public void run() {
-            EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-            EventLoopGroup workerGroup = new NioEventLoopGroup(1);
             try {
+                bossGroup = new NioEventLoopGroup(1);
+                workerGroup = new NioEventLoopGroup(1);
                 ServerBootstrap bootstrap = new ServerBootstrap();
                 bootstrap.group(bossGroup, workerGroup)
                         .channel(NioServerSocketChannel.class)
@@ -48,15 +62,21 @@ public class TransServer {
                             }
                         });
                 ChannelFuture future = bootstrap.bind(port).sync();
-                System.out.println("Trans Server started, port: " + port);
+                logger.info("Trans Server started, port: " + port);
                 future.channel().closeFuture().sync();
             } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                System.out.println("Trans Server shuting down");
+                logger.error(e.getMessage(), e);
+            }
+        }
+
+        public void shutdown() {
+            if (bossGroup != null) {
                 bossGroup.shutdownGracefully();
+            }
+            if (workerGroup != null) {
                 workerGroup.shutdownGracefully();
             }
+            logger.info("Trans Server stoped.");
         }
     }
 
