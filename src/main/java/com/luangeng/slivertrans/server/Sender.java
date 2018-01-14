@@ -23,6 +23,7 @@ public class Sender implements Runnable {
     FileInputStream in;
     FileChannel ch;
     ByteBuffer bf;
+    //MappedByteBuffer mb;
     int index = 0;
     Channel channel;
     private long t0;
@@ -67,6 +68,7 @@ public class Sender implements Runnable {
                 while (!channel.isWritable()) {
                     TimeUnit.MILLISECONDS.sleep(5);
                 }
+                //mb = ch.map(FileChannel.MapMode.READ_ONLY,0, 1024);
                 bf.flip();
                 Tool.sendData(channel, bf, index);
                 index++;

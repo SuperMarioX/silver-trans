@@ -40,7 +40,7 @@ public class TransClient {
     }
 
     public void getFile(String path) {
-        Tool.sendCmd(channel, "get " + path);
+        Tool.sendCmd(channel, "from " + path);
     }
 
     public void shutdown() {
@@ -59,9 +59,9 @@ public class TransClient {
             logger.info("not connected");
             return;
         }
-        if (cmd.startsWith("get ")) {
+        if (cmd.startsWith("from ")) {
             int i = Integer.valueOf(cmd.substring(4).trim());
-            cmd = "get " + ClientHandler.getFileNameByIndex(i);
+            cmd = "from " + ClientHandler.getFileNameByIndex(i);
         } else if (cmd.startsWith("cd ")) {
             String p = cmd.substring(3).trim();
             try {

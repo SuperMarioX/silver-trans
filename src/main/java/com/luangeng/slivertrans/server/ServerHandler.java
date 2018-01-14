@@ -30,7 +30,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                 ls(ctx.channel());
             } else if (cmd.startsWith("cd ")) {
                 cd(ctx.channel(), cmd);
-            } else if (cmd.startsWith("get ")) {
+            } else if (cmd.startsWith("from ")) {
                 String name = cmd.substring(4);
                 Sender sender = new Sender(cpath, name, ctx.channel());
                 SenderThreadPool.exe(sender);

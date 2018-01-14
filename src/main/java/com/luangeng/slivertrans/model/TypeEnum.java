@@ -2,7 +2,7 @@ package com.luangeng.slivertrans.model;
 
 public enum TypeEnum {
 
-    UNKNOW(0),
+    INVALID(0),
 
     CMD(1),
 
@@ -20,13 +20,13 @@ public enum TypeEnum {
         this.value = (short) value;
     }
 
-    public static TypeEnum get(short s) {
+    public static TypeEnum from(short s) {
         for (TypeEnum e : TypeEnum.values()) {
             if (e.value == s) {
                 return e;
             }
         }
-        return UNKNOW;
+        return INVALID;
     }
 
     public short value() {
