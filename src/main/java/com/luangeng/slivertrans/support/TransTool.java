@@ -10,7 +10,7 @@ import io.netty.util.CharsetUtil;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
-public class Tool {
+public class TransTool {
 
     public static final Charset CHARSET = CharsetUtil.UTF_8;
 

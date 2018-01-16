@@ -1,8 +1,8 @@
-package com.luangeng.slivertrans.server;
+package com.luangeng.slivertrans.client;
 
 import java.util.concurrent.*;
 
-public class SenderThreadPool {
+public class ReceiverThreadPool {
 
     private static ExecutorService executor = new ThreadPoolExecutor(10, 10,
             0L, TimeUnit.SECONDS,

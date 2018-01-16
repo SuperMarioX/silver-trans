@@ -2,8 +2,7 @@ package com.luangeng.slivertrans.client;
 
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
-import com.luangeng.slivertrans.support.SortedQueue;
-import com.luangeng.slivertrans.support.Tool;
+import com.luangeng.slivertrans.support.TransTool;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,64 +14,58 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class Receiver {
+public class Receiver implements Runnable {
 
     private static Logger logger = LoggerFactory.getLogger(Receiver.class);
 
-    private SortedQueue queue = new SortedQueue();
+    private SortedBlockingQueue queue = new SortedBlockingQueue();
     private String dstPath = System.getProperty("user.dir") + File.separator + "received";
     private String fileName;
     private long receivedSize = 0;
     private long totalSize = 0;
-    private int chunkIndex = 0;
     private FileOutputStream out;
     private FileChannel ch;
-    private long t1;
+    private long t0;
     private int process = 0;
 
     public Receiver(TransData data) {
-        init(Tool.getMsg(data));
-    }
-
-    public void init(String msg) {
+        String msg = TransTool.getMsg(data);
         String[] ss = msg.split("/:/");
         fileName = ss[0].trim();
         totalSize = Long.valueOf(ss[1].trim());
-        //new File(dstPath).mkdirs();
-        File f = new File(dstPath + File.separator + fileName);
-        if (f.exists()) {
-            f.delete();
+        File dstDir = new File(dstPath);
+        if (!dstDir.exists()) {
+            dstDir.mkdirs();
+        }
+        File dstFile = new File(dstPath + File.separator + fileName);
+        if (dstFile.exists()) {
+
         }
         try {
-            out = new FileOutputStream(f);
+            out = new FileOutputStream(dstFile);
         } catch (FileNotFoundException e) {
             logger.error("error: " + e.getMessage());
         }
         ch = out.getChannel();
-        queue.clear();
-        logger.info("receive begin: " + fileName + "  " + Tool.size(totalSize));
-        new MyThread().start();
-        t1 = System.currentTimeMillis();
+        logger.info("Receiving: " + fileName + "  Size: " + TransTool.size(totalSize));
     }
 
     public void receiver(TransData data) {
         queue.put(data);
     }
 
-    public void end() throws IOException {
-        long cost = Math.round((System.currentTimeMillis() - t1) / 1000f);
-        logger.info("receive over: " + fileName + "   Cost Time: " + cost + "s");
+    public void finish() throws IOException {
+        long cost = Math.round((System.currentTimeMillis() - t0) / 1000f);
+        logger.info("Receive complete: " + fileName + "   Cost Time: " + cost + "s");
         if (out != null) {
             out.close();
             out = null;
             ch = null;
         }
         fileName = null;
-        chunkIndex = 0;
         totalSize = 0;
         receivedSize = 0;
         process = 0;
-        queue.clear();
     }
 
     private void printProcess() {
@@ -80,32 +73,29 @@ public class Receiver {
         if (ps != process) {
             this.process = ps;
             logger.info(process + "% ");
-            if (this.process % 10 == 0 || process >= 100) {
-                //System.out.println();
-            }
         }
     }
 
-    private class MyThread extends Thread {
-        public void run() {
-            try {
-                while (true) {
-                    TransData data = queue.offer(chunkIndex++);
-                    if (data.getType() == TypeEnum.END) {
-                        end();
-                        break;
-                    }
-                    ByteBuf bfn = data.getData();
-                    receivedSize += data.getLength();
-                    ByteBuffer bf = bfn.nioBuffer();
-                    ch.write(bf);
-                    printProcess();
-                    bfn.release();
+    @Override
+    public void run() {
+        t0 = System.currentTimeMillis();
+        int chunkIndex = 0;
+        try {
+            while (true) {
+                TransData data = queue.pop(chunkIndex++);
+                if (data.getType() == TypeEnum.END) {
+                    finish();
+                    break;
                 }
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
+                ByteBuf bfn = data.getData();
+                receivedSize += data.getLength();
+                ByteBuffer bf = bfn.nioBuffer();
+                ch.write(bf);
+                printProcess();
+                bfn.release();
             }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
         }
     }
-
 }

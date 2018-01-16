@@ -1,6 +1,6 @@
 package com.luangeng.slivertrans.server;
 
-import com.luangeng.slivertrans.support.Tool;
+import com.luangeng.slivertrans.support.TransTool;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class Sender implements Runnable {
     public void begin(String path) {
         f = new File(path + File.separator + name);
         if (!f.exists() || !f.isFile() || !f.canRead()) {
-            Tool.sendMsg(channel, "file can not read.");
+            TransTool.sendMsg(channel, "file can not read.");
         }
 
         try {
@@ -55,8 +55,8 @@ public class Sender implements Runnable {
         }
 
         t0 = System.currentTimeMillis();
-        logger.info("send begin: " + name + "  " + Tool.size(f.length()));
-        Tool.sendBegin(channel, name + "/:/" + f.length());
+        logger.info("Sending: " + name + "  Size: " + TransTool.size(f.length()));
+        TransTool.sendBegin(channel, name + "/:/" + f.length());
     }
 
     public void send() {
@@ -70,14 +70,14 @@ public class Sender implements Runnable {
                 }
                 //mb = ch.map(FileChannel.MapMode.READ_ONLY,0, 1024);
                 bf.flip();
-                Tool.sendData(channel, bf, index);
+                TransTool.sendData(channel, bf, index);
                 index++;
                 bf.clear();
             }
-            Tool.sendEnd(channel, index);
+            TransTool.sendEnd(channel, index);
 
             long cost = Math.round((System.currentTimeMillis() - t0) / 1000f);
-            logger.info("send over: " + f.getName() + "   Cost Time: " + cost + "s");
+            logger.info("Send complete: " + f.getName() + "   Cost Time: " + cost + "s");
             clear();
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);

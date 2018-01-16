@@ -1,6 +1,7 @@
 package com.luangeng.slivertrans;
 
 import com.luangeng.slivertrans.client.TransClient;
+import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.server.TransServer;
 import com.luangeng.slivertrans.support.ConfigTool;
 import org.apache.log4j.PropertyConfigurator;
@@ -16,45 +17,72 @@ public class CmdApp {
         String log4j = System.getProperty("user.dir") + File.separator + "config" + File.separator + "log4j.properties";
         PropertyConfigurator.configure(log4j);
 
-        int port = ConfigTool.getInt("server.port");
-        TransServer.instance().startup(port);
+        Integer port = ConfigTool.getInt("server.port");
+        if (port == null) {
+            port = AppConst.DEFAULT_PORT;
+        }
+        TransServer.instance().start(port);
         Runtime.getRuntime().addShutdownHook(new ShutDownServer());
 
+        TransClient client = null;
         String clientIp = ConfigTool.getValue("client.ip");
-        String clientPort = ConfigTool.getValue("client.port");
+        Integer clientPort = ConfigTool.getInt("client.port");
+        if (clientPort == null) {
+            clientPort = AppConst.DEFAULT_PORT;
+        }
         if (clientIp != null) {
-            TransClient.instance().startup(clientIp, Integer.valueOf(clientPort));
-            Runtime.getRuntime().addShutdownHook(new ShutDownClient());
+            client = new TransClient();
+            client.start(clientIp, Integer.valueOf(clientPort));
         }
 
-        Scanner sc = new Scanner(System.in);
-        while (sc.hasNextLine()) {
-            String cmd = sc.nextLine().trim().toLowerCase();
+        Runtime.getRuntime().addShutdownHook(new ShutDownClient(client));
+
+        inputScan(client);
+
+        if (client != null) {
+            client.shutdown();
+        }
+        TransServer.instance().shutdown();
+    }
+
+    private static void inputScan(TransClient client) {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()) {
+            String cmd = scanner.nextLine().trim().toLowerCase();
             if (cmd.startsWith("connect ")) {
+                if (client != null) {
+                    System.out.println("Trans Client already connect with " + client.getAddress());
+                    continue;
+                }
                 String url = cmd.substring(8).trim();
                 String[] pp = url.split(":");
                 Arrays.stream(pp).forEach(t -> t.trim());
                 if (pp.length == 1) {
-                    TransClient.instance().startup(pp[0], 9000);
+                    client = new TransClient();
+                    client.start(pp[0], AppConst.DEFAULT_PORT);
                 } else if (pp.length == 2) {
-                    port = Integer.valueOf(pp[1]);
-                    TransClient.instance().startup(pp[0], port);
+                    int port = Integer.valueOf(pp[1]);
+                    client = new TransClient();
+                    client.start(pp[0], port);
                 } else {
-                    System.out.println("error input");
+                    System.out.println("Error input");
                 }
             } else if (cmd.equals("disconnect")) {
-                TransClient.instance().shutdown();
+                client.shutdown();
+                client = null;
             } else if (cmd.equals("exit")) {
-                TransClient.instance().shutdown();
-                TransServer.instance().shutdown();
-                sc.close();
-            } else if(cmd.equals("help") || cmd.equals("?")){
-                System.out.println("");
+                break;
+            } else if (cmd.equals("help") || cmd.equals("?")) {
+                System.out.println("this is help.");
             } else {
-                TransClient.instance().cmd(cmd);
+                if (client != null) {
+                    client.sendCmd(cmd);
+                } else {
+                    System.out.println("Not connected.");
+                }
             }
         }
-
+        scanner.close();
     }
 
     private static class ShutDownServer extends Thread {
@@ -64,8 +92,17 @@ public class CmdApp {
     }
 
     private static class ShutDownClient extends Thread {
+        private TransClient client;
+
+        ShutDownClient(TransClient client) {
+            this.client = client;
+        }
+
         public void run() {
-            TransClient.instance().shutdown();
+            if (client != null) {
+                client.shutdown();
+            }
         }
     }
+
 }

@@ -43,9 +43,16 @@ public class ConfigTool {
         return null;
     }
 
-    public static int getInt(String key) {
+    public static Integer getInt(String key) {
         String s = getValue(key);
-        return Integer.valueOf(s);
+        if (s == null) {
+            return null;
+        }
+        try {
+            return Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
 

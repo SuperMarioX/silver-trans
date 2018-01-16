@@ -2,7 +2,7 @@ package com.luangeng.slivertrans.client;
 
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
-import com.luangeng.slivertrans.support.Tool;
+import com.luangeng.slivertrans.support.TransTool;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -25,15 +25,15 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        Tool.sendCmd(ctx.channel(), "pwd");
-        Tool.sendCmd(ctx.channel(), "ls");
+        TransTool.sendCmd(ctx.channel(), "pwd");
+        TransTool.sendCmd(ctx.channel(), "ls");
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TransData data) throws Exception {
         TypeEnum type = data.getType();
         if (type == TypeEnum.MSG) {
-            String msg = Tool.getMsg(data);
+            String msg = TransTool.getMsg(data);
             if (msg.startsWith("ls ")) {
                 praseLs(msg);
             } else if (msg.startsWith("msg ")) {
@@ -45,8 +45,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
             receiver.receiver(data);
         } else if (type == TypeEnum.BEGIN) {
             receiver = new Receiver(data);
+            ReceiverThreadPool.submit(receiver);
         } else {
-            logger.info(Tool.getMsg(data));
+            logger.info(TransTool.getMsg(data));
         }
     }
 

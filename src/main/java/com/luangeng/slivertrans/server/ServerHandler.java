@@ -2,7 +2,7 @@ package com.luangeng.slivertrans.server;
 
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
-import com.luangeng.slivertrans.support.Tool;
+import com.luangeng.slivertrans.support.TransTool;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -25,19 +25,19 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
 
     private void handle(ChannelHandlerContext ctx, TransData data) throws Exception {
         if (data.getType() == TypeEnum.CMD) {
-            String cmd = Tool.getMsg(data);
+            String cmd = TransTool.getMsg(data);
             if (cmd.equalsIgnoreCase("ls")) {
                 ls(ctx.channel());
             } else if (cmd.startsWith("cd ")) {
                 cd(ctx.channel(), cmd);
-            } else if (cmd.startsWith("from ")) {
-                String name = cmd.substring(4);
+            } else if (cmd.startsWith("get ")) {
+                String name = cmd.substring(4).trim();
                 Sender sender = new Sender(cpath, name, ctx.channel());
-                SenderThreadPool.exe(sender);
+                SenderThreadPool.submit(sender);
             } else if (cmd.equalsIgnoreCase("pwd")) {
-                Tool.sendMsg(ctx.channel(), "now at " + ctx.channel().localAddress().toString() + cpath);
+                TransTool.sendMsg(ctx.channel(), ctx.channel().localAddress().toString() + cpath);
             } else {
-                Tool.sendMsg(ctx.channel(), "unknow command");
+                TransTool.sendMsg(ctx.channel(), "unknow command");
             }
         }
     }
@@ -61,14 +61,14 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
             if (f.isFile()) {
                 sb.append(k);
                 sb.append("/:/");
-                sb.append(Tool.size(f.length()));
+                sb.append(TransTool.size(f.length()));
                 sb.append("/:/");
                 sb.append(f.getName());
                 sb.append("\n");
                 k++;
             }
         }
-        Tool.sendMsg(channel, "ls " + sb.toString());
+        TransTool.sendMsg(channel, "ls " + sb.toString());
     }
 
     private void cd(Channel channel, String cmd) {
@@ -77,17 +77,17 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
             File f = new File(cpath);
             f = f.getParentFile();
             cpath = f.getAbsolutePath();
-            Tool.sendMsg(channel, "new path " + cpath);
+            TransTool.sendMsg(channel, "new path " + cpath);
             ls(channel);
         } else {
             String path1 = cpath + File.separator + dir;
             File f1 = new File(path1);
             if (f1.exists()) {
                 cpath = path1;
-                Tool.sendMsg(channel, "new path " + cpath);
+                TransTool.sendMsg(channel, "new path " + cpath);
                 ls(channel);
             } else {
-                Tool.sendMsg(channel, "error, path not found");
+                TransTool.sendMsg(channel, "error, path not found");
             }
         }
     }
