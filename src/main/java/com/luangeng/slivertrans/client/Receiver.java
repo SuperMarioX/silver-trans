@@ -1,5 +1,6 @@
 package com.luangeng.slivertrans.client;
 
+import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
 import com.luangeng.slivertrans.support.TransTool;
@@ -22,7 +23,7 @@ public class Receiver implements Runnable {
     private String dstPath = System.getProperty("user.dir") + File.separator + "received";
     private String fileName;
     private long receivedSize = 0;
-    private long totalSize = 0;
+    private long totalSize;
     private FileOutputStream out;
     private FileChannel ch;
     private long t0;
@@ -30,7 +31,7 @@ public class Receiver implements Runnable {
 
     public Receiver(TransData data) {
         String msg = TransTool.getMsg(data);
-        String[] ss = msg.split("/:/");
+        String[] ss = msg.split(AppConst.DELIMITER);
         fileName = ss[0].trim();
         totalSize = Long.valueOf(ss[1].trim());
         File dstDir = new File(dstPath);

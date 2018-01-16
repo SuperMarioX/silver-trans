@@ -1,5 +1,6 @@
 package com.luangeng.slivertrans.server;
 
+import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
 import com.luangeng.slivertrans.support.TransTool;
@@ -49,9 +50,9 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
         if (files != null)
             for (File f : files) {
                 sb.append(k);
-                sb.append("/:/");
+                sb.append(AppConst.DELIMITER);
                 sb.append("目录");
-                sb.append("/:/");
+                sb.append(AppConst.DELIMITER);
                 sb.append(f.getName());
                 sb.append("\n");
                 k++;
@@ -61,9 +62,9 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
         if (files != null)
             for (File f : files) {
                 sb.append(k);
-                sb.append("/:/");
+                sb.append(AppConst.DELIMITER);
                 sb.append(TransTool.size(f.length()));
-                sb.append("/:/");
+                sb.append(AppConst.DELIMITER);
                 sb.append(f.getName());
                 sb.append("\n");
                 k++;

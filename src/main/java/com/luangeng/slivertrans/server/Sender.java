@@ -1,5 +1,6 @@
 package com.luangeng.slivertrans.server;
 
+import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.support.TransTool;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
@@ -49,14 +50,14 @@ public class Sender implements Runnable {
         try {
             in = new FileInputStream(f);
             ch = in.getChannel();
-            bf = ByteBuffer.allocate(20480);
+            bf = ByteBuffer.allocate(AppConst.BUFFER_SIZE);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         t0 = System.currentTimeMillis();
         logger.info("Sending: " + name + "  Size: " + TransTool.size(f.length()));
-        TransTool.sendBegin(channel, name + "/:/" + f.length());
+        TransTool.sendBegin(channel, name + AppConst.DELIMITER + f.length());
     }
 
     public void send() {

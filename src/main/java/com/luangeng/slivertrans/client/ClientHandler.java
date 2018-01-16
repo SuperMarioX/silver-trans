@@ -1,5 +1,6 @@
 package com.luangeng.slivertrans.client;
 
+import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
 import com.luangeng.slivertrans.support.TransTool;
@@ -61,7 +62,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
         String[] paths = ss.split("\n");
         for (String p : paths) {
             p = p.trim();
-            String[] dd = p.split("/:/");
+            String[] dd = p.split(AppConst.DELIMITER);
             if (dd.length == 3) {
                 logger.info(dd[0] + " " + dd[1] + " " + dd[2]);
                 map.put(Integer.valueOf(dd[0].trim()), dd[2].trim());
