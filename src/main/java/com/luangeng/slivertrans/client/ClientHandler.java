@@ -36,8 +36,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
             String msg = TransTool.getMsg(data);
             if (msg.startsWith("ls ")) {
                 praseLs(msg);
-            } else if (msg.startsWith("msg ")) {
-                logger.info(msg.substring(4));
             } else {
                 logger.info(msg);
             }

@@ -33,7 +33,7 @@ public class TransClient extends Thread {
 
     public void sendCmd(String cmd) {
         if (channel == null) {
-            logger.info("not connected");
+            logger.info("Client not connected");
             return;
         }
         if (cmd.startsWith("get ")) {
@@ -73,7 +73,7 @@ public class TransClient extends Thread {
             logger.info("Trans Client connect with " + ip + ":" + port);
             channel.closeFuture().sync();
         } catch (Exception e) {
-            logger.error("error: " + e.getMessage());
+            logger.error("Error: " + e.getMessage());
             channel = null;
         }
     }

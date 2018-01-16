@@ -20,7 +20,6 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TransData data) throws Exception {
         handle(ctx, data);
-        //ctx.channel().writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
     }
 
     private void handle(ChannelHandlerContext ctx, TransData data) throws Exception {
@@ -37,7 +36,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
             } else if (cmd.equalsIgnoreCase("pwd")) {
                 TransTool.sendMsg(ctx.channel(), ctx.channel().localAddress().toString() + cpath);
             } else {
-                TransTool.sendMsg(ctx.channel(), "unknow command");
+                TransTool.sendMsg(ctx.channel(), "Unknow command");
             }
         }
     }
@@ -46,8 +45,9 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
         int k = 0;
         StringBuilder sb = new StringBuilder();
         File file = new File(cpath);
-        for (File f : file.listFiles(ff -> ff.isDirectory())) {
-            if (f.isDirectory()) {
+        File[] files = file.listFiles(ff -> ff.isDirectory());
+        if (files != null)
+            for (File f : files) {
                 sb.append(k);
                 sb.append("/:/");
                 sb.append("目录");
@@ -56,9 +56,10 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                 sb.append("\n");
                 k++;
             }
-        }
-        for (File f : file.listFiles(ff -> ff.isFile())) {
-            if (f.isFile()) {
+
+        files = file.listFiles(ff -> ff.isFile());
+        if (files != null)
+            for (File f : files) {
                 sb.append(k);
                 sb.append("/:/");
                 sb.append(TransTool.size(f.length()));
@@ -67,7 +68,6 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                 sb.append("\n");
                 k++;
             }
-        }
         TransTool.sendMsg(channel, "ls " + sb.toString());
     }
 
@@ -77,17 +77,17 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
             File f = new File(cpath);
             f = f.getParentFile();
             cpath = f.getAbsolutePath();
-            TransTool.sendMsg(channel, "new path " + cpath);
+            TransTool.sendMsg(channel, "New path " + cpath);
             ls(channel);
         } else {
             String path1 = cpath + File.separator + dir;
             File f1 = new File(path1);
-            if (f1.exists()) {
+            if (f1.exists() && f1.isDirectory()) {
                 cpath = path1;
-                TransTool.sendMsg(channel, "new path " + cpath);
+                TransTool.sendMsg(channel, "New path " + cpath);
                 ls(channel);
             } else {
-                TransTool.sendMsg(channel, "error, path not found");
+                TransTool.sendMsg(channel, "Error, folder not found");
             }
         }
     }

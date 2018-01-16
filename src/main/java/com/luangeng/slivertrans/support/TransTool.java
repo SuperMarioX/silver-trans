@@ -27,7 +27,10 @@ public class TransTool {
     }
 
     public static String getMsg(TransData data) {
-        return data.getData().toString(CHARSET);
+        if (data.getType() != TypeEnum.DATA) {
+            return data.getData().toString(CHARSET);
+        }
+        return null;
     }
 
 
