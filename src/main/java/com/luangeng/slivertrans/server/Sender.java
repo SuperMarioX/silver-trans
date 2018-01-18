@@ -1,7 +1,7 @@
 package com.luangeng.slivertrans.server;
 
 import com.luangeng.slivertrans.model.AppConst;
-import com.luangeng.slivertrans.support.TransTool;
+import com.luangeng.slivertrans.tools.TransTool;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +51,12 @@ public class Sender implements Runnable {
                 index++;
                 bf.clear();
             }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        } finally {
             TransTool.sendEnd(channel, index);
             long cost = Math.round((System.currentTimeMillis() - t0) / 1000f);
             logger.info("Send complete: " + f.getName() + "   Cost Time: " + cost + "s");
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
             clear();
         }
 

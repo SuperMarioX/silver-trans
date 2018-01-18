@@ -3,7 +3,7 @@ package com.luangeng.slivertrans.server;
 import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
-import com.luangeng.slivertrans.support.TransTool;
+import com.luangeng.slivertrans.tools.TransTool;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

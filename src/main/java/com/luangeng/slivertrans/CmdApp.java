@@ -3,7 +3,7 @@ package com.luangeng.slivertrans;
 import com.luangeng.slivertrans.client.TransClient;
 import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.server.TransServer;
-import com.luangeng.slivertrans.support.ConfigTool;
+import com.luangeng.slivertrans.tools.ConfigTool;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.File;

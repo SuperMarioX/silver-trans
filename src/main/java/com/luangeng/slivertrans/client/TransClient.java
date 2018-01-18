@@ -2,7 +2,7 @@ package com.luangeng.slivertrans.client;
 
 import com.luangeng.slivertrans.support.TransDecode;
 import com.luangeng.slivertrans.support.TransEncode;
-import com.luangeng.slivertrans.support.TransTool;
+import com.luangeng.slivertrans.tools.TransTool;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -51,23 +51,22 @@ public class TransClient extends Thread {
         TransTool.sendCmd(channel, cmd);
     }
 
-
     @Override
     public void run() {
         Bootstrap bootstrap = new Bootstrap();
         group = new NioEventLoopGroup();
         try {
             bootstrap.group(group).channel(NioSocketChannel.class);
+            bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
             bootstrap.handler(new ChannelInitializer<Channel>() {
                 @Override
                 protected void initChannel(Channel ch) throws Exception {
                     ChannelPipeline pipeline = ch.pipeline();
-                    ch.pipeline().addLast(new TransDecode());
-                    ch.pipeline().addLast(new TransEncode());
+                    pipeline.addLast(new TransDecode());
+                    pipeline.addLast(new TransEncode());
                     pipeline.addLast(new ClientHandler());
                 }
             });
-            bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
 
             channel = bootstrap.connect(ip, port).sync().channel();
             logger.info("Trans Client connect with " + ip + ":" + port);
