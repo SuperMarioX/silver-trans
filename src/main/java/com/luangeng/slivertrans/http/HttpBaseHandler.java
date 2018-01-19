@@ -39,8 +39,9 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
         if (HttpCommon.isStatic(uri)) {
             HttpHandler handler = new StaticHandler();
             future = handler.handle(ctx, request, response, uri);
-        } else {
-
+        } else if (uri.contains(".action")) {
+            HttpHandler handler = new ListHandler();
+            future = handler.handle(ctx, request, response, uri);
         }
 
         if (!HttpUtil.isKeepAlive(request) && future != null) {

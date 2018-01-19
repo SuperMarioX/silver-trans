@@ -37,12 +37,12 @@ public class HttpCommon {
         }
         // Convert file separators.
         uri = uri.replace('/', File.separatorChar);
-        if (uri.contains(File.separator + '.') ||
-                uri.contains('.' + File.separator) ||
-                uri.charAt(0) == '.' ||
-                uri.charAt(uri.length() - 1) == '.') {
-            return null;
-        }
+//        if (uri.contains(File.separator + '.') ||
+//                uri.contains('.' + File.separator) ||
+//                uri.charAt(0) == '.' ||
+//                uri.charAt(uri.length() - 1) == '.') {
+//            return null;
+//        }
 
         return uri;
     }
@@ -55,7 +55,7 @@ public class HttpCommon {
         set.add(".jpg");
         set.add(".gif");
         set.add(".js");
-        set.add(".bmp");
+        set.add(".ico");
         set.add(".html");
         set.add(".txt");
         for (String s : set) {

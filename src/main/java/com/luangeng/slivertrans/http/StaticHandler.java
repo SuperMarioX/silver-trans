@@ -20,9 +20,9 @@ public class StaticHandler extends HttpHandler {
 
     public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
-    public ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, FullHttpResponse response, String path) throws Exception {
+    public ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, FullHttpResponse response, String uri) throws Exception {
 
-        File file = new File(AppConst.BASE_DIR + path);
+        File file = new File(AppConst.BASE_DIR + uri);
         if (!file.exists() || file.isHidden()) {
             HttpCommon.sendError(ctx, HttpResponseStatus.NOT_FOUND);
             return null;
