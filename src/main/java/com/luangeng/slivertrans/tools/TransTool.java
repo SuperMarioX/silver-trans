@@ -54,13 +54,4 @@ public class TransTool {
         data.setIndex(index);
         ch.writeAndFlush(data);
     }
-
-    public static String size(long num) {
-        long m = 1 << 20;
-        if (num / m == 0) {
-            return (num / 1024) + "KB";
-        }
-        return num / m + "MB";
-    }
-
 }

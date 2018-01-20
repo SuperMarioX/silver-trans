@@ -3,6 +3,7 @@ package com.luangeng.slivertrans.server;
 import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
+import com.luangeng.slivertrans.tools.StringTool;
 import com.luangeng.slivertrans.tools.TransTool;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -63,7 +64,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
             for (File f : files) {
                 sb.append(k);
                 sb.append(AppConst.DELIMITER);
-                sb.append(TransTool.size(f.length()));
+                sb.append(StringTool.size(f.length()));
                 sb.append(AppConst.DELIMITER);
                 sb.append(f.getName());
                 sb.append("\n");

@@ -3,6 +3,7 @@ package com.luangeng.slivertrans.client;
 import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
+import com.luangeng.slivertrans.tools.StringTool;
 import com.luangeng.slivertrans.tools.TransTool;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class Receiver implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(Receiver.class);
 
     private SortedBlockingQueue queue = new SortedBlockingQueue();
-    private String dstPath = System.getProperty("user.dir") + File.separator + "received";
+    private String dstPath = AppConst.ROOT;
     private String fileName;
     private long receivedSize = 0;
     private long totalSize;
@@ -48,7 +49,7 @@ public class Receiver implements Runnable {
             logger.error("error: " + e.getMessage());
         }
         ch = out.getChannel();
-        logger.info("Receiving: " + fileName + "  Size: " + TransTool.size(totalSize));
+        logger.info("Receiving: " + fileName + "  Size: " + StringTool.size(totalSize));
     }
 
     public void receiver(TransData data) {

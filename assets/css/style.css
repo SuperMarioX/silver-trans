@@ -1,0 +1,33 @@
+body
+{
+background-image:url(../img/back.jpg);
+background-repeat:repeat;
+background-attachment:fixed;
+background-position: 50% 10%; 
+color:#d3d3d3;
+font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+font-size:17px
+}
+
+a{color:#d3d3d3;text-decoration:none; }
+a:hover {color:#0bd6d2;text-decoration:underline;}
+
+ul {
+    list-style-type: decimal;
+    margin:0px;
+    width:100%;
+}
+li {
+	list-style-type: decimal;
+	margin: 2px;
+}
+
+#dropTarget {
+    width: 50%;
+    height: 100px;
+    border: 3px dashed silver;
+    line-height: 100px;
+    text-align: center;
+    font-size: 30px;
+    color: #d3d3d3;
+}

@@ -1,5 +1,6 @@
-package com.luangeng.slivertrans.http;
+package com.luangeng.slivertrans;
 
+import com.luangeng.slivertrans.http.handler.HttpBaseHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -16,7 +17,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class HttpServer {
 
-    static int PORT = 8080;
+    private static int PORT = 8081;
 
     public static void main(String[] args) throws InterruptedException {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
@@ -50,7 +51,7 @@ public class HttpServer {
             //pipeline.addLast(new HttpContentCompressor());
 
             pipeline.addLast(new HttpServerCodec());
-            pipeline.addLast(new HttpObjectAggregator(65536));
+            pipeline.addLast(new HttpObjectAggregator(100 * 1024));
             pipeline.addLast(new ChunkedWriteHandler());
 
             pipeline.addLast(new HttpBaseHandler());

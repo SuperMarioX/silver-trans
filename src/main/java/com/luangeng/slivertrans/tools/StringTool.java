@@ -1,23 +1,15 @@
 package com.luangeng.slivertrans.tools;
 
-public class HttpUtils {
+public class StringTool {
 
     public static boolean isEmpty(String value) {
         return value == null || "".equals(value);
     }
 
-    /**
-     * Convert String to long
-     *
-     * @param value
-     * @param def   default value
-     * @return
-     */
     public static long toLong(String value, long def) {
         if (isEmpty(value)) {
             return def;
         }
-
         try {
             return Long.valueOf(value);
         } catch (NumberFormatException e) {
@@ -26,13 +18,6 @@ public class HttpUtils {
         }
     }
 
-    /**
-     * Convert String to int
-     *
-     * @param value
-     * @param def   default value
-     * @return
-     */
     public static int toInt(String value, int def) {
         if (isEmpty(value)) {
             return def;
@@ -45,4 +30,11 @@ public class HttpUtils {
         }
     }
 
+    public static String size(long num) {
+        long m = 1 << 20;
+        if (num / m == 0) {
+            return (num / 1024) + "KB";
+        }
+        return num / m + "MB";
+    }
 }
