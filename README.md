@@ -1,5 +1,5 @@
 ## silver-trans是什么？[![Build Status](https://travis-ci.org/luangeng/silver-trans.svg?branch=master)](https://travis-ci.org/luangeng/silver-trans)
-silver-trans是一个文件传输服务,
+silver-trans是一个文件服务器,也可以用来在主机直接传输文件。
 
 ## silver-trans能干什么？
 
