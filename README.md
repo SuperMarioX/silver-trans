@@ -33,9 +33,9 @@ It's up to you.
 
 
 ## 依赖
-[Netty](https://github.com/netty/netty)
-[resumable.js](https://github.com/23/resumable.js)
-[Gson](https://github.com/google/gson)
+* [Netty](https://github.com/netty/netty)
+* [resumable.js](https://github.com/23/resumable.js)
+* [Gson](https://github.com/google/gson)
 
 ***
 
