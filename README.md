@@ -28,8 +28,7 @@ TransApi.sentFile(src, dst);
 
 
 # silver-trans如何使用？
-你可以直接运行启动脚本作为文件服务器，也可以添加为依赖使用API调用
-It's up to you.
+你可以直接运行启动脚本作为文件服务器，也可以添加为依赖使用API调用， It's up to you.
 
 
 # 依赖
