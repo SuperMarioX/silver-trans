@@ -1,7 +1,8 @@
-# silver-trans
-基于Netty实现的文件传输组件.
-</br>
-1.服务器之间通过TCP传输，使用命令操作
+##silver-trans是什么？
+silver-trans是一个文件传输服务,
+
+##silver-trans能干什么？
+1.使用命令操作，在服务器之间通过TCP传输文件，
   
 |          命令      |                 | 
 | ----------------- |:-------------------|
@@ -14,11 +15,14 @@
 | get               | 获取文件|
 
 ***
-2.服务器之间通过TCP传输，API方式调用
+2.使用API方式调用，在服务器之间通过TCP传输文件
+TransApi.getFile(src, dst);
+TransApi.sentFile(src, dst);
 
 ***
 3.通过浏览器上传和下载文件
-***
 
+
+***
 
 [![Build Status](https://travis-ci.org/luangeng/silver-trans.svg?branch=master)](https://travis-ci.org/luangeng/silver-trans)
