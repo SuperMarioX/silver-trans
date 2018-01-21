@@ -1,8 +1,8 @@
-##silver-trans是什么？
+## silver-trans是什么？
 silver-trans是一个文件传输服务,
 
-##silver-trans能干什么？
-###1.使用命令操作，在服务器之间通过TCP传输文件，
+## silver-trans能干什么？
+### 1.使用命令操作，在服务器之间通过TCP传输文件，
   
 |          命令      |                 | 
 | ----------------- |:-------------------|
@@ -15,11 +15,11 @@ silver-trans是一个文件传输服务,
 | get               | 获取文件|
 
 
-###2.使用API方式调用，在服务器之间通过TCP传输文件
+### 2.使用API方式调用，在服务器之间通过TCP传输文件
 TransApi.getFile(src, dst);
 TransApi.sentFile(src, dst);
 
-###3.通过浏览器上传和下载文件
+### 3.通过浏览器上传和下载文件
 
 
 ***
