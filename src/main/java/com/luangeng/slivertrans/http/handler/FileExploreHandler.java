@@ -24,7 +24,7 @@ public class FileExploreHandler extends AbstractHttpHandler {
         String path = HttpTool.getParams(uri).get("path");
         path = path == null ? "" : path;
         if (path.endsWith("..")) {
-            path = path.substring(0, path.lastIndexOf("/"));
+            path = path.substring(0, path.lastIndexOf(File.separatorChar));
         }
 
         File file = new File(AppConst.ROOT + path);
@@ -34,7 +34,7 @@ public class FileExploreHandler extends AbstractHttpHandler {
         }
 
         path = file.getCanonicalPath();
-        if (!file.exists() || file.isHidden()) {
+        if (!file.exists()) {//|| file.isHidden()
             HttpTool.sendError(ctx, HttpResponseStatus.NOT_FOUND);
             return null;
         }

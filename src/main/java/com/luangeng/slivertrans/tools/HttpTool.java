@@ -38,6 +38,7 @@ public class HttpTool {
         staticResource.add(".ico");
         staticResource.add(".html");
         staticResource.add(".txt");
+        staticResource.add(".png");
     }
 
     // Decode the path.
