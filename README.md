@@ -17,8 +17,11 @@ silver-trans是一个文件传输服务,
 
 
 #### 2.使用API方式调用，在服务器之间通过TCP传输文件
+
+```java
 TransApi.getFile(src, dst);
 TransApi.sentFile(src, dst);
+```
 
 #### 3.通过浏览器上传和下载文件
 
