@@ -1,21 +1,19 @@
-$(document).ready(ajaxSetup());
+//$(document).ready();
 
 $(function(){
+    ajaxSetup();
     list('/');
 });
 
-// 全局Ajax设置, 用于session过期判断
 function ajaxSetup() {
     $.ajaxSetup({
         timeout : 30000,
         beforeSend : function(xhr) {
-            //添加ajax请求标识
             xhr.setRequestHeader("Ajax_request", "true");
         },
         complete : function(xhr, ts) {
-            //xhr.statusText
             if (xhr.getResponseHeader('sessionState') == 'timeout' && xhr.status == 403) {
-                //window.location.href = "login.jsp";
+                //window.location.href = "login.jsp";//xhr.statusText
                 console.log('jump');
             }
         }
@@ -65,5 +63,3 @@ function list(str){
         }
     });
 }
-
-

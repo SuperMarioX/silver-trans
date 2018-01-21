@@ -33,7 +33,7 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
         }
 
         if (uri.equals("") || uri.equals("/")) {
-            HttpTool.sendRedirect(ctx, "/html/list.html");
+            HttpTool.sendRedirect(ctx, "/html/index.html");
             return;
         }
 
