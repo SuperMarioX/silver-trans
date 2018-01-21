@@ -13,14 +13,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class TrunkPool {
+public class TrunkReceiver {
 
-    private static TrunkPool pool = new TrunkPool();
+    private static TrunkReceiver receive = new TrunkReceiver();
 
     private static Map<String, Task> taskMap = new HashMap();
 
-    public static TrunkPool instance() {
-        return pool;
+    public static TrunkReceiver instance() {
+        return receive;
     }
 
     public synchronized boolean write(ChunkInfo info, ByteBuf bf) {
@@ -33,7 +33,7 @@ public class TrunkPool {
         return task.write(bf, info);
     }
 
-    public synchronized boolean indexDone(ChunkInfo info) {
+    public synchronized boolean chunkWriten(ChunkInfo info) {
         Task t = taskMap.get(info.getResumableIdentifier());
         if (t != null) {
             return t.indexs.contains(info.getResumableChunkNumber());
@@ -68,6 +68,7 @@ public class TrunkPool {
                     taskMap.remove(info.getResumableIdentifier());
                     String newPath = AppConst.ROOT + File.separator + info.getResumableFilename();
                     f.renameTo(new File(newPath));
+                    indexs.clear();
                     return true;
                 }
             } catch (IOException e) {

@@ -17,9 +17,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class HttpServer {
 
-    private static int PORT = 8081;
-
-    public static void main(String[] args) throws InterruptedException {
+    public static void start(int port) throws InterruptedException {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -29,10 +27,10 @@ public class HttpServer {
             b.handler(new LoggingHandler(LogLevel.INFO));
             b.childHandler(new HttpUploadServerInitializer());
 
-            Channel ch = b.bind(PORT).sync().channel();
+            Channel ch = b.bind(port).sync().channel();
 
             System.out.println("Open your web browser and navigate to " +
-                    "http" + "://127.0.0.1:" + PORT + '/');
+                    "http" + "://127.0.0.1:" + port + '/');
 
             ch.closeFuture().sync();
         } finally {

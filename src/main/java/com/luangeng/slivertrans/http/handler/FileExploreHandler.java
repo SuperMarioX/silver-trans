@@ -13,30 +13,32 @@ import io.netty.util.CharsetUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.net.URLDecoder;
-import java.util.regex.Pattern;
 
 public class FileExploreHandler extends AbstractHttpHandler {
 
-    private static final Pattern ALLOWED_FILE_NAME = Pattern.compile("[^-\\._]?[^<>&\\\"]*");
+    private Gson gson = new Gson();
 
     @Override
     protected ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
-        uri = URLDecoder.decode(uri, "UTF8");
+        uri = uri.replace('/', File.separatorChar);
         String path = HttpTool.getParams(uri).get("path");
-        if (path.endsWith("...")) {
+        path = path == null ? "" : path;
+        if (path.endsWith("..")) {
             path = path.substring(0, path.lastIndexOf("/"));
         }
-        path = AppConst.ROOT + path;
-        if (!path.startsWith(AppConst.ROOT)) {
-            path = AppConst.ROOT;
+
+        File file = new File(AppConst.ROOT + path);
+        if (!file.getCanonicalPath().startsWith(AppConst.ROOT)) {
+            HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
+            return null;
         }
 
-        File file = new File(path);
+        path = file.getCanonicalPath();
         if (!file.exists() || file.isHidden()) {
             HttpTool.sendError(ctx, HttpResponseStatus.NOT_FOUND);
             return null;
         }
+
         if (file.isDirectory()) {
             ListFile lf = new ListFile();
             lf.setPath(path.substring(AppConst.ROOT.length()));
@@ -44,25 +46,21 @@ public class FileExploreHandler extends AbstractHttpHandler {
                 if (f.isHidden() || !f.canRead()) {
                     continue;
                 }
-                String name = f.getName();
-                if (!ALLOWED_FILE_NAME.matcher(name).matches()) {
-                    continue;
-                }
-                lf.getDirs().add(name);
+                lf.getDirs().add(f.getName());
             }
             for (File f : file.listFiles(ff -> ff.isFile())) {
                 if (f.isHidden() || !f.canRead()) {
                     continue;
                 }
                 String name = f.getName();
-                if (!ALLOWED_FILE_NAME.matcher(name).matches()) {
+                if (!AppConst.ALLOWED_FILE_NAME.matcher(name).matches()) {
                     continue;
                 }
                 lf.getFiles().add(name);
             }
 
             FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
-            ByteBuf buffer = Unpooled.copiedBuffer(new Gson().toJson(lf), CharsetUtil.UTF_8);
+            ByteBuf buffer = Unpooled.copiedBuffer(gson.toJson(lf), CharsetUtil.UTF_8);
             HttpUtil.setContentLength(response, buffer.readableBytes());
             response.content().writeBytes(buffer);
             buffer.release();
@@ -74,7 +72,11 @@ public class FileExploreHandler extends AbstractHttpHandler {
                 HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
                 return null;
             }
-            //
+            if (!AppConst.ALLOWED_FILE_NAME.matcher(file.getName()).matches()) {
+                HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
+                return null;
+            }
+
             RandomAccessFile raf = new RandomAccessFile(file, "r");
             long length = raf.length();
             HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
@@ -98,7 +100,6 @@ public class FileExploreHandler extends AbstractHttpHandler {
 
                 @Override
                 public void operationComplete(ChannelProgressiveFuture future) {
-                    //System.err.println(future.channel() + " Transfer complete.");
                     try {
                         raf.close();
                     } catch (IOException e) {

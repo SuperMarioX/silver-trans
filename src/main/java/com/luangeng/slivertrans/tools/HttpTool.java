@@ -1,6 +1,8 @@
 package com.luangeng.slivertrans.tools;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
@@ -15,7 +17,9 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpHeaders.Names.LOCATION;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_MODIFIED;
+import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 public class HttpTool {
@@ -24,6 +28,17 @@ public class HttpTool {
     public static final int HTTP_CACHE_SECONDS = 60;
     public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
     private static final Pattern INSECURE_URI = Pattern.compile(".*[<>&\"].*");  // INSECURE_URI.matcher(uri).matches()
+    private static Set<String> staticResource = new HashSet<>();
+
+    static {
+        staticResource.add(".css");
+        staticResource.add(".jpg");
+        staticResource.add(".gif");
+        staticResource.add(".js");
+        staticResource.add(".ico");
+        staticResource.add(".html");
+        staticResource.add(".txt");
+    }
 
     // Decode the path.
     public static String sanitizeUri(String uri) {
@@ -32,12 +47,6 @@ public class HttpTool {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        if (uri.isEmpty() || uri.charAt(0) != '/') {
-            return null;
-        }
-        // Convert file separators.
-        uri = uri.replace('/', File.separatorChar);
-
         return uri;
     }
 
@@ -52,12 +61,9 @@ public class HttpTool {
         for (String str : pair) {
             String[] pp = str.split("=");
             if (pp.length == 2) {
-                map.put(pp[0], pp[1]);
+                map.put(pp[0].trim(), pp[1].trim());
             } else if (pp.length == 1) {
-                map.put(pp[0], "");
-            } else {
-                //error
-                return null;
+                map.put(pp[0].trim(), "");
             }
         }
         return map;
@@ -69,15 +75,7 @@ public class HttpTool {
         if (i != -1) {
             uri = uri.substring(0, i);
         }
-        Set<String> set = new HashSet<>();
-        set.add(".css");
-        set.add(".jpg");
-        set.add(".gif");
-        set.add(".js");
-        set.add(".ico");
-        set.add(".html");
-        set.add(".txt");
-        for (String s : set) {
+        for (String s : staticResource) {
             if (uri.endsWith(s)) {
                 return true;
             }
@@ -85,10 +83,17 @@ public class HttpTool {
         return false;
     }
 
-    public static void sendError(ChannelHandlerContext ctx,
-                                 HttpResponseStatus status) {
-        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1,
-                status, Unpooled.copiedBuffer("Failure: " + status.toString() + "\r\n", CharsetUtil.UTF_8));
+    public static ChannelFuture sendMsg(ChannelHandlerContext ctx, String msg) {
+        ByteBuf bf = Unpooled.copiedBuffer(msg, CharsetUtil.UTF_8);
+        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, bf);
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, bf.readableBytes());
+        return ctx.writeAndFlush(response);
+    }
+
+    public static void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
+        ByteBuf bf = Unpooled.copiedBuffer("Failure: " + status.toString() + "\r\n", CharsetUtil.UTF_8);
+        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status, bf);
         response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
         // Close the connection as soon as the error message is sent.
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
@@ -96,21 +101,22 @@ public class HttpTool {
 
     /**
      * When file timestamp is the same as what the browser is sending up, send a "304 Not Modified"
-     *
-     * @param ctx Context
      */
     public static void sendNotModified(ChannelHandlerContext ctx) {
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, NOT_MODIFIED);
         setDateHeader(response);
-
         // Close the connection as soon as the error message is sent.
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+    }
+
+    public static void sendRedirect(ChannelHandlerContext ctx, String newUri) {
+        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.FOUND);
+        response.headers().set(LOCATION, newUri);
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
     /**
      * Sets the Date header for the HTTP response
-     *
-     * @param response HTTP response
      */
     private static void setDateHeader(FullHttpResponse response) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(HTTP_DATE_FORMAT, Locale.US);
@@ -122,9 +128,6 @@ public class HttpTool {
 
     /**
      * Sets the Date and Cache headers for the HTTP Response
-     *
-     * @param response    HTTP response
-     * @param fileToCache file to extract content type
      */
     public static void setDateAndCacheHeaders(HttpResponse response, File fileToCache) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(HTTP_DATE_FORMAT, Locale.US);
@@ -144,9 +147,6 @@ public class HttpTool {
 
     /**
      * Sets the content type header for the HTTP Response
-     *
-     * @param response HTTP response
-     * @param file     file to extract content type
      */
     public static void setContentTypeHeader(HttpResponse response, File file) {
         MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();

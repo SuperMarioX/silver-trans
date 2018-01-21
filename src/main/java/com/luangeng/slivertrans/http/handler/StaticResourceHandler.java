@@ -24,14 +24,19 @@ public class StaticResourceHandler extends AbstractHttpHandler {
     public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     public ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
-
-        File file = new File(AppConst.BASE_DIR + uri);
-        if (!file.exists() || file.isHidden()) {
-            HttpTool.sendError(ctx, HttpResponseStatus.NOT_FOUND);
+        uri = uri.replace('/', File.separatorChar);
+        File file = new File(AppConst.ASSETS_DIR + uri);
+        if (!file.getCanonicalPath().startsWith(AppConst.ASSETS_DIR)) {
+            HttpTool.sendError(ctx, FORBIDDEN);
             return null;
         }
-        if (!file.isFile()) {
+        if (!AppConst.ALLOWED_FILE_NAME.matcher(file.getName()).matches()) {
             HttpTool.sendError(ctx, FORBIDDEN);
+            return null;
+        }
+
+        if (!file.exists() || file.isHidden() || !file.isFile()) {
+            HttpTool.sendError(ctx, HttpResponseStatus.NOT_FOUND);
             return null;
         }
 
@@ -41,8 +46,8 @@ public class StaticResourceHandler extends AbstractHttpHandler {
             return null;
         }
 
-        FileChannel channel = new RandomAccessFile(file, "r").getChannel();
-        long fileLength = channel.size();
+        FileChannel fileChannel = new RandomAccessFile(file, "r").getChannel();
+        long fileLength = fileChannel.size();
 
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK);
         HttpUtil.setContentLength(response, fileLength);
@@ -54,12 +59,12 @@ public class StaticResourceHandler extends AbstractHttpHandler {
         }
 
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        while (channel.read(buffer) != -1) {
+        while (fileChannel.read(buffer) != -1) {
             buffer.flip();
             response.content().writeBytes(buffer);
             buffer.clear();
         }
-        channel.close();
+        fileChannel.close();
 
         return ctx.writeAndFlush(response);
     }

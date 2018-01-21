@@ -10,9 +10,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class CmdApp {
+public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         String log4j = System.getProperty("user.dir") + File.separator + "config" + File.separator + "log4j.properties";
         PropertyConfigurator.configure(log4j);
@@ -21,6 +21,13 @@ public class CmdApp {
         if (port == null) {
             port = AppConst.DEFAULT_PORT;
         }
+
+        String protocol = ConfigTool.getValue("protocol");
+        if (protocol.equalsIgnoreCase("http")) {
+            HttpServer.start(port);
+            return;
+        }
+
         TransServer.instance().start(port);
         Runtime.getRuntime().addShutdownHook(new ShutDownServer());
 

@@ -1,7 +1,7 @@
 $(document).ready(ajaxSetup());
 
 $(function(){
-    list();
+    refresh();
 });
 
 // 全局Ajax设置, 用于session过期判断
@@ -23,22 +23,33 @@ function ajaxSetup() {
 }
 
 function down(a){
-    var str = $("#path").html()=='/' ? '' : $("#path").html();
+    var path = $("#path").text().trim();
+    var str = path=='/' ? '' : path;
     str = 'list.action?path='+str+'/'+$(a).html();
     window.open(str);
 }
 
-function list(a) {
+function refresh(){
+    var path = $("#path").text().trim();
+    list(path);
+}
+
+function jump(a) {
     var str = '';
     if(a!=undefined){
-        if($(a).html().endsWith('...')) {
-            str = $("#path").html() + '...';
+        var path = $("#path").text().trim();
+        if($(a).text().trim().endsWith('..')) {
+            str = path + '..';
         }
         else{
-            str = $("#path").html()=='/' ? '' : $("#path").html();
-            str = str+'/'+$(a).html();
+            str = path=='/' ? '' : path;
+            str = str+'/'+$(a).text();
         }
     }
+    list(str);
+}
+
+function list(str){
     $.ajax({
         url : "/list.action",
         type : "GET",
@@ -48,20 +59,20 @@ function list(a) {
         success : function(data) {
         $("ul").html("");
         if (data.path==''){
-            $("#path").html('/');
+            $("#path").html('/&nbsp;&nbsp;');
         }else{
-            $("#path").html(data.path);
-            $("ul").append("<li><a href='javascript:void(0);' onclick=list(this)>...</a></li>");
+            $("#path").text(data.path);
+            $("ul").append("<li><a href='javascript:void(0);' onclick=jump(this)>..&nbsp;&nbsp;&nbsp;&nbsp;</a></li>");
         }
         for (i in data.dirs) {
-            var s="<li><a href='javascript:void(0);' onclick=list(this)>" + data.dirs[i]+"</a></li>";
+            var s="<li>"+$("#dir_ico").html()+"<a href='javascript:void(0);' onclick=jump(this)>" + data.dirs[i]+"</a></li>";
             $("ul").append(s);
         }
         for (i in data.files) {
-        var str = $("#path").html()=='/' ? '' : $("#path").html();
+            var str = $("#path").text()=='/' ? '' : $("#path").text();
             str = 'list.action?path='+str+'/'+data.files[i];
-             var s="<li><a href='"+str+"'>"+ data.files[i]+"</a></li>";
-             $("ul").append(s);
+            var s="<li>"+$("#file_ico").html()+"<a href='"+str+"'>"+ data.files[i]+"</a></li>";
+            $("ul").append(s);
         }
         }
     });

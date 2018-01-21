@@ -1,18 +1,14 @@
 package com.luangeng.slivertrans.http.handler;
 
-import com.luangeng.slivertrans.http.TrunkPool;
+import com.luangeng.slivertrans.http.TrunkReceiver;
 import com.luangeng.slivertrans.model.ChunkInfo;
 import com.luangeng.slivertrans.tools.HttpTool;
 import com.luangeng.slivertrans.tools.StringTool;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.*;
-import io.netty.util.CharsetUtil;
-
-import static io.netty.handler.codec.http.HttpResponseStatus.OK;
-import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 public class FileUploadHandler extends AbstractHttpHandler {
 
@@ -39,7 +35,7 @@ public class FileUploadHandler extends AbstractHttpHandler {
         info.setResumableType(type);
 
         if (!info.vaild()) {
-
+            return null;
         }
         return info;
     }
@@ -48,31 +44,32 @@ public class FileUploadHandler extends AbstractHttpHandler {
     protected ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
 
         ChunkInfo info = getResumableInfo(uri);
-
-        if (request.method() == HttpMethod.GET) {
-            if (TrunkPool.instance().indexDone(info)) {
-                writeResponse(ctx, "Uploaded");
-            } else {
-                HttpTool.sendError(ctx, HttpResponseStatus.NOT_MODIFIED);
-            }
+        if (info == null) {
+            HttpTool.sendError(ctx, HttpResponseStatus.BAD_REQUEST);
             return null;
         }
 
-        boolean done = TrunkPool.instance().write(info, request.content());
-        if (done) {
-            writeResponse(ctx, "All finished.");
-        } else {
-            writeResponse(ctx, "Upload");
+        ChannelFuture channelFuture = null;
+        if (request.method() == HttpMethod.GET) {
+            if (TrunkReceiver.instance().chunkWriten(info)) {
+                HttpTool.sendMsg(ctx, "Uploaded");
+            } else {
+                HttpTool.sendNotModified(ctx);
+            }
+            return null;
+        } else if (request.method() == HttpMethod.POST) {
+
+            boolean done = TrunkReceiver.instance().write(info, request.content());
+
+            if (done) {
+                channelFuture = HttpTool.sendMsg(ctx, "All finished.");
+            } else {
+                channelFuture = HttpTool.sendMsg(ctx, "Upload");
+            }
         }
 
-        return null;
+        return channelFuture;
     }
 
-    private void writeResponse(ChannelHandlerContext ctx, String msg) {
-        ByteBuf bf = Unpooled.copiedBuffer(msg, CharsetUtil.UTF_8);
-        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, bf);
-        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
-        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, bf.readableBytes());
-        ctx.writeAndFlush(response);
-    }
+
 }
