@@ -26,6 +26,17 @@ TransApi.sentFile(src, dst);
 #### 3.通过浏览器上传和下载文件
 
 
+
+## silver-trans如何使用？
+你可以直接运行启动脚本作为文件服务器，也可以添加为依赖使用API调用
+It's up to you.
+
+
+## 依赖
+[Netty](https://github.com/netty/netty)
+[resumable.js](https://github.com/23/resumable.js)
+[Gson](https://github.com/google/gson)
+
 ***
 
 [![Build Status](https://travis-ci.org/luangeng/silver-trans.svg?branch=master)](https://travis-ci.org/luangeng/silver-trans)
