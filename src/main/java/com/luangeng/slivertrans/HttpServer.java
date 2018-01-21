@@ -11,8 +11,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class HttpServer {
@@ -24,7 +22,7 @@ public class HttpServer {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup);
             b.channel(NioServerSocketChannel.class);
-            b.handler(new LoggingHandler(LogLevel.INFO));
+            //b.handler(new LoggingHandler(LogLevel.INFO));
             b.childHandler(new HttpUploadServerInitializer());
 
             Channel ch = b.bind(port).sync().channel();
@@ -49,7 +47,7 @@ public class HttpServer {
             //pipeline.addLast(new HttpContentCompressor());
 
             pipeline.addLast(new HttpServerCodec());
-            pipeline.addLast(new HttpObjectAggregator(100 * 1024));
+            pipeline.addLast(new HttpObjectAggregator(1024 * 1024));
             pipeline.addLast(new ChunkedWriteHandler());
 
             pipeline.addLast(new HttpBaseHandler());

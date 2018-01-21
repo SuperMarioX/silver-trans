@@ -1,7 +1,7 @@
 var r = new Resumable({
   target: 'upload.action',
   method: 'octet',
-  chunkSize:1024*10,
+  chunkSize:1024*300,
   simultaneousUploads:4,
   //testChunks: true,
   query:{upload_token: new Date().getTime()},

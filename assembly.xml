@@ -28,6 +28,10 @@
             <directory>target/config</directory>
             <outputDirectory>/config</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>target/assets</directory>
+            <outputDirectory>/assets</outputDirectory>
+        </fileSet>
 
         <!-- 从源目录拷贝文件去压缩 -->
         <fileSet>

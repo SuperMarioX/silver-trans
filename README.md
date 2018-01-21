@@ -1,6 +1,7 @@
 # silver-trans
 基于Netty实现的文件传输组件.
-</br>    
+</br>
+1.服务器之间通过TCP传输，使用命令操作
   
 |          命令      |                 | 
 | ----------------- |:-------------------|
@@ -13,4 +14,11 @@
 | get               | 获取文件|
 
 ***
+2.服务器之间通过TCP传输，API方式调用
+
+***
+3.通过浏览器上传和下载文件
+***
+
+
 [![Build Status](https://travis-ci.org/luangeng/silver-trans.svg?branch=master)](https://travis-ci.org/luangeng/silver-trans)
