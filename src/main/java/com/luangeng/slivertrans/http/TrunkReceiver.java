@@ -5,7 +5,6 @@ import com.luangeng.slivertrans.model.ChunkInfo;
 import io.netty.buffer.ByteBuf;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
@@ -42,15 +41,21 @@ public class TrunkReceiver {
     }
 
     private static class Task {
+        private String relativePath;
         private File f;
         private RandomAccessFile raf = null;
         private Set<Long> indexs = new HashSet<>();
 
         public Task(ChunkInfo info) {
-            f = new File(AppConst.ROOT + File.separator + info.getResumableFilename() + ".temp");
+            relativePath = info.getResumableRelativePath();
+            String dst = AppConst.ROOT + relativePath + File.separator + info.getResumableFilename();
             try {
+                f = new File(dst + ".temp");
+                if (!f.getCanonicalPath().startsWith(AppConst.ROOT)) {
+                    throw new IOException("path forbidden");
+                }
                 raf = new RandomAccessFile(f, "rw");
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -66,7 +71,7 @@ public class TrunkReceiver {
                 if (indexs.size() == info.getResumableTotalChunks()) {
                     raf.close();
                     taskMap.remove(info.getResumableIdentifier());
-                    String newPath = AppConst.ROOT + File.separator + info.getResumableFilename();
+                    String newPath = AppConst.ROOT + relativePath + File.separator + info.getResumableFilename();
                     f.renameTo(new File(newPath));
                     indexs.clear();
                     return true;

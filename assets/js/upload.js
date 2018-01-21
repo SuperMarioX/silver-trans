@@ -4,6 +4,7 @@ var r = new Resumable({
   chunkSize:1024*10,
   simultaneousUploads:4,
   //testChunks: true,
+  query:{upload_token: new Date().getTime()},
   throttleProgressCallbacks:1
 });
 
@@ -19,6 +20,7 @@ r.on('fileProgress', function(file){
 r.on('fileAdded', function(file, event){
     $("#fileName").html(file.fileName)
     r.upload();
+    file.relativePath = $("#path").text().trim();
     console.info('fileAdded', file);
   });
 r.on('filesAdded', function(array){
@@ -38,8 +40,8 @@ r.on('complete', function(){
     console.info('complete');
   });
 r.on('progress', function(){
-    //console.info('progress');
-    $('#process').html(Math.round(r.progress()*10000)/100+'%')
+    var process =  Math.round(r.progress()*10000)/100;
+    $('#process').text(process+'%')
   });
 r.on('error', function(message, file){
     console.info('error', message, file);

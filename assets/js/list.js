@@ -1,7 +1,7 @@
 $(document).ready(ajaxSetup());
 
 $(function(){
-    refresh();
+    list('/');
 });
 
 // 全局Ajax设置, 用于session过期判断
@@ -22,21 +22,9 @@ function ajaxSetup() {
     });
 }
 
-function down(a){
-    var path = $("#path").text().trim();
-    var str = path=='/' ? '' : path;
-    str = 'list.action?path='+str+'/'+$(a).html();
-    window.open(str);
-}
-
-function refresh(){
-    var path = $("#path").text().trim();
-    list(path);
-}
-
 function jump(a) {
     var str = '';
-    if(a!=undefined){
+    if(a != undefined){
         var path = $("#path").text().trim();
         if($(a).text().trim().endsWith('..')) {
             str = path + '..';

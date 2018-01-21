@@ -102,7 +102,11 @@ public class ChunkInfo {
     }
 
     public boolean vaild() {
-        if (resumableChunkSize < 0 || resumableTotalSize < 0) {
+        if (resumableChunkNumber < 0 ||
+                resumableChunkSize < 0 ||
+                resumableTotalSize < 0 ||
+                resumableCurrentChunkSize > resumableTotalSize ||
+                resumableChunkNumber > resumableTotalChunks) {
             return false;
         } else {
             return true;

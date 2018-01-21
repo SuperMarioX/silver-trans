@@ -10,18 +10,21 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 
+import java.util.Map;
+
 public class FileUploadHandler extends AbstractHttpHandler {
 
     private ChunkInfo getResumableInfo(String uri) {
-        long chunkNum = StringTool.toLong(HttpTool.getParams(uri).get("resumableChunkNumber"), -1);
-        long chunkSize = StringTool.toLong(HttpTool.getParams(uri).get("resumableChunkSize"), -1);
-        long currentChunkSize = StringTool.toLong(HttpTool.getParams(uri).get("resumableCurrentChunkSize"), -1);
-        long totalSize = StringTool.toLong(HttpTool.getParams(uri).get("resumableTotalSize"), -1);
-        long totalChunks = StringTool.toLong(HttpTool.getParams(uri).get("resumableTotalChunks"), -1);
-        String identifier = HttpTool.getParams(uri).get("resumableIdentifier");
-        String filename = HttpTool.getParams(uri).get("resumableFilename");
-        String relativePath = HttpTool.getParams(uri).get("resumableRelativePath");
-        String type = HttpTool.getParams(uri).get("resumableType");
+        Map<String, String> queryparams = HttpTool.getParams(uri);
+        long chunkNum = StringTool.toLong(queryparams.get("resumableChunkNumber"), -1);
+        long chunkSize = StringTool.toLong(queryparams.get("resumableChunkSize"), -1);
+        long currentChunkSize = StringTool.toLong(queryparams.get("resumableCurrentChunkSize"), -1);
+        long totalSize = StringTool.toLong(queryparams.get("resumableTotalSize"), -1);
+        long totalChunks = StringTool.toLong(queryparams.get("resumableTotalChunks"), -1);
+        String identifier = queryparams.get("resumableIdentifier");
+        String filename = queryparams.get("resumableFilename");
+        String relativePath = queryparams.get("resumableRelativePath");
+        String type = queryparams.get("resumableType");
 
         ChunkInfo info = new ChunkInfo();
         info.setResumableChunkNumber(chunkNum);
