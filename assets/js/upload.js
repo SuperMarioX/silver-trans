@@ -53,7 +53,7 @@ r.on('complete', function() {
 });
 r.on('progress', function() {
 	var process = Math.round(r.progress() * 10000) / 100;
-	$('.expand').width(process+'%');
+	$('.processbar').width(process+'%');
 	$('#process').text(process + '%')
 });
 r.on('error', function(message, file) {
