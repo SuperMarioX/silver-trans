@@ -7,18 +7,27 @@
 </head>
 <body>
 
-<a style="display:inline-block;height:30px;text-align:center;line-height:30px;"><b>Path:&nbsp;&nbsp;&nbsp;
-    <a href="javascript:void(0)" id="path" onclick="list($('#path').text().trim());"></a></b></a>
+<span class="processbar"></span>
+<div style="margin:10px;">
+    <div id="loading">
+        <div id="spinner"></div>
+    </div>
+
+    <div style="display:inline-block;height:30px;text-align:center;line-height:30px;"><b>Path:&nbsp;&nbsp;&nbsp;
+        <a href="javascript:void(0)" id="path" onclick="list($('#path').text().trim());"></a></b></div>
 <br/>
 
-<a id="process" style="width:80px;display:inline-block;">0%</a>
-<a href="javascript:void(0)" id="browseButton">Select files:&nbsp;&nbsp;<a id="fileName"></a></a>
+    <div id="process" style="width:80px;display:inline-block;">0%</div>
+    <a href="javascript:void(0)" id="browseButton">Select files:&nbsp;&nbsp;</a>
+    <div id="fileName" style="display:inline-block;"></div>
 
 <p></p>
 
 <div id="dropTarget">将文件拖拽到此区域上传</div>
 
 <ul></ul>
+
+</div>
 
 <div id="dir_ico" style="display:none">
     <svg aria-hidden="true" version="1.1" height="16" width="14" viewBox="0 0 14 16"

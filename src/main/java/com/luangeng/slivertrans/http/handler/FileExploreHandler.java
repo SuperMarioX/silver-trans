@@ -27,8 +27,8 @@ public class FileExploreHandler extends AbstractHttpHandler {
             path = path.substring(0, path.lastIndexOf(File.separatorChar));
         }
 
-        File file = new File(AppConst.ROOT + path);
-        if (!file.getCanonicalPath().startsWith(AppConst.ROOT)) {
+        File file = new File(AppConst.ROOT_PATH + path);
+        if (!file.getCanonicalPath().startsWith(AppConst.ROOT_PATH)) {
             HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
             return null;
         }
@@ -41,7 +41,7 @@ public class FileExploreHandler extends AbstractHttpHandler {
 
         if (file.isDirectory()) {
             ListFile lf = new ListFile();
-            lf.setPath(path.substring(AppConst.ROOT.length()));
+            lf.setPath(path.substring(AppConst.ROOT_PATH.length()));
             for (File f : file.listFiles(ff -> ff.isDirectory())) {
                 if (f.isHidden() || !f.canRead()) {
                     continue;

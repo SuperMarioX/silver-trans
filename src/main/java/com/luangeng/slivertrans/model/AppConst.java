@@ -15,7 +15,7 @@ public interface AppConst {
 
     String ASSETS_DIR = System.getProperty("user.dir") + File.separator + "assets";
 
-    String ROOT = ConfigTool.getValue("root.path");
+    String ROOT_PATH = ConfigTool.getValue("root.path");
 
     Pattern ALLOWED_FILE_NAME = Pattern.compile("[^-\\._]?[^<>&\\\"]*");
 

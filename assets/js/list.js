@@ -9,6 +9,7 @@ function ajaxSetup() {
 	$.ajaxSetup({
 		timeout : 30000,
 		beforeSend : function(xhr) {
+		    $("#loading").show();
 			xhr.setRequestHeader("Ajax_request", "true");
 		},
 		complete : function(xhr, ts) {
@@ -17,6 +18,7 @@ function ajaxSetup() {
 				// window.location.href = "login.jsp";//xhr.statusText
 				console.log('jump');
 			}
+			$("#loading").fadeOut("slow");
 		}
 	});
 }
@@ -33,11 +35,11 @@ function jump(a) {
 		}
 	}
 	list(str);
+
 }
 
 function list(str) {
-	$
-			.ajax({
+	$.ajax({
 				url : "/list.action",
 				type : "GET",
 				data : {

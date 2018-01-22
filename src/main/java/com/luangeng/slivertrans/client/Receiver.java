@@ -21,7 +21,7 @@ public class Receiver implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(Receiver.class);
 
     private SortedBlockingQueue queue = new SortedBlockingQueue();
-    private String dstPath = AppConst.ROOT;
+    private String dstPath = AppConst.ROOT_PATH;
     private String fileName;
     private long receivedSize = 0;
     private long totalSize;

@@ -27,6 +27,11 @@ r.on('fileAdded', function(file, event) {
 });
 r.on('filesAdded', function(array) {
 	r.upload();
+//	var a =  new Array();
+//    for(var e in array){
+//        a.push(e.fileName);
+//    }
+//	$("#fileName").html(a.join(', '))
 	console.info('filesAdded', array);
 });
 r.on('fileRetry', function(file) {
@@ -37,12 +42,18 @@ r.on('fileError', function(file, message) {
 });
 r.on('uploadStart', function() {
 	console.info('uploadStart');
+	$('.expand').width('0%');
+	$("#loading").show();
+	$("#browseButton").css("pointer-events","none");
 });
 r.on('complete', function() {
 	console.info('complete');
+	$("#loading").fadeOut("slow");
+	$("#browseButton").css("pointer-events","auto");
 });
 r.on('progress', function() {
 	var process = Math.round(r.progress() * 10000) / 100;
+	$('.expand').width(process+'%');
 	$('#process').text(process + '%')
 });
 r.on('error', function(message, file) {

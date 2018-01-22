@@ -48,10 +48,10 @@ public class TrunkReceiver {
 
         public Task(ChunkInfo info) {
             relativePath = info.getResumableRelativePath();
-            String dst = AppConst.ROOT + relativePath + File.separator + info.getResumableFilename();
+            String dst = AppConst.ROOT_PATH + relativePath + File.separator + info.getResumableFilename();
             try {
                 f = new File(dst + ".temp");
-                if (!f.getCanonicalPath().startsWith(AppConst.ROOT)) {
+                if (!f.getCanonicalPath().startsWith(AppConst.ROOT_PATH)) {
                     throw new IOException("path forbidden");
                 }
                 raf = new RandomAccessFile(f, "rw");
@@ -71,7 +71,7 @@ public class TrunkReceiver {
                 if (indexs.size() == info.getResumableTotalChunks()) {
                     raf.close();
                     taskMap.remove(info.getResumableIdentifier());
-                    String newPath = AppConst.ROOT + relativePath + File.separator + info.getResumableFilename();
+                    String newPath = AppConst.ROOT_PATH + relativePath + File.separator + info.getResumableFilename();
                     f.renameTo(new File(newPath));
                     indexs.clear();
                     return true;
