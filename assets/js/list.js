@@ -35,7 +35,6 @@ function jump(a) {
 		}
 	}
 	list(str);
-
 }
 
 function list(str) {
@@ -53,9 +52,7 @@ function list(str) {
 						$("#path").html('/&nbsp;&nbsp;');
 					} else {
 						$("#path").text(data.path);
-						$("ul")
-								.append(
-										"<li><a href='javascript:void(0);' onclick=jump(this)>..&nbsp;&nbsp;&nbsp;&nbsp;</a></li>");
+						$("ul").append("<li><a href='javascript:void(0);' onclick=jump(this)>..&nbsp;&nbsp;&nbsp;&nbsp;</a></li>");
 					}
 					for (i in data.dirs) {
 						var s = "<li>"
@@ -65,8 +62,7 @@ function list(str) {
 						$("ul").append(s);
 					}
 					for (i in data.files) {
-						var str = $("#path").text() == '/' ? '' : $("#path")
-								.text();
+						var str = $("#path").text().trim() == '/' ? '' : $("#path").text().trim();
 						str = 'list.action?path=' + str + '/' + data.files[i];
 						var s = "<li>" + $("#file_ico").html() + "<a href='"
 								+ str + "'>" + data.files[i] + "</a></li>";

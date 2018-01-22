@@ -26,7 +26,7 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
         }
 
         final String uri = HttpTool.sanitizeUri(request.uri());
-        ;
+
         if (uri == null) {
             HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
             return;

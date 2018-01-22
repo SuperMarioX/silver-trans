@@ -6,12 +6,14 @@ import com.luangeng.slivertrans.model.ListFile;
 import com.luangeng.slivertrans.tools.HttpTool;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.DefaultFileRegion;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class FileExploreHandler extends AbstractHttpHandler {
@@ -86,27 +88,11 @@ public class FileExploreHandler extends AbstractHttpHandler {
             String filename = new String(file.getName().getBytes(), "ISO-8859-1");
             response.headers().set(HttpHeaderNames.CONTENT_DISPOSITION, "attachment;filename=" + filename);
             HttpTool.setDateAndCacheHeaders(response, file);
-            // Write the initial line and the header.
             ctx.write(response);
 
             // Write the content.
-            ChannelFuture sendFuture = ctx.write(new DefaultFileRegion(raf.getChannel(), 0, length), ctx.newProgressivePromise());
+            ctx.write(new DefaultFileRegion(raf.getChannel(), 0, length)).addListener((ChannelFutureListener) future -> raf.close());
             ChannelFuture lastFuture = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
-
-            sendFuture.addListener(new ChannelProgressiveFutureListener() {
-                @Override
-                public void operationProgressed(ChannelProgressiveFuture future, long progress, long total) {
-                }
-
-                @Override
-                public void operationComplete(ChannelProgressiveFuture future) {
-                    try {
-                        raf.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
 
             return lastFuture;
         }

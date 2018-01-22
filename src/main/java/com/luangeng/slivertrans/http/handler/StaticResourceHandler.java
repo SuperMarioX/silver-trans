@@ -3,13 +3,13 @@ package com.luangeng.slivertrans.http.handler;
 import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.tools.HttpTool;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.DefaultFileRegion;
 import io.netty.handler.codec.http.*;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,10 +46,10 @@ public class StaticResourceHandler extends AbstractHttpHandler {
             return null;
         }
 
-        FileChannel fileChannel = new RandomAccessFile(file, "r").getChannel();
-        long fileLength = fileChannel.size();
+        RandomAccessFile raf = new RandomAccessFile(file, "r");
+        long fileLength = raf.length();
 
-        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK);
+        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
         HttpUtil.setContentLength(response, fileLength);
         HttpTool.setContentTypeHeader(response, file);
         HttpTool.setDateAndCacheHeaders(response, file);
@@ -57,16 +57,10 @@ public class StaticResourceHandler extends AbstractHttpHandler {
         if (HttpUtil.isKeepAlive(request)) {
             response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         }
+        ctx.write(response);
+        ctx.write(new DefaultFileRegion(raf.getChannel(), 0, fileLength)).addListener((ChannelFutureListener) future -> raf.close());
 
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        while (fileChannel.read(buffer) != -1) {
-            buffer.flip();
-            response.content().writeBytes(buffer);
-            buffer.clear();
-        }
-        fileChannel.close();
-
-        return ctx.writeAndFlush(response);
+        return ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
     }
 
     private boolean isModified(FullHttpRequest request, File file) {

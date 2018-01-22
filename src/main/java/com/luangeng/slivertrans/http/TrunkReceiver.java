@@ -65,8 +65,8 @@ public class TrunkReceiver {
                 return false;
             }
             try {
-                raf.seek((info.getResumableChunkNumber() - 1) * info.getResumableChunkSize());
-                raf.getChannel().write(bf.nioBuffer());
+                long position = (info.getResumableChunkNumber() - 1) * info.getResumableChunkSize();
+                raf.getChannel().position(position).write(bf.nioBuffer());
                 indexs.add(info.getResumableChunkNumber());
                 if (indexs.size() == info.getResumableTotalChunks()) {
                     raf.close();
