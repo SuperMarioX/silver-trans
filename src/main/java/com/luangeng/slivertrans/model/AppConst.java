@@ -5,18 +5,30 @@ import com.luangeng.slivertrans.tools.ConfigTool;
 import java.io.File;
 import java.util.regex.Pattern;
 
-public interface AppConst {
+public class AppConst {
 
-    String DELIMITER = ":";
+    public static final String DELIMITER = ":";
 
-    int DEFAULT_PORT = 9000;
+    public static final int DEFAULT_PORT = 9000;
 
-    int BUFFER_SIZE = 10240;
+    public static final int BUFFER_SIZE = 10240;
 
-    String ASSETS_DIR = System.getProperty("user.dir") + File.separator + "assets";
+    public static final String DEFAULT_ROOT_PATH = System.getProperty("user.home");
 
-    String ROOT_PATH = ConfigTool.getValue("root.path");
+    public static final String ASSETS_DIR = System.getProperty("user.dir") + File.separator + "assets";
 
-    Pattern ALLOWED_FILE_NAME = Pattern.compile("[^-\\._]?[^<>&\\\"]*");
+    public static final Pattern ALLOWED_FILE_NAME = Pattern.compile("[^-\\._]?[^<>&\\\"]*");
+
+    public static String ROOT_PATH = ConfigTool.getValue("root.path");
+
+    static {
+        if (ROOT_PATH == null) {
+            ROOT_PATH = DEFAULT_ROOT_PATH;
+        }
+        File f = new File(ROOT_PATH);
+        if (!f.exists() || !f.isDirectory() || f.isHidden()) {
+            ROOT_PATH = DEFAULT_ROOT_PATH;
+        }
+    }
 
 }

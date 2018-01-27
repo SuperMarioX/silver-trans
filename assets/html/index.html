@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <title>silver-trans</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <meta name="info" content="luangeng">
 </head>
 <body>
 
 <span class="processbar"></span>
 <div style="margin:10px;">
-    <div id="loading">
-        <div id="spinner"></div>
-    </div>
 
-    <div style="display:inline-block;height:30px;text-align:center;line-height:30px;"><b>Path:&nbsp;&nbsp;&nbsp;
+
+    <div style="display:inline-block;height:30px;text-align:center;line-height:30px;"><b>Current Directory:&nbsp;&nbsp;&nbsp;
         <a href="javascript:void(0)" id="path" onclick="list($('#path').text().trim());"></a></b></div>
 <br/>
 
@@ -25,7 +24,10 @@
 
 <div id="dropTarget">将文件拖拽到此区域上传</div>
 
-<ul></ul>
+    <div id="loading">
+        <div id="spinner"></div>
+    </div>
+    <ul id="list_ul"></ul>
 
 </div>
 

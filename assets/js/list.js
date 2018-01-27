@@ -9,7 +9,9 @@ function ajaxSetup() {
 	$.ajaxSetup({
 		timeout : 30000,
 		beforeSend : function(xhr) {
-		    $("#loading").show();
+		var left=$("#list_ul").position().left+$("#list_ul").width()/2-20;
+		var top=$("#list_ul").position().top + 20;
+		    $("#loading").css('left',left).css('top',top).show();
 			xhr.setRequestHeader("Ajax_request", "true");
 		},
 		complete : function(xhr, ts) {
@@ -18,7 +20,7 @@ function ajaxSetup() {
 				// window.location.href = "login.jsp";//xhr.statusText
 				console.log('jump');
 			}
-			$("#loading").fadeOut("slow");
+			$("#loading").fadeOut();
 		}
 	});
 }

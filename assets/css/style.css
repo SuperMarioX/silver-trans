@@ -1,9 +1,13 @@
 body {
+    background-color: #000000;
 	background-image: url(../img/sahara.png);
 	background-repeat: repeat;
-	background-size: cover;
+	background-size: 1600px 720px;
 	background-attachment: fixed;
-	background-position: top left;
+	background-position: top;
+	overflow-x:hidden;
+	overflow-y:auto;
+
 	color: #dddddd;
 	font: 15px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
 		"Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
@@ -62,9 +66,7 @@ li {
   background-color : transparent;
   height : 40px;
   width : 40px;
-  padding : 20px;
-  float : right;
-  position : relative;
+  position : absolute;
 }
 
 #spinner {
