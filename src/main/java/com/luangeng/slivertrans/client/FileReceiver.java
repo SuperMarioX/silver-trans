@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class Receiver implements Runnable {
+public class FileReceiver implements Runnable {
 
-    private static Logger logger = LoggerFactory.getLogger(Receiver.class);
+    private static Logger logger = LoggerFactory.getLogger(FileReceiver.class);
 
     private SortedBlockingQueue queue = new SortedBlockingQueue();
     private String dstPath = AppConst.ROOT_PATH;
@@ -30,7 +30,7 @@ public class Receiver implements Runnable {
     private long t0;
     private int process = 0;
 
-    public Receiver(TransData data) {
+    public FileReceiver(TransData data) {
         String msg = TransTool.getMsg(data);
         String[] ss = msg.split(AppConst.DELIMITER);
         fileName = ss[0].trim();

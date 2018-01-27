@@ -33,7 +33,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                 cd(ctx.channel(), cmd);
             } else if (cmd.startsWith("get ")) {
                 String name = cmd.substring(4).trim();
-                Sender sender = new Sender(cpath, name, ctx.channel());
+                FileSender sender = new FileSender(cpath, name, ctx.channel());
                 SenderThreadPool.submit(sender);
             } else if (cmd.equalsIgnoreCase("pwd")) {
                 TransTool.sendMsg(ctx.channel(), ctx.channel().localAddress().toString() + cpath);

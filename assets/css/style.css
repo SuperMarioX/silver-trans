@@ -1,5 +1,5 @@
 body {
-    background-color: #000000;
+    background-color: #00000033;
 	background-image: url(../img/sahara.png);
 	background-repeat: repeat;
 	background-size: 1600px 720px;
@@ -29,16 +29,29 @@ a:hover {
 	text-decoration: underline;
 }
 
-ul {
+table {
 	width: 80%;
 	border: 1px solid;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	margin-top:10px;
+	padding:5px;
 }
-
-li {
-	list-style-type: decimal;
-	margin: 5px;
+tr {
+}
+.td1 {
+    text-align:center;
+    width:30px;
+}
+.td2 {
+}
+.td3 {
+    width:100px;
+}
+.td4 {
+    width:160px;
+}
+.td5 {
+    text-align:center;
+    width:160px;
 }
 
 #dropTarget {
@@ -48,8 +61,6 @@ li {
 	line-height: 60px;
 	text-align: center;
 	font-size: 20px;
-	padding-left: 20px;
-	padding-right: 20px;
 }
 
 .processbar {
@@ -88,4 +99,18 @@ li {
 @keyframes spin {
   0% {transform : rotate(0deg);}
   100% {transform : rotate(720deg);}
+}
+
+
+
+
+textarea{
+    border:0;
+    background-color:#00000033;
+    color: #666464;
+    height: auto;
+    width: 90%;
+    font: 15px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    		"Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
+    		"WenQuanYi Micro Hei", sans-serif;
 }

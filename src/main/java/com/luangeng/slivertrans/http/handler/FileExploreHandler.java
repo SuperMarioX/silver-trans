@@ -16,6 +16,9 @@ import io.netty.util.CharsetUtil;
 import java.io.File;
 import java.io.RandomAccessFile;
 
+import static com.luangeng.slivertrans.tools.StringTool.date;
+import static com.luangeng.slivertrans.tools.StringTool.size;
+
 public class FileExploreHandler extends AbstractHttpHandler {
 
     private Gson gson = new Gson();
@@ -48,7 +51,7 @@ public class FileExploreHandler extends AbstractHttpHandler {
                 if (f.isHidden() || !f.canRead()) {
                     continue;
                 }
-                lf.getDirs().add(f.getName());
+                lf.getDirs().add(new ListFile.Detail(f.getName(), "", date(f.lastModified())));
             }
             for (File f : file.listFiles(ff -> ff.isFile())) {
                 if (f.isHidden() || !f.canRead()) {
@@ -58,7 +61,7 @@ public class FileExploreHandler extends AbstractHttpHandler {
                 if (!AppConst.ALLOWED_FILE_NAME.matcher(name).matches()) {
                     continue;
                 }
-                lf.getFiles().add(name);
+                lf.getFiles().add(new ListFile.Detail(f.getName(), size(f.length()), date(f.lastModified())));
             }
 
             FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);

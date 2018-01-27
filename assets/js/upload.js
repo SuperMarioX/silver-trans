@@ -43,12 +43,12 @@ r.on('fileError', function(file, message) {
 r.on('uploadStart', function() {
 	console.info('uploadStart');
 	$('.expand').width('0%');
-	$("#loading").show();
+	//$("#loading").show();
 	$("#browseButton").css("pointer-events","none");
 });
 r.on('complete', function() {
 	console.info('complete');
-	$("#loading").fadeOut("slow");
+	//$("#loading").fadeOut("slow");
 	$("#browseButton").css("pointer-events","auto");
 });
 r.on('progress', function() {

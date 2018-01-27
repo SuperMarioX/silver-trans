@@ -12,9 +12,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class Sender implements Runnable {
+public class FileSender implements Runnable {
 
-    private static Logger logger = LoggerFactory.getLogger(Sender.class);
+    private static Logger logger = LoggerFactory.getLogger(FileSender.class);
 
     String name;
     File f;
@@ -25,7 +25,7 @@ public class Sender implements Runnable {
     Channel channel;
     private long t0;
 
-    public Sender(String path, String name, Channel c) {
+    public FileSender(String path, String name, Channel c) {
         this.name = name;
         this.channel = c;
         this.f = new File(path + File.separator + name);

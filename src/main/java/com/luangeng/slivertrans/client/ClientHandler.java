@@ -18,7 +18,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
 
     private static Map<Integer, String> map = new HashMap();
 
-    Receiver receiver;
+    FileReceiver receiver;
 
     public static String getFileNameByIndex(int i) {
         return map.get(Integer.valueOf(i));
@@ -43,7 +43,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
         } else if (type == TypeEnum.DATA || type == TypeEnum.END) {
             receiver.receiver(data);
         } else if (type == TypeEnum.BEGIN) {
-            receiver = new Receiver(data);
+            receiver = new FileReceiver(data);
             ReceiverThreadPool.submit(receiver);
         } else {
             logger.info(TransTool.getMsg(data));
