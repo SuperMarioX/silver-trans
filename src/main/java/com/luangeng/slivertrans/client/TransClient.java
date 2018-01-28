@@ -2,7 +2,6 @@ package com.luangeng.slivertrans.client;
 
 import com.luangeng.slivertrans.support.TransDecode;
 import com.luangeng.slivertrans.support.TransEncode;
-import com.luangeng.slivertrans.tools.TransTool;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -10,90 +9,55 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.lang.Thread.State.NEW;
-
-public class TransClient extends Thread {
+public class TransClient {
 
     private static Logger logger = LoggerFactory.getLogger(TransClient.class);
 
-    private String ip;
-    private int port;
-    private Channel channel;
+    private static TransClient client = new TransClient();
+
+    private Bootstrap bootstrap;
     private EventLoopGroup group;
 
-    public void start(String ip, int port) {
-        if (this.getState() == NEW) {
-            this.ip = ip;
-            this.port = port;
-            this.start();
-        } else {
-            logger.info("Trans Client already connect with " + this.getAddress());
-        }
+    private TransClient() {
+        init();
     }
 
-    public void sendCmd(String cmd) {
-        if (channel == null) {
-            logger.info("Client not connected");
-            return;
-        }
-        if (cmd.startsWith("get ")) {
-            int i = Integer.valueOf(cmd.substring(4).trim());
-            cmd = "get " + ClientHandler.getFileNameByIndex(i);
-        } else if (cmd.startsWith("cd ")) {
-            String p = cmd.substring(3).trim();
-            try {
-                int i = Integer.valueOf(p);
-                cmd = "cd " + ClientHandler.getFileNameByIndex(i);
-            } catch (Exception e) {
-                //nothing
-            }
-        }
-        TransTool.sendCmd(channel, cmd);
+    public static TransClient instance() {
+        return client;
     }
 
-    @Override
-    public void run() {
-        Bootstrap bootstrap = new Bootstrap();
-        group = new NioEventLoopGroup();
+    public Channel connect(String ip, int port) {
+        Channel channel = null;
         try {
-            bootstrap.group(group).channel(NioSocketChannel.class);
-            bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
-            bootstrap.handler(new ChannelInitializer<Channel>() {
-                @Override
-                protected void initChannel(Channel ch) throws Exception {
-                    ChannelPipeline pipeline = ch.pipeline();
-                    pipeline.addLast(new TransDecode());
-                    pipeline.addLast(new TransEncode());
-                    pipeline.addLast(new ClientHandler());
-                }
-            });
-
             channel = bootstrap.connect(ip, port).sync().channel();
-            logger.info("Trans Client connect with " + ip + ":" + port);
-            channel.closeFuture().sync();
-        } catch (Exception e) {
-            logger.error("Error: " + e.getMessage());
-            channel = null;
+            logger.info("Trans Client connect to " + ip + ":" + port);
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage());
         }
+        return channel;
+    }
+
+    public void init() {
+        bootstrap = new Bootstrap();
+        group = new NioEventLoopGroup();
+        bootstrap.group(group).channel(NioSocketChannel.class);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        bootstrap.handler(new ChannelInitializer<Channel>() {
+            @Override
+            protected void initChannel(Channel ch) throws Exception {
+                ChannelPipeline pipeline = ch.pipeline();
+                pipeline.addLast(new TransDecode());
+                pipeline.addLast(new TransEncode());
+                pipeline.addLast(new ClientHandler());
+            }
+        });
     }
 
     public void shutdown() {
         if (group != null) {
             group.shutdownGracefully();
         }
-        channel = null;
-        logger.info("Trans Client disconnect from " + this.getAddress());
+        logger.info("Trans Client shutdown");
     }
 
-    public void getFile(String path) {
-        TransTool.sendCmd(channel, "get " + path);
-    }
-
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public String getAddress() {
-        return this.ip + ":" + this.port;
-    }
 }

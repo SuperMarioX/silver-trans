@@ -1,6 +1,7 @@
-package com.luangeng.slivertrans;
+package com.luangeng.slivertrans.http;
 
 import com.luangeng.slivertrans.http.handler.HttpBaseHandler;
+import com.luangeng.slivertrans.server.TransServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -12,10 +13,31 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class HttpServer {
+import static java.lang.Thread.State.NEW;
 
-    public static void start(int port) throws InterruptedException {
+public class HttpServer extends Thread {
+
+    private static Logger logger = LoggerFactory.getLogger(TransServer.class);
+
+    private static HttpServer server = new HttpServer();
+
+    private int port;
+
+    public static HttpServer instance() {
+        return server;
+    }
+
+    public void start(int port) {
+        if (this.getState() == NEW) {
+            this.port = port;
+            this.start();
+        }
+    }
+
+    public void run() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -26,11 +48,11 @@ public class HttpServer {
             b.childHandler(new HttpUploadServerInitializer());
 
             Channel ch = b.bind(port).sync().channel();
-
-            System.out.println("Open your web browser and navigate to " +
-                    "http" + "://127.0.0.1:" + port + '/');
+            logger.info("HTTP Server started on port: " + port);
 
             ch.closeFuture().sync();
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage(), e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

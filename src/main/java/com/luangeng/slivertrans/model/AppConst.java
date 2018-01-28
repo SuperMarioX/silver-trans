@@ -13,20 +13,21 @@ public class AppConst {
 
     public static final int BUFFER_SIZE = 10240;
 
+    public static final String CONFIG_DIR = System.getProperty("user.dir") + File.separator + "config";
+
     public static final String DEFAULT_ROOT_PATH = System.getProperty("user.home");
 
     public static final String ASSETS_DIR = System.getProperty("user.dir") + File.separator + "assets";
+    public static String ROOT_PATH = ConfigTool.getValue("root.path");
 
     public static final Pattern ALLOWED_FILE_NAME = Pattern.compile("[^-\\._]?[^<>&\\\"]*");
-
-    public static String ROOT_PATH = ConfigTool.getValue("root.path");
 
     static {
         if (ROOT_PATH == null) {
             ROOT_PATH = DEFAULT_ROOT_PATH;
         }
         File f = new File(ROOT_PATH);
-        if (!f.exists() || !f.isDirectory() || f.isHidden()) {
+        if (!f.exists() || !f.isDirectory()) {
             ROOT_PATH = DEFAULT_ROOT_PATH;
         }
     }

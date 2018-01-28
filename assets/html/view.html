@@ -9,9 +9,45 @@
 <body>
 
 
-<textarea readonly>asdasd</textarea>
-
+<textarea readonly>asd</textarea>
 
 </body>
 <script src="../js/jquery-1.11.3.min.js"></script>
+
+<script>
+
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)
+        return decodeURI(r[2]);
+    return null;
+}
+
+function view() {
+$.ajax({
+    	url : "/view.action",
+    	type : "GET",
+    	data : {
+    		path : getQueryString('path')
+    	},
+    	dataType : "text",
+    	async : true,
+    	success : function(data) {
+    	    $("textarea").html(data);
+    	},
+    	error : function(a,b,c){
+    	console.log(a);
+    	    }
+    	});
+}
+
+
+
+    $(function() {
+        view();
+    });
+
+
+</script>
 </html>

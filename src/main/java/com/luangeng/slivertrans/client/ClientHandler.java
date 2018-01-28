@@ -26,8 +26,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        TransTool.sendCmd(ctx.channel(), "pwd");
-        TransTool.sendCmd(ctx.channel(), "ls");
+        super.channelActive(ctx);
     }
 
     @Override
@@ -37,8 +36,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
             String msg = TransTool.getMsg(data);
             if (msg.startsWith("ls ")) {
                 praseLs(msg);
-            } else {
-                logger.info(msg);
             }
         } else if (type == TypeEnum.DATA || type == TypeEnum.END) {
             receiver.receiver(data);

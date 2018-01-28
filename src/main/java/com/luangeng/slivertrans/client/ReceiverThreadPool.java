@@ -1,8 +1,12 @@
 package com.luangeng.slivertrans.client;
 
+import com.luangeng.slivertrans.model.TransData;
+
 import java.util.concurrent.*;
 
 public class ReceiverThreadPool {
+
+    FileReceiver receiver;
 
     private static ExecutorService executor = new ThreadPoolExecutor(10, 10,
             0L, TimeUnit.SECONDS,
@@ -10,6 +14,14 @@ public class ReceiverThreadPool {
 
     public static void submit(Runnable run) {
         executor.execute(run);
+    }
+
+    public static void begin(TransData data) {
+
+    }
+
+    public static void receive(TransData data) {
+
     }
 
     public static void shutdown() {

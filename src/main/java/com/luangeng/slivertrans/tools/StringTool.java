@@ -20,18 +20,6 @@ public class StringTool {
         }
     }
 
-    public static int toInt(String value, int def) {
-        if (isEmpty(value)) {
-            return def;
-        }
-        try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return def;
-        }
-    }
-
     public static String size(long num) {
         long m = 1 << 20;
         if (num / m == 0) {

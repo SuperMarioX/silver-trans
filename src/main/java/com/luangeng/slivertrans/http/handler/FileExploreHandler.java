@@ -39,7 +39,7 @@ public class FileExploreHandler extends AbstractHttpHandler {
         }
 
         path = file.getCanonicalPath();
-        if (!file.exists()) {//|| file.isHidden()
+        if (!file.exists()) {
             HttpTool.sendError(ctx, HttpResponseStatus.NOT_FOUND);
             return null;
         }
@@ -48,13 +48,13 @@ public class FileExploreHandler extends AbstractHttpHandler {
             ListFile lf = new ListFile();
             lf.setPath(path.substring(AppConst.ROOT_PATH.length()));
             for (File f : file.listFiles(ff -> ff.isDirectory())) {
-                if (f.isHidden() || !f.canRead()) {
+                if (!f.canRead()) {
                     continue;
                 }
                 lf.getDirs().add(new ListFile.Detail(f.getName(), "", date(f.lastModified())));
             }
             for (File f : file.listFiles(ff -> ff.isFile())) {
-                if (f.isHidden() || !f.canRead()) {
+                if (!f.canRead()) {
                     continue;
                 }
                 String name = f.getName();

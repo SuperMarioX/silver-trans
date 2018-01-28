@@ -15,6 +15,8 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
 
+        System.out.println(this.hashCode());
+
         if (!request.decoderResult().isSuccess()) {
             HttpTool.sendError(ctx, HttpResponseStatus.BAD_REQUEST);
             return;
@@ -47,6 +49,9 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
             future = handler.handle(ctx, request, uri);
         } else if (uri.contains("upload.action")) {
             handler = new FileUploadHandler();
+            future = handler.handle(ctx, request, uri);
+        } else if (uri.contains("view.action")) {
+            handler = new FileViewHandler();
             future = handler.handle(ctx, request, uri);
         } else {
             HttpTool.sendError(ctx, HttpResponseStatus.NOT_FOUND);

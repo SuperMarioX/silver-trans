@@ -14,16 +14,17 @@ body {
 		"WenQuanYi Micro Hei", sans-serif;
 }
 
-h4 {
-	margin-top: 10px;
-	margin-bottom: 10px;
+.path {
+    display:inline-block;
+    height:30px;
+    text-align:center;
+    line-height:30px;
 }
 
 a {
 	color: #dddddd;
 	text-decoration: none;
 }
-
 a:hover {
 	color: #0bd6d2;
 	text-decoration: underline;
@@ -37,19 +38,20 @@ table {
 }
 tr {
 }
-.td1 {
+.td0 {
     text-align:center;
     width:30px;
 }
-.td2 {
+.td1 {
+    text-align:left;
 }
-.td3 {
+.td2 {
     width:100px;
 }
-.td4 {
+.td3 {
     width:160px;
 }
-.td5 {
+.td4 {
     text-align:center;
     width:160px;
 }
@@ -102,13 +104,13 @@ tr {
 }
 
 
-
-
-textarea{
+textarea {
     border:0;
     background-color:#00000033;
-    color: #666464;
-    height: auto;
+    color: #dddddd;
+    resize:none;
+    overflow:hidden;
+    height: 100000px;
     width: 90%;
     font: 15px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
     		"Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",

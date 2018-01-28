@@ -18,10 +18,10 @@ public class TransApi {
         String addr = path.substring(11);
         TransClient client = map.get(addr);
         if (client == null) {
-            client = new TransClient();
-            map.put(addr, client);
+            //client = new TransClient();
+            //map.put(addr, client);
         }
-        client.getFile(path);
+        //client.getFile(path);
     }
 
 }

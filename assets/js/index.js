@@ -22,6 +22,8 @@ String.prototype.format = function(args) {
 	return result;
 }
 
+var listData;
+
 $(function() {
 	ajaxSetup();
 	list('/');
@@ -53,15 +55,24 @@ function jump(a) {
 		if ($(a).text().trim().endsWith('..')) {
 			str = path + '..';
 		} else {
-			str = path == '/' ? '' : path;
-			str = str + '/' + $(a).text();
+			str = path + '/' + $(a).text();
 		}
 	}
 	list(str);
 }
 
+function view(a){
+    var path = $("#path").val();
+    var str = path + '/' + a;
+    window.open("view.html?path="+str);
+}
+
+function del(){
+
+}
+
 function list(str) {
-    var tr = "<tr><td class='td1'>{0}.</td><td class='td2'>{1}</td><td class='td3'>{2}</td><td class='td4'>{3}</td></tr>";
+    var tr = "<tr><td class='td0'>{0}.</td><td class='td1'>{1}</td><td class='td2'>{2}</td><td class='td3'>{3}</td></tr>";
     var index=0;
 	$.ajax({
     	url : "/list.action",
@@ -72,6 +83,7 @@ function list(str) {
     	dataType : "json",
     	async : true,
     	success : function(data) {
+    	    listData = data;
     		$("table").html("");
     		if (data.path.length==0) {
     			$("#path").html('/&nbsp;&nbsp;').val('');
@@ -83,14 +95,15 @@ function list(str) {
     		for (i in data.dirs) {
     		    index++;
     		    var name=$("#dir_ico").html()+"<a href='javascript:void(0);' onclick=jump(this)>"+ data.dirs[i].name + "</a>";
-    			var s=tr.format(index, name,"",data.dirs[i].date, $("#delete_ico").html());
+    			var s=tr.format(index, name,"",data.dirs[i].date, '');
     			$("table").append(s);
     		}
     		for (i in data.files) {
     		    index++;
     			var str = 'list.action?path=' + $("#path").val() + '/' + data.files[i].name;
     			var name = $("#file_ico").html()+"<a href='" + str + "'>" + data.files[i].name + "</a>";
-    			var s = tr.format(index, name, data.files[i].size, data.files[i].date, $("#delete_ico").html());
+    			var view = "<a onclick=view(listData.files[i].name)>View</a>";
+    			var s = tr.format(index, name, data.files[i].size, data.files[i].date, view);
     			$("table").append(s);
     		}
     	}
