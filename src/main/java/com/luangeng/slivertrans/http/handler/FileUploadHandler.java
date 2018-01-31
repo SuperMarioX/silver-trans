@@ -1,7 +1,7 @@
 package com.luangeng.slivertrans.http.handler;
 
 import com.luangeng.slivertrans.http.TrunkReceiver;
-import com.luangeng.slivertrans.model.ChunkInfo;
+import com.luangeng.slivertrans.model.FileChunkInfo;
 import com.luangeng.slivertrans.tools.HttpTool;
 import com.luangeng.slivertrans.tools.StringTool;
 import io.netty.channel.ChannelFuture;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class FileUploadHandler extends AbstractHttpHandler {
 
-    private ChunkInfo getResumableInfo(String uri) {
+    private FileChunkInfo getResumableInfo(String uri) {
         Map<String, String> queryparams = HttpTool.getParams(uri);
         long chunkNum = StringTool.toLong(queryparams.get("resumableChunkNumber"), -1);
         long chunkSize = StringTool.toLong(queryparams.get("resumableChunkSize"), -1);
@@ -26,7 +26,7 @@ public class FileUploadHandler extends AbstractHttpHandler {
         String relativePath = queryparams.get("resumableRelativePath");
         String type = queryparams.get("resumableType");
 
-        ChunkInfo info = new ChunkInfo();
+        FileChunkInfo info = new FileChunkInfo();
         info.setResumableChunkNumber(chunkNum);
         info.setResumableChunkSize(chunkSize);
         info.setResumableCurrentChunkSize(currentChunkSize);
@@ -46,7 +46,7 @@ public class FileUploadHandler extends AbstractHttpHandler {
     @Override
     protected ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
 
-        ChunkInfo info = getResumableInfo(uri);
+        FileChunkInfo info = getResumableInfo(uri);
         if (info == null) {
             HttpTool.sendError(ctx, HttpResponseStatus.BAD_REQUEST);
             return null;

@@ -3,12 +3,14 @@ package com.luangeng.slivertrans.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListFile {
+public class FileDirVo {
+
+    private String path;
 
     private List<Detail> dirs = new ArrayList<>();
 
-    private String path;
     private List<Detail> files = new ArrayList<>();
+
 
     public List<Detail> getDirs() {
         return dirs;

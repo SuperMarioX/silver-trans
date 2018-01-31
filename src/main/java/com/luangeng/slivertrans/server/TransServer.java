@@ -1,6 +1,5 @@
 package com.luangeng.slivertrans.server;
 
-import com.luangeng.slivertrans.support.TcpChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -46,7 +45,7 @@ public class TransServer extends Thread {
             bootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 100)
-                    .childHandler(new TcpChannelInitializer());
+                    .childHandler(new TcpServerChannelInitializer());
             ChannelFuture future = bootstrap.bind(port).sync();
             logger.info("Trans Server started on port: " + port);
             future.channel().closeFuture().sync();

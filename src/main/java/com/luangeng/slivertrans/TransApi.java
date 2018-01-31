@@ -1,27 +1,12 @@
 package com.luangeng.slivertrans;
 
-import com.luangeng.slivertrans.client.TransClient;
-import com.luangeng.slivertrans.server.TransServer;
+public interface TransApi {
 
-import java.util.HashMap;
-import java.util.Map;
+    void upload(String path);
 
-public class TransApi {
+    void download(String path);
 
-    private static Map<String, TransClient> map = new HashMap();
+    void delete(String path);
 
-    public static void startServer(int port) {
-        TransServer.instance().start(port);
-    }
-
-    public static void getFile(String path) {
-        String addr = path.substring(11);
-        TransClient client = map.get(addr);
-        if (client == null) {
-            //client = new TransClient();
-            //map.put(addr, client);
-        }
-        //client.getFile(path);
-    }
 
 }

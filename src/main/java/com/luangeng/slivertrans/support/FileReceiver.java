@@ -1,4 +1,4 @@
-package com.luangeng.slivertrans.client;
+package com.luangeng.slivertrans.support;
 
 import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.model.TransData;
@@ -49,7 +49,7 @@ public class FileReceiver implements Runnable {
             logger.error("error: " + e.getMessage());
         }
         ch = out.getChannel();
-        logger.info("Receiving: " + fileName + "  Size: " + StringTool.size(totalSize));
+        logger.info("Receiving: " + fileName + "  Size: " + StringTool.formatFileSize(totalSize));
     }
 
     public void receiver(TransData data) {

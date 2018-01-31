@@ -2,7 +2,7 @@ package com.luangeng.slivertrans.http.handler;
 
 import com.google.gson.Gson;
 import com.luangeng.slivertrans.model.AppConst;
-import com.luangeng.slivertrans.model.ListFile;
+import com.luangeng.slivertrans.model.FileDirVo;
 import com.luangeng.slivertrans.tools.HttpTool;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -16,8 +16,8 @@ import io.netty.util.CharsetUtil;
 import java.io.File;
 import java.io.RandomAccessFile;
 
-import static com.luangeng.slivertrans.tools.StringTool.date;
-import static com.luangeng.slivertrans.tools.StringTool.size;
+import static com.luangeng.slivertrans.tools.StringTool.formatDate;
+import static com.luangeng.slivertrans.tools.StringTool.formatFileSize;
 
 public class FileExploreHandler extends AbstractHttpHandler {
 
@@ -45,13 +45,13 @@ public class FileExploreHandler extends AbstractHttpHandler {
         }
 
         if (file.isDirectory()) {
-            ListFile lf = new ListFile();
+            FileDirVo lf = new FileDirVo();
             lf.setPath(path.substring(AppConst.ROOT_PATH.length()));
             for (File f : file.listFiles(ff -> ff.isDirectory())) {
                 if (!f.canRead()) {
                     continue;
                 }
-                lf.getDirs().add(new ListFile.Detail(f.getName(), "", date(f.lastModified())));
+                lf.getDirs().add(new FileDirVo.Detail(f.getName(), "", formatDate(f.lastModified())));
             }
             for (File f : file.listFiles(ff -> ff.isFile())) {
                 if (!f.canRead()) {
@@ -61,7 +61,7 @@ public class FileExploreHandler extends AbstractHttpHandler {
                 if (!AppConst.ALLOWED_FILE_NAME.matcher(name).matches()) {
                     continue;
                 }
-                lf.getFiles().add(new ListFile.Detail(f.getName(), size(f.length()), date(f.lastModified())));
+                lf.getFiles().add(new FileDirVo.Detail(f.getName(), formatFileSize(f.length()), formatDate(f.lastModified())));
             }
 
             FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);

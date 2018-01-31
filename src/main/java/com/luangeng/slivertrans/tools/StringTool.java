@@ -20,7 +20,7 @@ public class StringTool {
         }
     }
 
-    public static String size(long num) {
+    public static String formatFileSize(long num) {
         long m = 1 << 20;
         if (num / m == 0) {
             return (num / 1024) + "KB";
@@ -28,7 +28,7 @@ public class StringTool {
         return num / m + "MB";
     }
 
-    public static String date(long date) {
+    public static String formatDate(long date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(date);
     }

@@ -1,7 +1,7 @@
 package com.luangeng.slivertrans.http;
 
 import com.luangeng.slivertrans.model.AppConst;
-import com.luangeng.slivertrans.model.ChunkInfo;
+import com.luangeng.slivertrans.model.FileChunkInfo;
 import io.netty.buffer.ByteBuf;
 
 import java.io.File;
@@ -22,7 +22,7 @@ public class TrunkReceiver {
         return receive;
     }
 
-    public synchronized boolean write(ChunkInfo info, ByteBuf bf) {
+    public synchronized boolean write(FileChunkInfo info, ByteBuf bf) {
         String id = info.getResumableIdentifier();
         Task task = taskMap.get(id);
         if (task == null) {
@@ -32,7 +32,7 @@ public class TrunkReceiver {
         return task.write(bf, info);
     }
 
-    public synchronized boolean chunkWriten(ChunkInfo info) {
+    public synchronized boolean chunkWriten(FileChunkInfo info) {
         Task t = taskMap.get(info.getResumableIdentifier());
         if (t != null) {
             return t.indexs.contains(info.getResumableChunkNumber());
@@ -46,7 +46,7 @@ public class TrunkReceiver {
         private RandomAccessFile raf = null;
         private Set<Long> indexs = new HashSet<>();
 
-        public Task(ChunkInfo info) {
+        public Task(FileChunkInfo info) {
             relativePath = info.getResumableRelativePath();
             String dst = AppConst.ROOT_PATH + relativePath + File.separator + info.getResumableFilename();
             try {
@@ -60,7 +60,7 @@ public class TrunkReceiver {
             }
         }
 
-        public boolean write(ByteBuf bf, ChunkInfo info) {
+        public boolean write(ByteBuf bf, FileChunkInfo info) {
             if (indexs.contains(info.getResumableChunkNumber())) {
                 return false;
             }

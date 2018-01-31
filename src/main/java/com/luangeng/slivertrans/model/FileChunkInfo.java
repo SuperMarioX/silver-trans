@@ -1,6 +1,6 @@
 package com.luangeng.slivertrans.model;
 
-public class ChunkInfo {
+public class FileChunkInfo {
 
     //序列 从1开始
     private long resumableChunkNumber;

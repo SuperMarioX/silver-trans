@@ -1,4 +1,4 @@
-package com.luangeng.slivertrans.server;
+package com.luangeng.slivertrans.support;
 
 import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.tools.StringTool;
@@ -42,7 +42,7 @@ public class FileSender implements Runnable {
             t0 = System.currentTimeMillis();
             bf = ByteBuffer.allocate(AppConst.BUFFER_SIZE);
             in = new FileInputStream(f);
-            logger.info("Sending: " + name + "  Size: " + StringTool.size(f.length()));
+            logger.info("Sending: " + name + "  Size: " + StringTool.formatFileSize(f.length()));
             TransTool.sendBegin(channel, name + AppConst.DELIMITER + f.length());
 
             while (in.getChannel().read(bf) != -1) {

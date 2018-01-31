@@ -1,7 +1,7 @@
 package com.luangeng.slivertrans.client;
 
-import com.luangeng.slivertrans.support.TransDecode;
-import com.luangeng.slivertrans.support.TransEncode;
+import com.luangeng.slivertrans.support.TransDataDecode;
+import com.luangeng.slivertrans.support.TransDataEncode;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -46,8 +46,8 @@ public class TransClient {
             @Override
             protected void initChannel(Channel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast(new TransDecode());
-                pipeline.addLast(new TransEncode());
+                pipeline.addLast(new TransDataDecode());
+                pipeline.addLast(new TransDataEncode());
                 pipeline.addLast(new ClientHandler());
             }
         });
