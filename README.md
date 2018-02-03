@@ -2,7 +2,7 @@
 [![GitHub release](https://img.shields.io/badge/release-download-orange.svg)](https://raw.githubusercontent.com/luangeng/silver-trans/master/release/silver-trans-release.zip)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 ## silver-trans是什么？
-silver-trans是一个文件服务器，也可以用来在主机之间传输文件。
+[silver-trans](https://luangeng.github.io/silver-trans/)是一个文件服务器，也可以用来在主机之间传输文件。
 
 ## silver-trans能干什么？
 
