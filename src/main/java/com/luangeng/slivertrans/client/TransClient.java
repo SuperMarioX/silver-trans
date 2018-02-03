@@ -1,9 +1,9 @@
 package com.luangeng.slivertrans.client;
 
-import com.luangeng.slivertrans.support.TransDataDecode;
-import com.luangeng.slivertrans.support.TransDataEncode;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
@@ -19,7 +19,11 @@ public class TransClient {
     private EventLoopGroup group;
 
     private TransClient() {
-        init();
+        bootstrap = new Bootstrap();
+        group = new NioEventLoopGroup();
+        bootstrap.group(group).channel(NioSocketChannel.class);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        bootstrap.handler(new TcpClientChannelInitializer());
     }
 
     public static TransClient instance() {
@@ -35,22 +39,6 @@ public class TransClient {
             logger.error(e.getMessage());
         }
         return channel;
-    }
-
-    public void init() {
-        bootstrap = new Bootstrap();
-        group = new NioEventLoopGroup();
-        bootstrap.group(group).channel(NioSocketChannel.class);
-        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
-        bootstrap.handler(new ChannelInitializer<Channel>() {
-            @Override
-            protected void initChannel(Channel ch) throws Exception {
-                ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast(new TransDataDecode());
-                pipeline.addLast(new TransDataEncode());
-                pipeline.addLast(new ClientHandler());
-            }
-        });
     }
 
     public void shutdown() {

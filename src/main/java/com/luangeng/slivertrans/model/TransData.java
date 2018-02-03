@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 
 public class TransData {
 
+    private long id;
+
     private TypeEnum type;
 
     private int index;
@@ -18,6 +20,14 @@ public class TransData {
     public TransData(TypeEnum type, ByteBuf data) {
         this.type = type;
         this.data = data;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public TypeEnum getType() {

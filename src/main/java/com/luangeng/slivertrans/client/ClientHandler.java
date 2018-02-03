@@ -3,8 +3,7 @@ package com.luangeng.slivertrans.client;
 import com.luangeng.slivertrans.model.AppConst;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
-import com.luangeng.slivertrans.support.FileReceiver;
-import com.luangeng.slivertrans.support.ReceiverThreadPool;
+import com.luangeng.slivertrans.support.FileReceiverPool;
 import com.luangeng.slivertrans.tools.TransTool;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,8 +18,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
     private static Logger logger = LoggerFactory.getLogger(ClientHandler.class);
 
     private static Map<Integer, String> map = new HashMap();
-
-    FileReceiver receiver;
 
     public static String getFileNameByIndex(int i) {
         return map.get(Integer.valueOf(i));
@@ -38,14 +35,11 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransData> {
             String msg = TransTool.getMsg(data);
             if (msg.startsWith("ls ")) {
                 praseLs(msg);
+            } else {
+                logger.info(TransTool.getMsg(data));
             }
-        } else if (type == TypeEnum.DATA || type == TypeEnum.END) {
-            receiver.receiver(data);
-        } else if (type == TypeEnum.BEGIN) {
-            receiver = new FileReceiver(data);
-            ReceiverThreadPool.submit(receiver);
-        } else {
-            logger.info(TransTool.getMsg(data));
+        } else if (type == TypeEnum.DATA || type == TypeEnum.END || type == TypeEnum.BEGIN) {
+            FileReceiverPool.receive(data);
         }
     }
 

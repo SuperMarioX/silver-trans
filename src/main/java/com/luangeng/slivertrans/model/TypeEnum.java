@@ -8,11 +8,13 @@ public enum TypeEnum {
 
     MSG(2),
 
-    DATA(3),
+    ACK(3),
 
-    BEGIN(4),
+    DATA(4),
 
-    END(5);
+    BEGIN(5),
+
+    END(6);
 
     short value;
 

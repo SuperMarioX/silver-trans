@@ -22,6 +22,9 @@ public class HttpServer extends Thread {
 
     private static Logger logger = LoggerFactory.getLogger(TransServer.class);
 
+    private static EventLoopGroup bossGroup;
+    private static EventLoopGroup workerGroup;
+
     private static HttpServer server = new HttpServer();
 
     private int port;
@@ -33,33 +36,37 @@ public class HttpServer extends Thread {
     public void start(int port) {
         if (this.getState() == NEW) {
             this.port = port;
+            this.bossGroup = new NioEventLoopGroup(1);
+            this.workerGroup = new NioEventLoopGroup();
             this.start();
         }
     }
 
     public void run() {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup);
             b.channel(NioServerSocketChannel.class);
             //b.handler(new LoggingHandler(LogLevel.INFO));
-            b.childHandler(new HttpUploadServerInitializer());
+            b.childHandler(new HttpServerChannelInitializer());
 
             Channel ch = b.bind(port).sync().channel();
             logger.info("HTTP Server started on port: " + port);
 
-            ch.closeFuture().sync();
+            //ch.closeFuture().sync();
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
-        } finally {
+        }
+    }
+
+    public void shutdown() {
+        if (bossGroup != null && workerGroup != null) {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
     }
 
-    private static class HttpUploadServerInitializer extends ChannelInitializer<SocketChannel> {
+    private static class HttpServerChannelInitializer extends ChannelInitializer<SocketChannel> {
         @Override
         public void initChannel(SocketChannel ch) {
             ChannelPipeline pipeline = ch.pipeline();

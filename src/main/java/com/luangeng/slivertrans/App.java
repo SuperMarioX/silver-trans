@@ -19,30 +19,26 @@ public class App {
         String log4j = CONFIG_DIR + File.separator + "log4j.properties";
         PropertyConfigurator.configure(log4j);
 
-        Integer port = ConfigTool.getInt("server.port");
-        if (port == null) {
-            port = AppConst.DEFAULT_PORT;
-        }
+        Integer port = ConfigTool.getInt("server.port", AppConst.DEFAULT_PORT);
 
         HttpServer.instance().start(port + 1);
         TransServer.instance().start(port);
         Runtime.getRuntime().addShutdownHook(new ShutDownServer());
 
         String clientIp = ConfigTool.getValue("client.ip");
-        Integer clientPort = ConfigTool.getInt("client.port");
-        if (clientPort == null) {
-            clientPort = AppConst.DEFAULT_PORT;
-        }
+        Integer clientPort = ConfigTool.getInt("client.port", AppConst.DEFAULT_PORT);
 
         CmdScanner.inputScan(clientIp, clientPort);
 
         TransClient.instance().shutdown();
         TransServer.instance().shutdown();
+        HttpServer.instance().shutdown();
     }
 
     private static class ShutDownServer extends Thread {
         public void run() {
             TransServer.instance().shutdown();
+            HttpServer.instance().shutdown();
         }
     }
 

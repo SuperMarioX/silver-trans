@@ -15,12 +15,13 @@ public class AppConst {
 
     public static final String CONFIG_DIR = System.getProperty("user.dir") + File.separator + "config";
 
+    public static final String ASSETS_DIR = System.getProperty("user.dir") + File.separator + "assets";
+
     public static final String DEFAULT_ROOT_PATH = System.getProperty("user.home");
 
-    public static final String ASSETS_DIR = System.getProperty("user.dir") + File.separator + "assets";
-    public static String ROOT_PATH = ConfigTool.getValue("root.path");
-
     public static final Pattern ALLOWED_FILE_NAME = Pattern.compile("[^-\\._]?[^<>&\\\"]*");
+
+    public static String ROOT_PATH = ConfigTool.getValue("root.path");
 
     static {
         if (ROOT_PATH == null) {

@@ -23,6 +23,7 @@ public class FileReceiver implements Runnable {
     private SortedBlockingQueue queue = new SortedBlockingQueue();
     private String dstPath = AppConst.ROOT_PATH;
     private String fileName;
+    private int chunkIndex = 0;
     private long receivedSize = 0;
     private long totalSize;
     private FileOutputStream out;
@@ -41,7 +42,7 @@ public class FileReceiver implements Runnable {
         }
         File dstFile = new File(dstPath + File.separator + fileName);
         if (dstFile.exists()) {
-
+            //
         }
         try {
             out = new FileOutputStream(dstFile);
@@ -81,7 +82,6 @@ public class FileReceiver implements Runnable {
     @Override
     public void run() {
         t0 = System.currentTimeMillis();
-        int chunkIndex = 0;
         try {
             while (true) {
                 TransData data = queue.pop(chunkIndex++);

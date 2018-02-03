@@ -20,7 +20,6 @@ public class FileSender implements Runnable {
     File f;
     FileInputStream in;
     ByteBuffer bf;
-    //MappedByteBuffer mb;
     int index = 0;
     Channel channel;
     private long t0;
@@ -42,16 +41,17 @@ public class FileSender implements Runnable {
             t0 = System.currentTimeMillis();
             bf = ByteBuffer.allocate(AppConst.BUFFER_SIZE);
             in = new FileInputStream(f);
+
             logger.info("Sending: " + name + "  Size: " + StringTool.formatFileSize(f.length()));
             TransTool.sendBegin(channel, name + AppConst.DELIMITER + f.length());
 
             while (in.getChannel().read(bf) != -1) {
-                //mb = ch.map(FileChannel.MapMode.READ_ONLY,0, 1024);
                 bf.flip();
                 TransTool.sendData(channel, bf, index);
                 index++;
                 bf.clear();
             }
+
             TransTool.sendEnd(channel, index);
             long cost = Math.round((System.currentTimeMillis() - t0) / 1000f);
             logger.info("Send complete: " + f.getName() + "   Cost Time: " + cost + "s");

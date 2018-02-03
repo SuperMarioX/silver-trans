@@ -2,7 +2,7 @@ package com.luangeng.slivertrans.support;
 
 import java.util.concurrent.*;
 
-public class SenderThreadPool {
+public class FileSenderPool {
 
     private static ExecutorService executor = new ThreadPoolExecutor(10, 10,
             0L, TimeUnit.SECONDS,
