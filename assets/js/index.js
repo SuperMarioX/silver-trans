@@ -33,9 +33,7 @@ function ajaxSetup() {
 	$.ajaxSetup({
 		timeout : 30000,
 		beforeSend : function(xhr) {
-		//var left=$("#list_tr").position().left+$("#list_tr").width()/2-20;
-		//var top=$("#list_tr").position().top + 20;
-		    //$("#loading").css('left',left).css('top',top).show();
+		    $("#loading").show();
 			xhr.setRequestHeader("Ajax_request", "true");
 		},
 		complete : function(xhr, ts) {

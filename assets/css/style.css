@@ -1,6 +1,6 @@
 body {
     background-color: #00000033;
-	background-image: url(../img/sahara.png);
+	background-image: url(../img/sahara.jpg);
 	background-repeat: repeat;
 	background-size: 1600px 720px;
 	background-attachment: fixed;
@@ -80,6 +80,7 @@ tr {
   height : 40px;
   width : 40px;
   position : absolute;
+  margin:20px;
 }
 
 #spinner {
