@@ -1,0 +1,42 @@
+<assembly>
+    <id>release</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <fileSets>
+        <fileSet>
+            <directory>target</directory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>target/lib</directory>
+            <outputDirectory>/lib</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>assets</directory>
+            <outputDirectory>/assets</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>config</directory>
+            <outputDirectory>/config</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>.</directory>
+            <includes>
+                <include>README.md</include>
+                <include>LICENSE.txt</include>
+                <include>startup.*</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+
+    </fileSets>
+</assembly>

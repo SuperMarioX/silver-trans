@@ -5,14 +5,19 @@
 *.iml
 *.ipr
 *.iws
+*.rar
+
+
 
 log/
 logs/
 out/
 target/
-temp/
-received/
 .settings/
 
 .classpath
 .project
+
+
+
+
