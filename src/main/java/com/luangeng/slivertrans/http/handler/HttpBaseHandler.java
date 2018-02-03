@@ -15,8 +15,6 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
 
-        System.out.println(this.hashCode());
-
         if (!request.decoderResult().isSuccess()) {
             HttpTool.sendError(ctx, HttpResponseStatus.BAD_REQUEST);
             return;
