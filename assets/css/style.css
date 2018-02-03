@@ -1,5 +1,5 @@
 body {
-    background-color: #00000033;
+    background-color: #000000;
 	background-image: url(../img/sahara.jpg);
 	background-repeat: repeat;
 	background-size: 1600px 720px;
@@ -7,7 +7,6 @@ body {
 	background-position: top;
 	overflow-x:hidden;
 	overflow-y:auto;
-
 	color: #dddddd;
 	font: 15px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
 		"Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
