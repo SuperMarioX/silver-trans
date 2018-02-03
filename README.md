@@ -8,8 +8,8 @@ silver-trans是一个文件服务器，也可以用来在主机之间传输文�
 
 ##### 1.使用命令操作，在主机之间通过TCP传输文件
   
-| 命令              | 功能                | 
-| ----------------- |:-------------------|
+| 命令              | 功能               | 
+| ----------------- |:------------------|
 | connect ip:port   | 连接到主机|
 | disconnect        | 断开连接|
 | exit              | 退出程序|
@@ -17,7 +17,7 @@ silver-trans是一个文件服务器，也可以用来在主机之间传输文�
 | cd                | 进入目录|
 | ls                | 显示当前目录文件列表|
 | get               | 获取文件|
-| delete            | 删除文件|
+| rm                | 删除文件|
 
 
 ##### 2.使用API方式调用，在主机之间通过TCP传输文件
@@ -39,5 +39,3 @@ TransApi.sentFile(src, dst);
 * [Netty](https://github.com/netty/netty)
 * [resumable.js](https://github.com/23/resumable.js)
 * [Gson](https://github.com/google/gson)
-
-***
