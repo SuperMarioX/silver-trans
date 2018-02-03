@@ -41,7 +41,6 @@
             <includes>
                 <include>README.md</include>
                 <include>LICENSE.txt</include>
-                <include>startup.*</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </fileSet>
