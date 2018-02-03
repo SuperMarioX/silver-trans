@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/luangeng/silver-trans.svg?branch=master)](https://travis-ci.org/luangeng/silver-trans)
-[![GitHub release](https://img.shields.io/badge/release-download-orange.svg)](https://github.com/luangeng/silver-trans)
+[![GitHub release](https://img.shields.io/badge/release-download-orange.svg)](https://raw.githubusercontent.com/luangeng/Test/master/silver-trans-release.zip)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 ## silver-trans是什么？
 silver-trans是一个文件服务器，也可以用来在主机之间传输文件。
@@ -8,8 +8,8 @@ silver-trans是一个文件服务器，也可以用来在主机之间传输文�
 
 ##### 1.使用命令操作，在主机之间通过TCP传输文件
   
-|          命令      |                 | 
-| ----------------- |:-------------------|
+| 命令              | 功能               | 
+| ----------------- |:------------------|
 | connect ip:port   | 连接到主机|
 | disconnect        | 断开连接|
 | exit              | 退出程序|
@@ -17,6 +17,7 @@ silver-trans是一个文件服务器，也可以用来在主机之间传输文�
 | cd                | 进入目录|
 | ls                | 显示当前目录文件列表|
 | get               | 获取文件|
+| rm                | 删除文件|
 
 
 ##### 2.使用API方式调用，在主机之间通过TCP传输文件
@@ -38,5 +39,3 @@ TransApi.sentFile(src, dst);
 * [Netty](https://github.com/netty/netty)
 * [resumable.js](https://github.com/23/resumable.js)
 * [Gson](https://github.com/google/gson)
-
-***
