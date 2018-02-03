@@ -20,7 +20,7 @@ public class FileSender implements Runnable {
     File f;
     FileInputStream in;
     ByteBuffer bf;
-    int index = 0;
+    int index = 1;
     Channel channel;
     private long t0;
 

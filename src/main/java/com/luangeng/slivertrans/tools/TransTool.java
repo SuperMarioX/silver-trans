@@ -1,5 +1,6 @@
 package com.luangeng.slivertrans.tools;
 
+import com.luangeng.slivertrans.model.CmdEnum;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
 import io.netty.buffer.ByteBuf;
@@ -21,10 +22,11 @@ public class TransTool {
         ch.writeAndFlush(data);
     }
 
-    public static void sendCmd(Channel ch, String msg) {
+    public static void sendCmd(Channel ch, CmdEnum cmd, String param) {
         Objects.requireNonNull(ch);
-        ByteBuf bfn = Unpooled.copiedBuffer(msg, CHARSET);
+        ByteBuf bfn = Unpooled.copiedBuffer(param, CHARSET);
         TransData data = new TransData(TypeEnum.CMD, bfn);
+        data.setIndex(cmd.value());
         ch.writeAndFlush(data);
     }
 
@@ -39,6 +41,7 @@ public class TransTool {
     public static void sendBegin(Channel ch, String msg) {
         ByteBuf bfn = Unpooled.copiedBuffer(msg, CHARSET);
         TransData data = new TransData(TypeEnum.BEGIN, bfn);
+        data.setIndex(0);
         ch.writeAndFlush(data);
     }
 

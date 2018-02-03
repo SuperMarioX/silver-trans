@@ -3,7 +3,7 @@ package com.luangeng.slivertrans.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileDirVo {
+public class FileDirVO {
 
     private String path;
 

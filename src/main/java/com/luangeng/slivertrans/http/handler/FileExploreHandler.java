@@ -2,7 +2,7 @@ package com.luangeng.slivertrans.http.handler;
 
 import com.google.gson.Gson;
 import com.luangeng.slivertrans.model.AppConst;
-import com.luangeng.slivertrans.model.FileDirVo;
+import com.luangeng.slivertrans.model.FileDirVO;
 import com.luangeng.slivertrans.tools.HttpTool;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -45,13 +45,13 @@ public class FileExploreHandler extends AbstractHttpHandler {
         }
 
         if (file.isDirectory()) {
-            FileDirVo lf = new FileDirVo();
+            FileDirVO lf = new FileDirVO();
             lf.setPath(path.substring(AppConst.ROOT_PATH.length()));
             for (File f : file.listFiles(ff -> ff.isDirectory())) {
                 if (!f.canRead()) {
                     continue;
                 }
-                lf.getDirs().add(new FileDirVo.Detail(f.getName(), "", formatDate(f.lastModified())));
+                lf.getDirs().add(new FileDirVO.Detail(f.getName(), "", formatDate(f.lastModified())));
             }
             for (File f : file.listFiles(ff -> ff.isFile())) {
                 if (!f.canRead()) {
@@ -61,7 +61,7 @@ public class FileExploreHandler extends AbstractHttpHandler {
                 if (!AppConst.ALLOWED_FILE_NAME.matcher(name).matches()) {
                     continue;
                 }
-                lf.getFiles().add(new FileDirVo.Detail(f.getName(), formatFileSize(f.length()), formatDate(f.lastModified())));
+                lf.getFiles().add(new FileDirVO.Detail(f.getName(), formatFileSize(f.length()), formatDate(f.lastModified())));
             }
 
             FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);

@@ -9,7 +9,7 @@ public class TransDataEncode extends MessageToByteEncoder<TransData> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, TransData msg, ByteBuf out) throws Exception {
-        out.writeShort(msg.getType().value())
+        out.writeInt(msg.getType().value())
                 .writeInt(msg.getIndex())
                 .writeInt(msg.getData().readableBytes())
                 .writeBytes(msg.getData());

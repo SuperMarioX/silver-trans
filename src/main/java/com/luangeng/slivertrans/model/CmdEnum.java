@@ -1,30 +1,27 @@
 package com.luangeng.slivertrans.model;
 
-public enum TypeEnum {
+public enum CmdEnum {
 
-    INVALID,
+    UNKNOW,
 
-    CMD,
+    CD,
 
-    MSG,
+    PWD,
 
-    ACK,
+    GET,
 
-    DATA,
+    DELETE,
 
-    BEGIN,
+    LS;
 
-    END;
-
-    public static TypeEnum from(int s) {
+    public static CmdEnum from(int s) {
         if (s < values().length) {
             return values()[s];
         }
-        return INVALID;
+        return UNKNOW;
     }
 
     public int value() {
         return this.ordinal();
     }
-
 }

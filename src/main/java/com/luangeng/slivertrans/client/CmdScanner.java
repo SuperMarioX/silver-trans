@@ -1,6 +1,7 @@
 package com.luangeng.slivertrans.client;
 
 import com.luangeng.slivertrans.model.AppConst;
+import com.luangeng.slivertrans.model.CmdEnum;
 import com.luangeng.slivertrans.tools.TransTool;
 import io.netty.channel.Channel;
 
@@ -20,8 +21,8 @@ public class CmdScanner {
             ip = ip0;
             port = port0;
             channel = TransClient.instance().connect(ip, port);
-            TransTool.sendCmd(channel, "pwd");
-            TransTool.sendCmd(channel, "ls");
+            TransTool.sendCmd(channel, CmdEnum.PWD, "pwd");
+            TransTool.sendCmd(channel, CmdEnum.LS, "ls");
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -65,7 +66,7 @@ public class CmdScanner {
                 System.out.println("this is help.");
             } else {
                 if (isActive()) {
-                    sendCmd(cmd);
+                    otherCmd(cmd);
                 } else {
                     System.out.println("Not connected.");
                 }
@@ -74,20 +75,21 @@ public class CmdScanner {
         scanner.close();
     }
 
-    private static void sendCmd(String cmd) {
+    private static void otherCmd(String cmd) {
         if (cmd.startsWith("get ")) {
             int i = Integer.valueOf(cmd.substring(4).trim());
-            cmd = "get " + ClientHandler.getFileNameByIndex(i);
+            String path = ClientHandler.getFileNameByIndex(i);
+            TransTool.sendCmd(channel, CmdEnum.GET, path);
         } else if (cmd.startsWith("cd ")) {
-            String p = cmd.substring(3).trim();
             try {
-                int i = Integer.valueOf(p);
-                cmd = "cd " + ClientHandler.getFileNameByIndex(i);
+                int i = Integer.valueOf(cmd.substring(3).trim());
+                String path = ClientHandler.getFileNameByIndex(i);
+                TransTool.sendCmd(channel, CmdEnum.CD, path);
             } catch (Exception e) {
                 //nothing
             }
         }
-        TransTool.sendCmd(channel, cmd);
+
     }
 
     private static boolean isActive() {

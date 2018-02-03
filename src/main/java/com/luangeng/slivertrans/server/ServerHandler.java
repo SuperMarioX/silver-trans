@@ -1,6 +1,7 @@
 package com.luangeng.slivertrans.server;
 
 import com.luangeng.slivertrans.model.AppConst;
+import com.luangeng.slivertrans.model.CmdEnum;
 import com.luangeng.slivertrans.model.TransData;
 import com.luangeng.slivertrans.model.TypeEnum;
 import com.luangeng.slivertrans.support.FileSender;
@@ -28,19 +29,27 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
 
     private void handle(ChannelHandlerContext ctx, TransData data) throws Exception {
         if (data.getType() == TypeEnum.CMD) {
-            String cmd = TransTool.getMsg(data);
-            if (cmd.equalsIgnoreCase("ls")) {
-                ls(ctx.channel());
-            } else if (cmd.startsWith("cd ")) {
-                cd(ctx.channel(), cmd);
-            } else if (cmd.startsWith("get ")) {
-                String name = cmd.substring(4).trim();
-                FileSender sender = new FileSender(path, name, ctx.channel());
-                FileSenderPool.submit(sender);
-            } else if (cmd.equalsIgnoreCase("pwd")) {
-                TransTool.sendMsg(ctx.channel(), ctx.channel().localAddress().toString() + path);
-            } else {
-                TransTool.sendMsg(ctx.channel(), "Unknow command");
+            CmdEnum cmd = CmdEnum.from(data.getIndex());
+            String param = TransTool.getMsg(data);
+            switch (cmd) {
+                case PWD:
+                    TransTool.sendMsg(ctx.channel(), ctx.channel().localAddress().toString() + path);
+                    break;
+                case CD:
+                    cd(ctx.channel(), param);
+                    break;
+                case LS:
+                    ls(ctx.channel());
+                    break;
+                case GET:
+                    FileSender sender = new FileSender(path, param, ctx.channel());
+                    FileSenderPool.submit(sender);
+                    break;
+                case DELETE:
+                    delete(param);
+                    break;
+                case UNKNOW:
+                    TransTool.sendMsg(ctx.channel(), "Unknow command");
             }
         }
     }
@@ -73,24 +82,30 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
         TransTool.sendMsg(channel, "ls " + sb.toString());
     }
 
-    private void cd(Channel channel, String cmd) {
-        String dir = cmd.substring(3).trim();
-        if (dir.equals("..")) {
+    private void cd(Channel channel, String param) {
+        if (param.equals("..")) {
             File f = new File(path);
             f = f.getParentFile();
             path = f.getAbsolutePath();
             TransTool.sendMsg(channel, "New path " + path);
             ls(channel);
         } else {
-            String path1 = path + File.separator + dir;
+            String path1 = path + File.separator + param;
             File f1 = new File(path1);
             if (f1.exists() && f1.isDirectory()) {
                 path = path1;
                 TransTool.sendMsg(channel, "New path " + path);
                 ls(channel);
             } else {
-                TransTool.sendMsg(channel, "Error, folder not found");
+                TransTool.sendMsg(channel, "Error, folder not exists");
             }
+        }
+    }
+
+    private void delete(String path) {
+        File f = new File(path);
+        if (f.exists()) {
+            f.delete();
         }
     }
 
