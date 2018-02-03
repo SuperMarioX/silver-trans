@@ -28,7 +28,7 @@ TransApi.sentFile(src, dst);
 ```
 
 ##### 3.通过浏览器上传文件到主机或从主机下载
-<img src="https://github.com/luangeng/Test/blob/master/silver-trans.png" alt="silver-trans" align=center />
+<img src="https://github.com/luangeng/Test/blob/master/silver-trans.jpg" alt="silver-trans" align=center />
 
 
 ## silver-trans如何使用？
