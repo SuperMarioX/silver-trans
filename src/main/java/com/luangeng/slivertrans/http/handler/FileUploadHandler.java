@@ -54,16 +54,14 @@ public class FileUploadHandler extends AbstractHttpHandler {
 
         ChannelFuture channelFuture = null;
         if (request.method() == HttpMethod.GET) {
-            if (TrunkReceiver.instance().chunkWriten(info)) {
+            if (TrunkReceiver.instance().isChunkWriten(info)) {
                 HttpTool.sendMsg(ctx, "Uploaded");
             } else {
                 HttpTool.sendNotModified(ctx);
             }
             return null;
         } else if (request.method() == HttpMethod.POST) {
-
             boolean done = TrunkReceiver.instance().write(info, request.content());
-
             if (done) {
                 channelFuture = HttpTool.sendMsg(ctx, "All finished.");
             } else {

@@ -1,14 +1,18 @@
 var r = new Resumable({
 	target : 'upload.action',
 	method : 'octet',
-	chunkSize : 1024 * 300,
+	chunkSize : 1024 * 500,
+	forceChunkSize:1024*500,
 	simultaneousUploads : 4,
-	// testChunks: true,
-	query : {
-		upload_token : new Date().getTime()
-	},
-	throttleProgressCallbacks : 1
+	maxFiles:1,
+	maxFileSize:1024*1024*1024*1024,
+	fileType:[],
+//	query : {
+//		upload_token : new Date().getTime()
+//	},
+	testChunks: false
 });
+var process_0;
 
 r.assignBrowse(document.getElementById('browseButton'));
 r.assignDrop(document.getElementById('dropTarget'));
@@ -17,12 +21,13 @@ r.on('fileSuccess', function(file) {
 	console.info('fileSuccess', file);
 });
 r.on('fileProgress', function(file) {
-	// console.info('fileProgress', file);
+	console.info('fileProgress', file);
+	file.relativePath = $('#path').text().trim();
 });
 r.on('fileAdded', function(file, event) {
-	$("#fileName").html(file.fileName)
+	$('#fileName').html(file.fileName)
 	r.upload();
-	file.relativePath = $("#path").text().trim();
+	//file.relativePath = $('#path').text().trim();
 	console.info('fileAdded', file);
 });
 r.on('filesAdded', function(array) {
@@ -31,7 +36,7 @@ r.on('filesAdded', function(array) {
 //    for(var e in array){
 //        a.push(e.fileName);
 //    }
-//	$("#fileName").html(a.join(', '))
+//	$('#fileName').html(a.join(', '))
 	console.info('filesAdded', array);
 });
 r.on('fileRetry', function(file) {
@@ -42,19 +47,21 @@ r.on('fileError', function(file, message) {
 });
 r.on('uploadStart', function() {
 	console.info('uploadStart');
-	$('.expand').width('0%');
-	//$("#loading").show();
-	$("#browseButton").css("pointer-events","none");
+	$('.processbar').show();
+	$('#browseButton').css('pointer-events','none');
 });
 r.on('complete', function() {
 	console.info('complete');
-	//$("#loading").fadeOut("slow");
-	$("#browseButton").css("pointer-events","auto");
+	$('#browseButton').css('pointer-events','auto');
+	$('.processbar').fadeOut();
 });
 r.on('progress', function() {
-	var process = Math.round(r.progress() * 10000) / 100;
-	$('.processbar').width(process+'%');
-	$('#process').text(process + '%')
+	var process = Math.round(r.progress() * 1000) / 10;
+	if(process_0 != process){
+	    process_0 = process;
+	    $('.processbar').width(process+'%');
+	    $('#process').text(process + '%');
+	}
 });
 r.on('error', function(message, file) {
 	console.info('error', message, file);

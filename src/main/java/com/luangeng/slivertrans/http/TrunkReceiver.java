@@ -32,7 +32,7 @@ public class TrunkReceiver {
         return task.write(bf, info);
     }
 
-    public synchronized boolean chunkWriten(FileChunkInfo info) {
+    public synchronized boolean isChunkWriten(FileChunkInfo info) {
         Task t = taskMap.get(info.getResumableIdentifier());
         if (t != null) {
             return t.indexs.contains(info.getResumableChunkNumber());
