@@ -1,18 +1,15 @@
 var r = new Resumable({
 	target : 'upload.action',
-	method : 'octet',
+	//method : 'octet',
 	chunkSize : 1024 * 500,
 	forceChunkSize:1024*500,
 	simultaneousUploads : 4,
 	maxFiles:1,
-	maxFileSize:1024*1024*1024*1024,
+	maxFileSize:1024*1024*1024*100,
 	fileType:[],
-//	query : {
-//		upload_token : new Date().getTime()
-//	},
+//	query : {upload_token : new Date().getTime()},
 	testChunks: false
 });
-var process_0;
 
 r.assignBrowse(document.getElementById('browseButton'));
 r.assignDrop(document.getElementById('dropTarget'));
@@ -55,6 +52,7 @@ r.on('complete', function() {
 	$('#browseButton').css('pointer-events','auto');
 	$('.processbar').fadeOut();
 });
+var process_0;
 r.on('progress', function() {
 	var process = Math.round(r.progress() * 1000) / 10;
 	if(process_0 != process){

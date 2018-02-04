@@ -35,7 +35,7 @@ public class TrunkReceiver {
     public synchronized boolean isChunkWriten(FileChunkInfo info) {
         Task t = taskMap.get(info.getResumableIdentifier());
         if (t != null) {
-            return t.indexs.contains(info.getResumableChunkNumber());
+            return t.contains(info.getResumableChunkNumber());
         }
         return false;
     }
@@ -80,6 +80,10 @@ public class TrunkReceiver {
                 e.printStackTrace();
             }
             return false;
+        }
+
+        public boolean contains(Long index) {
+            return indexs.contains(index);
         }
 
     }
