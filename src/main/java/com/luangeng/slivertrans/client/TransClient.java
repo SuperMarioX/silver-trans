@@ -45,7 +45,7 @@ public class TransClient {
         if (group != null) {
             group.shutdownGracefully();
         }
-        logger.info("Trans Client shutdown");
+        logger.info("Trans Client stoped.");
     }
 
 }

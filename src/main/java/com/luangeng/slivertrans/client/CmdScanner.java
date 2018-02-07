@@ -88,6 +88,8 @@ public class CmdScanner {
             } catch (Exception e) {
                 //nothing
             }
+        } else {
+            TransTool.sendCmd(channel, CmdEnum.fromStr(cmd), "");
         }
 
     }

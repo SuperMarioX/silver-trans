@@ -8,16 +8,11 @@
 *.rar
 
 
-
 log/
 logs/
 out/
-target/
+/target
 .settings/
 
 .classpath
 .project
-
-
-
-

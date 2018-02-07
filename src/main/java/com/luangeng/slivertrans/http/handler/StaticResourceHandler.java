@@ -10,7 +10,6 @@ import io.netty.handler.codec.http.*;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,8 +25,7 @@ public class StaticResourceHandler extends AbstractHttpHandler {
 
     public ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
         uri = uri.replace('/', File.separatorChar);
-        URI u = new URI(uri);
-        File file = new File(AppConst.ASSETS_DIR + u.getPath());
+        File file = new File(AppConst.ASSETS_DIR + uri);
         if (!file.getCanonicalPath().startsWith(AppConst.ASSETS_DIR)) {
             HttpTool.sendError(ctx, FORBIDDEN);
             return null;
@@ -36,7 +34,6 @@ public class StaticResourceHandler extends AbstractHttpHandler {
             HttpTool.sendError(ctx, FORBIDDEN);
             return null;
         }
-
         if (!file.exists() || !file.isFile()) {
             HttpTool.sendError(ctx, HttpResponseStatus.NOT_FOUND);
             return null;

@@ -29,7 +29,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
 
     private void handle(ChannelHandlerContext ctx, TransData data) throws Exception {
         if (data.getType() == TypeEnum.CMD) {
-            CmdEnum cmd = CmdEnum.from(data.getIndex());
+            CmdEnum cmd = CmdEnum.fromInt(data.getIndex());
             String param = TransTool.getMsg(data);
             switch (cmd) {
                 case PWD:
