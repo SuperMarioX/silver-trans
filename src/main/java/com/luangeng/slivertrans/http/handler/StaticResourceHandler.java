@@ -30,10 +30,7 @@ public class StaticResourceHandler extends AbstractHttpHandler {
             HttpTool.sendError(ctx, FORBIDDEN);
             return null;
         }
-        if (!AppConst.ALLOWED_FILE_NAME.matcher(file.getName()).matches()) {
-            HttpTool.sendError(ctx, FORBIDDEN);
-            return null;
-        }
+
         if (!file.exists() || !file.isFile()) {
             HttpTool.sendError(ctx, HttpResponseStatus.NOT_FOUND);
             return null;

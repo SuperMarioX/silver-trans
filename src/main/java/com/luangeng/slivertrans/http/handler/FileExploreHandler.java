@@ -44,43 +44,39 @@ public class FileExploreHandler extends AbstractHttpHandler {
             return null;
         }
 
+        if (!file.canRead()) {
+            HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
+            return null;
+        }
+
         if (file.isDirectory()) {
-            FileDirVO lf = new FileDirVO();
-            lf.setPath(path.substring(AppConst.ROOT_PATH.length()));
-            for (File f : file.listFiles(ff -> ff.isDirectory())) {
-                if (!f.canRead()) {
-                    continue;
-                }
-                lf.getDirs().add(new FileDirVO.Detail(f.getName(), "", formatDate(f.lastModified())));
+            File[] files = file.listFiles();
+            if (files == null) {
+                HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
+                return null;
             }
-            for (File f : file.listFiles(ff -> ff.isFile())) {
+
+            FileDirVO fileDirVO = new FileDirVO();
+            fileDirVO.setPath(path.substring(AppConst.ROOT_PATH.length()));
+            for (File f : files) {
                 if (!f.canRead()) {
                     continue;
                 }
-                String name = f.getName();
-                if (!AppConst.ALLOWED_FILE_NAME.matcher(name).matches()) {
-                    continue;
+                if (f.isDirectory()) {
+                    fileDirVO.getDirs().add(new FileDirVO.Detail(f.getName(), "", formatDate(f.lastModified())));
+                } else {
+                    fileDirVO.getFiles().add(new FileDirVO.Detail(f.getName(), formatFileSize(f.length()), formatDate(f.lastModified())));
                 }
-                lf.getFiles().add(new FileDirVO.Detail(f.getName(), formatFileSize(f.length()), formatDate(f.lastModified())));
             }
 
             FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
-            ByteBuf buffer = Unpooled.copiedBuffer(gson.toJson(lf), CharsetUtil.UTF_8);
+            ByteBuf buffer = Unpooled.copiedBuffer(gson.toJson(fileDirVO), CharsetUtil.UTF_8);
             HttpUtil.setContentLength(response, buffer.readableBytes());
             response.content().writeBytes(buffer);
             buffer.release();
             return ctx.writeAndFlush(response);
 
         } else if (file.isFile()) {
-
-            if (!file.canRead()) {
-                HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
-                return null;
-            }
-            if (!AppConst.ALLOWED_FILE_NAME.matcher(file.getName()).matches()) {
-                HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN);
-                return null;
-            }
 
             RandomAccessFile raf = new RandomAccessFile(file, "r");
             long length = raf.length();

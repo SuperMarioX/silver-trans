@@ -104,6 +104,9 @@ function list(str) {
     			var s = tr.format(index, name, data.files[i].size, data.files[i].date, view);
     			$("table").append(s);
     		}
+    	},
+    	error : function(a,b,c){
+    	    alert(a.responseText);
     	}
     });
 }
