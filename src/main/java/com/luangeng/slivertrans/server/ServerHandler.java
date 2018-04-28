@@ -20,7 +20,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
 
     private static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
 
-    private String path = AppConst.ROOT_PATH;
+    private String currentPath = AppConst.ROOT_PATH;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TransData data) throws Exception {
@@ -33,7 +33,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
             String param = TransTool.getMsg(data);
             switch (cmd) {
                 case PWD:
-                    TransTool.sendMsg(ctx.channel(), ctx.channel().localAddress().toString() + path);
+                    TransTool.sendMsg(ctx.channel(), ctx.channel().localAddress().toString() + currentPath);
                     break;
                 case CD:
                     cd(ctx.channel(), param);
@@ -42,7 +42,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                     ls(ctx.channel());
                     break;
                 case GET:
-                    FileSender sender = new FileSender(path, param, ctx.channel());
+                    FileSender sender = new FileSender(currentPath, param, ctx.channel());
                     FileSenderPool.submit(sender);
                     break;
                 case DELETE:
@@ -57,7 +57,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
     private void ls(Channel channel) {
         int k = 1;
         StringBuilder sb = new StringBuilder();
-        File file = new File(path);
+        File file = new File(currentPath);
         File[] files = file.listFiles(ff -> ff.isDirectory());
         if (files != null)
             for (File f : files) {
@@ -84,17 +84,17 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
 
     private void cd(Channel channel, String param) {
         if (param.equals("..")) {
-            File f = new File(path);
+            File f = new File(currentPath);
             f = f.getParentFile();
-            path = f.getAbsolutePath();
-            TransTool.sendMsg(channel, "New path " + path);
+            currentPath = f.getAbsolutePath();
+            TransTool.sendMsg(channel, "New currentPath " + currentPath);
             ls(channel);
         } else {
-            String path1 = path + File.separator + param;
+            String path1 = currentPath + File.separator + param;
             File f1 = new File(path1);
             if (f1.exists() && f1.isDirectory()) {
-                path = path1;
-                TransTool.sendMsg(channel, "New path " + path);
+                currentPath = path1;
+                TransTool.sendMsg(channel, "New currentPath " + currentPath);
                 ls(channel);
             } else {
                 TransTool.sendMsg(channel, "Error, folder not exists");

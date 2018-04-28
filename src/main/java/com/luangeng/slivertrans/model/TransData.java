@@ -4,7 +4,8 @@ import io.netty.buffer.ByteBuf;
 
 public class TransData {
 
-    private long id;
+    //length 32
+    private String id;
 
     private TypeEnum type;
 
@@ -22,11 +23,11 @@ public class TransData {
         this.data = data;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

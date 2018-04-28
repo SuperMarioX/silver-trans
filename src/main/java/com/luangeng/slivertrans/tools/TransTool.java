@@ -8,7 +8,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.util.CharsetUtil;
 
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
@@ -37,26 +36,4 @@ public class TransTool {
         return null;
     }
 
-
-    public static void sendBegin(Channel ch, String msg) {
-        ByteBuf bfn = Unpooled.copiedBuffer(msg, CHARSET);
-        TransData data = new TransData(TypeEnum.BEGIN, bfn);
-        data.setIndex(0);
-        ch.writeAndFlush(data);
-    }
-
-    public static void sendData(Channel ch, ByteBuffer bf, int index) {
-        TransData data = new TransData();
-        data.setType(TypeEnum.DATA);
-        ByteBuf bfn = Unpooled.copiedBuffer(bf);
-        data.setData(bfn);
-        data.setIndex(index);
-        ch.writeAndFlush(data);
-    }
-
-    public static void sendEnd(Channel ch, int index) {
-        TransData data = new TransData(TypeEnum.END, Unpooled.EMPTY_BUFFER);
-        data.setIndex(index);
-        ch.writeAndFlush(data);
-    }
 }
