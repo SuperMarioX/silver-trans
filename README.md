@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/luangeng/silver-trans.svg?branch=master)](https://travis-ci.org/luangeng/silver-trans)
 [![GitHub release](https://img.shields.io/badge/release-download-orange.svg)](https://raw.githubusercontent.com/luangeng/silver-trans/master/target/silver-trans-1.0-SNAPSHOT.zip)
-[![License](https://img.shields.io/badge/license-Free-blue.svg)](https://luangeng.github.io/silver-trans/)
+[![License](https://img.shields.io/badge/license-2.0-blue.svg)](https://luangeng.github.io/silver-trans/)
 ## silver-trans是什么？
 [silver-trans](https://luangeng.github.io/silver-trans/)是一个文件服务器，也可以用来在主机之间传输文件。
 
