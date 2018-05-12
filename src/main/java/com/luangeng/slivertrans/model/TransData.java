@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 public class TransData {
 
     //length 32
-    private String id;
+    private String id = "";
 
     private TypeEnum type;
 

@@ -8,7 +8,7 @@ body {
 	overflow-x:hidden;
 	overflow-y:auto;
 	color: #dddddd;
-	font: 15px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+	font: 14px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
 		"Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
 		"WenQuanYi Micro Hei", sans-serif;
 }
@@ -38,8 +38,8 @@ table {
 tr {
 }
 .td0 {
-    text-align:center;
-    width:30px;
+    text-align:left;
+    width:40px;
 }
 .td1 {
     text-align:left;
@@ -111,7 +111,5 @@ textarea {
     overflow:hidden;
     height: 100000px;
     width: 90%;
-    font: 15px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
-    		"Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
-    		"WenQuanYi Micro Hei", sans-serif;
+    font: 15px;
 }

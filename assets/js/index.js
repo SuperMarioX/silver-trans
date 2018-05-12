@@ -1,4 +1,4 @@
-//$(document).ready();
+// 替换字符串{0} {1} {2} 为参数中的值
 String.prototype.format = function(args) {
 	var result = this;
 	if (arguments.length > 0) {
@@ -83,6 +83,7 @@ function list(str) {
     	success : function(data) {
     	    listData = data;
     		$("table").html("");
+    		$("table").append(tr.format("No","Title","Size","Last Update Date"));
     		if (data.path.length==0) {
     			$("#path").html('/&nbsp;&nbsp;').val('');
     		} else {

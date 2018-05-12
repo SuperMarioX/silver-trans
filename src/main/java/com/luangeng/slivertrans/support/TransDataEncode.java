@@ -15,6 +15,8 @@ public class TransDataEncode extends MessageToByteEncoder<TransData> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, TransData msg, ByteBuf out) throws Exception {
+        int n = msg != null ? msg.getId().length() : 0;
+        out.writeInt(n);
         out.writeBytes(Unpooled.copiedBuffer(msg.getId(), CHARSET));
         out.writeInt(msg.getType().value());
         out.writeInt(msg.getIndex());

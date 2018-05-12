@@ -21,8 +21,8 @@ public class CmdScanner {
             ip = ip0;
             port = port0;
             channel = TransClient.instance().connect(ip, port);
-            TransTool.sendCmd(channel, CmdEnum.PWD, "pwd");
-            TransTool.sendCmd(channel, CmdEnum.LS, "ls");
+            TransTool.sendCmd(channel, CmdEnum.PWD, CmdEnum.PWD.name());
+            TransTool.sendCmd(channel, CmdEnum.LS, CmdEnum.LS.name());
         }
 
         Scanner scanner = new Scanner(System.in);

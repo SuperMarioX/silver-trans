@@ -10,6 +10,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpContentCompressor;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
@@ -18,6 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import static java.lang.Thread.State.NEW;
 
+/*
+    HTTP Server
+ */
 public class HttpServer extends Thread {
 
     private static Logger logger = LoggerFactory.getLogger(TransServer.class);
@@ -73,7 +77,7 @@ public class HttpServer extends Thread {
             //pipeline.addLast(new HttpRequestDecoder());
             //pipeline.addLast(new HttpResponseEncoder());
             // Remove the following line if you don't want automatic content compression.
-            //pipeline.addLast(new HttpContentCompressor());
+            pipeline.addLast(new HttpContentCompressor());
 
             pipeline.addLast(new HttpServerCodec());
             pipeline.addLast(new HttpObjectAggregator(1024 * 1024));

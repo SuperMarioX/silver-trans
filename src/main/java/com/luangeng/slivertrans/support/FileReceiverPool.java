@@ -47,7 +47,6 @@ public class FileReceiverPool {
         executor.shutdown();
     }
 
-
     //自定义线程工厂
     private static class MyThreadFactory implements ThreadFactory {
         @Override

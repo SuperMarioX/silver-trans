@@ -7,16 +7,16 @@ import io.netty.buffer.ByteBuf;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TrunkReceiver {
 
     private static TrunkReceiver receive = new TrunkReceiver();
 
-    private static Map<String, Task> taskMap = new HashMap();
+    private static Map<String, Task> taskMap = new ConcurrentHashMap<>();
 
     public static TrunkReceiver instance() {
         return receive;

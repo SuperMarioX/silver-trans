@@ -18,7 +18,8 @@ public class TransDataDecode extends ReplayingDecoder<Void> {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         TransData data = new TransData();
-        data.setId(in.readBytes(32).toString(CHARSET));
+        int n = in.readInt();
+        data.setId(in.readBytes(n).toString(CHARSET));
         data.setType(TypeEnum.from(in.readInt()));
         data.setIndex(in.readInt());
         data.setLength(in.readInt());
