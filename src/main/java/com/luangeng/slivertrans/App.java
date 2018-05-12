@@ -34,7 +34,7 @@ public class App {
 
         //TransClient.instance().shutdown();
         //TransServer.instance().shutdown();
-        HttpServer.instance().shutdown();
+        //HttpServer.instance().shutdown();
     }
 
     private static class ShutDownServer extends Thread {
