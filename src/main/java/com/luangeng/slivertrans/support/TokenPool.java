@@ -33,13 +33,13 @@ public class TokenPool extends Thread {
     public void run() {
         Set<String> keys = tokenMap.keySet();
         for (String key : keys) {
-            if (tokenMap.get(key) == 1) {
+            if (tokenMap.get(key) <= 1) {
                 tokenMap.remove(key);
             }
-            tokenMap.put(key, tokenMap.get(key) - 1);
+            tokenMap.put(key, tokenMap.get(key) - 5);
         }
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
