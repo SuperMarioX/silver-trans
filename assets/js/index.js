@@ -34,12 +34,12 @@ function ajaxSetup() {
 		timeout : 30000,
 		beforeSend : function(xhr) {
 		    $("#loading").show();
-			xhr.setRequestHeader("Ajax_request", "true");
+			xhr.setRequestHeader("ajax", "true");
+			xhr.setRequestHeader("token", getCookie("token"));
 		},
 		complete : function(xhr, ts) {
-			if (xhr.getResponseHeader('sessionState') == 'timeout'
-					&& xhr.status == 403) {
-				console.log('jump');
+			if (xhr.getResponseHeader('auth') == 'forbidden' && xhr.status == 403) {
+			    auth();
 			}
 			$("#loading").fadeOut();
 		}
@@ -110,4 +110,45 @@ function list(str) {
     	    alert(a.responseText);
     	}
     });
+}
+
+function getCookie(c_name) {
+    if (document.cookie.length>0) {
+        c_start=document.cookie.indexOf(c_name + "=");
+        if (c_start!=-1) {
+            c_start=c_start + c_name.length+1;
+            c_end=document.cookie.indexOf(";",c_start);
+            if (c_end==-1) {c_end=document.cookie.length;}
+            return unescape(document.cookie.substring(c_start,c_end));
+        }
+    }
+    return ""
+}
+
+function setCookie(c_name,value,expiredays) {
+    if (expiredays==null) {
+        expiredays = "";
+    } else {
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate()+expiredays);
+        expiredays = "; expires="+exdate.toGMTString();
+    }
+    document.cookie=c_name+ "=" +escape(value)+ expiredays;
+}
+
+function auth(){
+     auth=prompt('Password:',"");
+     if (auth!=null && auth!="") {
+         $.ajax({
+             	url : "/auth.action",
+             	type : "POST",
+             	data : auth,
+             	dataType : "text",
+             	async : true,
+             	success : function(data) {
+             	    setCookie("token", data, 1);
+             	    location.reload();
+             	  }
+             	});
+     }
 }

@@ -1,0 +1,1 @@
+nohup java -jar silver-trans.jar &

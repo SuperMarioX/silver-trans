@@ -100,6 +100,17 @@ public class HttpTool {
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
+    public static void sendError(ChannelHandlerContext ctx, HttpResponseStatus status, Map<String, String> heads) {
+        ByteBuf bf = Unpooled.copiedBuffer("Failure: " + status.toString() + "\r\n", CharsetUtil.UTF_8);
+        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status, bf);
+        response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
+        for (Map.Entry<String, String> entry : heads.entrySet()) {
+            response.headers().set(entry.getKey(), entry.getValue());
+        }
+        // Close the connection as soon as the error message is sent.
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+    }
+
     /**
      * When file timestamp is the same as what the browser is sending up, send a "304 Not Modified"
      */

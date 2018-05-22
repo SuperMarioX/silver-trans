@@ -1,1 +1,1 @@
-java -jar -Dio.netty.leakDetectionLevel=advanced silver-trans-1.0-SNAPSHOT.jar
+java -jar -Dio.netty.leakDetectionLevel=advanced silver-trans.jar
