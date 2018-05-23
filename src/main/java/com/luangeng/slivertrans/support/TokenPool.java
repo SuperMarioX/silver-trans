@@ -4,13 +4,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-/*
- *
+/**
  * token
- * */
+ */
 public class TokenPool extends Thread {
 
-    private static Map<String, Integer> tokenMap = new ConcurrentHashMap<>();
+    private static Map<String, Long> tokenMap = new ConcurrentHashMap<>();
 
     static {
         new TokenPool().start();
@@ -19,8 +18,13 @@ public class TokenPool extends Thread {
     private TokenPool() {
     }
 
+    public static void add(String value) {
+        add(value, 600);
+    }
+
     public static void add(String value, int second) {
-        tokenMap.put(value, second);
+        long time = System.currentTimeMillis();
+        tokenMap.put(value, time + second * 1000);
     }
 
     public static boolean contain(String key) {
@@ -30,13 +34,21 @@ public class TokenPool extends Thread {
         return tokenMap.containsKey(key);
     }
 
+    /**
+     * 续约
+     */
+    public static void renew(String val) {
+        add(val, 600);
+    }
+
+    @Override
     public void run() {
+        long tie = System.currentTimeMillis();
         Set<String> keys = tokenMap.keySet();
         for (String key : keys) {
-            if (tokenMap.get(key) <= 1) {
+            if (tie - tokenMap.get(key) <= 0) {
                 tokenMap.remove(key);
             }
-            tokenMap.put(key, tokenMap.get(key) - 5);
         }
         try {
             Thread.sleep(5000);
@@ -44,5 +56,6 @@ public class TokenPool extends Thread {
             e.printStackTrace();
         }
     }
+
 
 }
