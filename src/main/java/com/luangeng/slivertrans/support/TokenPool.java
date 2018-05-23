@@ -2,12 +2,15 @@ package com.luangeng.slivertrans.support;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * token池
  */
 public class TokenPool extends Thread {
+
+    private static final int DEFAULT_SECOND = 600;
 
     private static Map<String, Long> tokenMap = new ConcurrentHashMap<>();
 
@@ -18,13 +21,15 @@ public class TokenPool extends Thread {
     private TokenPool() {
     }
 
-    public static void add(String val) {
-        add(val, 600);
+    public static String make() {
+        return make(DEFAULT_SECOND);
     }
 
-    public static void add(String value, int second) {
+    public static String make(int second) {
+        String val = UUID.randomUUID().toString();
         long time = System.currentTimeMillis();
-        tokenMap.put(value, time + second * 1000);
+        tokenMap.put(val, time + second * 1000);
+        return val;
     }
 
     public static boolean contain(String val) {
@@ -39,7 +44,8 @@ public class TokenPool extends Thread {
      * 续约
      */
     public static void renew(String val) {
-        add(val, 600);
+        long time = System.currentTimeMillis();
+        tokenMap.put(val, time + DEFAULT_SECOND / 2 * 1000);
     }
 
     @Override

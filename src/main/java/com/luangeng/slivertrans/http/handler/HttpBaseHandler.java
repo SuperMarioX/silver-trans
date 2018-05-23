@@ -14,7 +14,6 @@ import io.netty.handler.codec.http.HttpUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.luangeng.slivertrans.tools.TransTool.CHARSET;
 
@@ -43,8 +42,7 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
             String pwd = request.content().toString(CHARSET);
             String pass = ConfigTool.getValue("pwd");
             if (pwd.equals(pass)) {
-                pass = UUID.randomUUID().toString();
-                TokenPool.add(pass, 600);
+                pass = TokenPool.make();
                 HttpTool.sendMsg(ctx, pass);
                 return;
             }
