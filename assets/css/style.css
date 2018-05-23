@@ -8,9 +8,13 @@ body {
 	overflow-x:hidden;
 	overflow-y:auto;
 	color: #dddddd;
+<<<<<<< Updated upstream
 	font: 14px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
 		"Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
 		"WenQuanYi Micro Hei", sans-serif;
+=======
+	font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+>>>>>>> Stashed changes
 }
 
 .path {
@@ -111,5 +115,12 @@ textarea {
     overflow:hidden;
     height: 100000px;
     width: 90%;
+<<<<<<< Updated upstream
     font: 15px;
 }
+=======
+    font: 15px "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    		"Hiragino Sans GB", "Heiti SC", "Microsoft YaHei",
+    		"WenQuanYi Micro Hei", sans-serif;
+}
+>>>>>>> Stashed changes
