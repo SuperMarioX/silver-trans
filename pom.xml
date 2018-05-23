@@ -55,7 +55,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/*.xml</include>
+                    <include>**/*.*</include>
                 </includes>
             </resource>
         </resources>
@@ -73,7 +73,7 @@
                 </configuration>
             </plugin>
 
-            <!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+            <!-- 打包jar文件时，在manifest文件中写入lib包中的jar依赖 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -115,7 +115,7 @@
                 </executions>
             </plugin>
 
-            <!-- 解决资源文件的编码问题 -->
+            <!-- 资源文件的编码问题 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -124,7 +124,7 @@
                 </configuration>
             </plugin>
 
-            <!-- 自定义打zip包 -->
+            <!-- 自定义打zip包或gz包 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
