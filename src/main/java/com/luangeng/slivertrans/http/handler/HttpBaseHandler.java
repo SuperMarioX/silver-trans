@@ -17,6 +17,11 @@ import java.util.Map;
 
 import static com.luangeng.slivertrans.tools.TransTool.CHARSET;
 
+/**
+ * Http前置处理器
+ *
+ * @author admin
+ */
 public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     @Override
@@ -37,6 +42,7 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
             HttpTool.sendError(ctx, HttpResponseStatus.BAD_REQUEST);
             return;
         }
+        request.setUri(uri);
 
         if (uri.equals("/auth.action")) {
             String pwd = request.content().toString(CHARSET);
