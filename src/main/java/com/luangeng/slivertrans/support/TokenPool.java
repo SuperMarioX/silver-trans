@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * token
+ * token池
  */
 public class TokenPool extends Thread {
 
@@ -18,8 +18,8 @@ public class TokenPool extends Thread {
     private TokenPool() {
     }
 
-    public static void add(String value) {
-        add(value, 600);
+    public static void add(String val) {
+        add(val, 600);
     }
 
     public static void add(String value, int second) {
@@ -27,11 +27,12 @@ public class TokenPool extends Thread {
         tokenMap.put(value, time + second * 1000);
     }
 
-    public static boolean contain(String key) {
-        if (key == null) {
+    public static boolean contain(String val) {
+        if (val == null) {
             return false;
         }
-        return tokenMap.containsKey(key);
+        renew(val);
+        return tokenMap.containsKey(val);
     }
 
     /**
@@ -43,10 +44,10 @@ public class TokenPool extends Thread {
 
     @Override
     public void run() {
-        long tie = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         Set<String> keys = tokenMap.keySet();
         for (String key : keys) {
-            if (tie - tokenMap.get(key) <= 0) {
+            if (time - tokenMap.get(key) > 0) {
                 tokenMap.remove(key);
             }
         }
