@@ -46,7 +46,7 @@ public class FileSender implements Runnable {
 
         int index = 1;
         String identity = channel.localAddress().toString() + file.getAbsolutePath() + channel.remoteAddress().toString();
-        id = Encrypt.MD5_Encrypt(identity);
+        id = Encrypt.md5Encrypt(identity);
         long t0 = System.currentTimeMillis();
         ByteBuffer bf = ByteBuffer.allocate(AppConst.BUFFER_SIZE);
         FileChannel fileChannel = null;

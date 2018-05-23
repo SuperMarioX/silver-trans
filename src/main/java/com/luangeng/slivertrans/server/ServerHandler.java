@@ -50,6 +50,10 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                     break;
                 case UNKNOW:
                     TransTool.sendMsg(ctx.channel(), "Unknow command");
+                    break;
+                default:
+                    TransTool.sendMsg(ctx.channel(), "Unknow command");
+                    break;
             }
         }
     }
@@ -59,7 +63,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
         StringBuilder sb = new StringBuilder();
         File file = new File(currentPath);
         File[] files = file.listFiles(ff -> ff.isDirectory());
-        if (files != null)
+        if (files != null) {
             for (File f : files) {
                 sb.append(k++);
                 sb.append(AppConst.DELIMITER);
@@ -68,9 +72,10 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                 sb.append(f.getName());
                 sb.append("\n");
             }
+        }
 
         files = file.listFiles(ff -> ff.isFile());
-        if (files != null)
+        if (files != null) {
             for (File f : files) {
                 sb.append(k++);
                 sb.append(AppConst.DELIMITER);
@@ -79,6 +84,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<TransData> {
                 sb.append(f.getName());
                 sb.append("\n");
             }
+        }
         TransTool.sendMsg(channel, "ls " + sb.toString());
     }
 

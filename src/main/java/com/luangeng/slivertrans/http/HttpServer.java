@@ -40,12 +40,13 @@ public class HttpServer extends Thread {
     public void start(int port) {
         if (this.getState() == NEW) {
             this.port = port;
-            this.bossGroup = new NioEventLoopGroup(1);
-            this.workerGroup = new NioEventLoopGroup();
+            bossGroup = new NioEventLoopGroup(1);
+            workerGroup = new NioEventLoopGroup();
             this.start();
         }
     }
 
+    @Override
     public void run() {
         try {
             ServerBootstrap b = new ServerBootstrap();

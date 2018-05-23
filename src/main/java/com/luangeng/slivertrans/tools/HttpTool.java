@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
-import static io.netty.handler.codec.http.HttpHeaders.Names.LOCATION;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_MODIFIED;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
@@ -123,7 +122,7 @@ public class HttpTool {
 
     public static void sendRedirect(ChannelHandlerContext ctx, String newUri) {
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.FOUND);
-        response.headers().set(LOCATION, newUri);
+        response.headers().set("Location", newUri);
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 

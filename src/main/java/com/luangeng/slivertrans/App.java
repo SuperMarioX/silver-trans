@@ -38,6 +38,7 @@ public class App {
     }
 
     private static class ShutDownServer extends Thread {
+        @Override
         public void run() {
             TransServer.instance().shutdown();
             HttpServer.instance().shutdown();
@@ -45,6 +46,7 @@ public class App {
     }
 
     private static class ShutDownClient extends Thread {
+        @Override
         public void run() {
 
         }

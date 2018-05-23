@@ -3,6 +3,9 @@ package com.luangeng.slivertrans.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 返回前台的目录下文件信息对象
+ */
 public class FileDirVO {
 
     private String path;
@@ -46,5 +49,12 @@ public class FileDirVO {
             this.size = size;
             this.date = date;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "FileDirVO{" +
+                "path='" + path + '\'' +
+                '}';
     }
 }

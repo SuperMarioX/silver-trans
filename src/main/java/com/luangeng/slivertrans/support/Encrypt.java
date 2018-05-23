@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public final class Encrypt {
 
-    private final static String password = "1234567";
+    private final static String PASSWORD = "1234567";
 
     private static String byteToString(byte[] resultBytes) {
         StringBuffer hexValue = new StringBuffer();
@@ -19,7 +19,7 @@ public final class Encrypt {
         return hexValue.toString();
     }
 
-    public static String MD5_Encrypt(String info) {
+    public static String md5Encrypt(String info) {
         MessageDigest md5 = null;
         try {
             md5 = MessageDigest.getInstance("MD5");

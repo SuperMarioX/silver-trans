@@ -23,6 +23,7 @@ public class StaticResourceHandler extends AbstractHttpHandler {
 
     public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
+    @Override
     public ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
         uri = uri.replace('/', File.separatorChar);
         File file = new File(AppConst.ASSETS_DIR + uri);
