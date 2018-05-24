@@ -2,6 +2,7 @@ package com.luangeng.slivertrans.http.handler;
 
 import com.luangeng.slivertrans.support.TokenPool;
 import com.luangeng.slivertrans.tools.ConfigTool;
+import com.luangeng.slivertrans.tools.EncryptTool;
 import com.luangeng.slivertrans.tools.HttpTool;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -22,7 +23,7 @@ import static com.luangeng.slivertrans.tools.TransTool.CHARSET;
  *
  * @author admin
  */
-public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class MainHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
@@ -45,12 +46,11 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
         request.setUri(uri);
 
         if (uri.equals("/auth.action")) {
-            String pwd = request.content().toString(CHARSET);
-            String pass = ConfigTool.getValue("pwd");
-            if (pwd.equals(pass)) {
-                pass = TokenPool.make();
-                HttpTool.sendMsg(ctx, pass);
-                return;
+            if (loginOk(request)) {
+                String token = TokenPool.make();
+                HttpTool.sendMsg(ctx, token);
+            } else {
+                HttpTool.sendError(ctx, HttpResponseStatus.UNAUTHORIZED);
             }
         }
 
@@ -68,7 +68,7 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
             if (!tokenOk(request)) {
                 Map heads = new HashMap();
                 heads.put("auth", "forbidden");
-                HttpTool.sendError(ctx, HttpResponseStatus.FORBIDDEN, heads);
+                HttpTool.sendError(ctx, HttpResponseStatus.UNAUTHORIZED, heads);
                 return;
             }
 
@@ -101,8 +101,16 @@ public class HttpBaseHandler extends SimpleChannelInboundHandler<FullHttpRequest
     }
 
     private boolean tokenOk(FullHttpRequest request) {
-        String token = request.headers().get("token");
+        String token = request.headers().get("Token");
         return TokenPool.contain(token);
+    }
+
+    private boolean loginOk(FullHttpRequest request) {
+        String pwd = request.content().toString(CHARSET);
+        String pass = ConfigTool.getValue("pwd");
+        long salt = System.currentTimeMillis() / 100000;
+        pass = EncryptTool.md5(pass + salt);
+        return pwd.equals(pass);
     }
 
 }

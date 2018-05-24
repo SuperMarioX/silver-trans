@@ -1,6 +1,6 @@
 package com.luangeng.slivertrans.http;
 
-import com.luangeng.slivertrans.http.handler.HttpBaseHandler;
+import com.luangeng.slivertrans.http.handler.MainHttpHandler;
 import com.luangeng.slivertrans.server.TransServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -84,7 +84,7 @@ public class HttpServer extends Thread {
             pipeline.addLast(new HttpObjectAggregator(1024 * 1024));
             pipeline.addLast(new ChunkedWriteHandler());
 
-            pipeline.addLast(new HttpBaseHandler());
+            pipeline.addLast(new MainHttpHandler());
         }
     }
 }

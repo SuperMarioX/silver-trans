@@ -27,7 +27,7 @@ public class StaticResourceHandler extends AbstractHttpHandler {
     public ChannelFuture handle(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
         uri = uri.replace('/', File.separatorChar);
         File file = new File(AppConst.ASSETS_DIR + uri);
-        if (!file.getCanonicalPath().startsWith(AppConst.ASSETS_DIR)) {
+        if (!file.getCanonicalPath().startsWith(new File(AppConst.ASSETS_DIR).getCanonicalPath())) {
             HttpTool.sendError(ctx, FORBIDDEN);
             return null;
         }

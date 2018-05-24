@@ -7,7 +7,7 @@ var r = new Resumable({
 	maxFiles:1,
 	maxFileSize:1024*1024*1024*100,
 	fileType:[],
-//	query : {upload_token : new Date().getTime()},
+	headers : {'token' : getCookie('token')},
 	testChunks: false
 });
 

@@ -34,11 +34,10 @@ function ajaxSetup() {
 		timeout : 30000,
 		beforeSend : function(xhr) {
 		    $("#loading").show();
-			xhr.setRequestHeader("ajax", "true");
-			xhr.setRequestHeader("token", getCookie("token"));
+			xhr.setRequestHeader("Token", getCookie("token"));
 		},
 		complete : function(xhr, ts) {
-			if (xhr.getResponseHeader('auth') == 'forbidden' && xhr.status == 403) {
+			if (xhr.getResponseHeader('auth') == 'forbidden' && xhr.status == 401) {
 			    auth();
 			}
 			$("#loading").fadeOut();
@@ -57,6 +56,9 @@ function jump(a) {
 		}
 	}
 	list(str);
+}
+
+function download(a){
 }
 
 function view(a){
@@ -139,16 +141,20 @@ function setCookie(c_name,value,expiredays) {
 function auth(){
      auth=prompt('Password:',"");
      if (auth!=null && auth!="") {
+        auth = auth+parseInt(new Date().getTime()/100000);
          $.ajax({
              	url : "/auth.action",
              	type : "POST",
-             	data : auth,
+             	data : hex_md5(auth),
              	dataType : "text",
              	async : true,
              	success : function(data) {
              	    setCookie("token", data, 1);
              	    location.reload();
-             	  }
+             	  },
+             	error:function(a,b,c){
+             	    alert(c)
+             	}
              	});
      }
 }

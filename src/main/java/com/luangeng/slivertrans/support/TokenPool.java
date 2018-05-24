@@ -36,8 +36,11 @@ public class TokenPool extends Thread {
         if (val == null) {
             return false;
         }
-        renew(val);
-        return tokenMap.containsKey(val);
+        if (tokenMap.containsKey(val)) {
+            renew(val);
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -1,10 +1,10 @@
 body {
     background-color: #000000;
 	background-image: url(../img/sahara.jpg);
-	background-repeat: repeat;
+	background-repeat: no-repeat;
 	background-size: 1600px 720px;
 	background-attachment: fixed;
-	background-position: top;
+	background-position: bottom left;
 	overflow-x:hidden;
 	overflow-y:auto;
 	color: #dddddd;

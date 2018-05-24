@@ -22,7 +22,6 @@ public class App {
         PropertyConfigurator.configure(log4j);
 
         Integer port = ConfigTool.getInt("server.port", AppConst.DEFAULT_PORT);
-        logger.info("http server start up...");
         HttpServer.instance().start(port + 1);
         //TransServer.instance().start(port);
         Runtime.getRuntime().addShutdownHook(new ShutDownServer());
