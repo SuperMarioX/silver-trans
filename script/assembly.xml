@@ -5,6 +5,7 @@
     </formats>
 
     <fileSets>
+        <!--拷贝silver-trans到zip中-->
         <fileSet>
             <directory>target</directory>
             <includes>
@@ -13,21 +14,19 @@
             <outputDirectory>/</outputDirectory>
         </fileSet>
 
+        <!--拷贝依赖的jar到lib目录中-->
         <fileSet>
             <directory>target/lib</directory>
             <outputDirectory>/lib</outputDirectory>
         </fileSet>
 
-        <fileSet>
-            <directory>assets</directory>
-            <outputDirectory>/assets</outputDirectory>
-        </fileSet>
-
+        <!--拷贝配置文件-->
         <fileSet>
             <directory>config</directory>
             <outputDirectory>/config</outputDirectory>
         </fileSet>
 
+        <!--拷贝启动脚本-->
         <fileSet>
             <directory>script</directory>
             <includes>
@@ -36,14 +35,14 @@
             <outputDirectory>/</outputDirectory>
         </fileSet>
 
-        <fileSet>
-            <directory>.</directory>
-            <includes>
-                <include>README.md</include>
-                <include>LICENSE.txt</include>
-            </includes>
-            <outputDirectory>/</outputDirectory>
-        </fileSet>
+        <!--拷贝其他文件-->
+        <!--<fileSet>-->
+        <!--<directory>.</directory>-->
+        <!--<includes>-->
+        <!--<include>README.md</include>-->
+        <!--</includes>-->
+        <!--<outputDirectory>/</outputDirectory>-->
+        <!--</fileSet>-->
 
     </fileSets>
 </assembly>

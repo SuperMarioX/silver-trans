@@ -14,7 +14,7 @@ public class AppConst {
 
     public static final String CONFIG_DIR = System.getProperty("user.dir") + File.separator + "config";
 
-    public static final String ASSETS_DIR = System.getProperty("user.dir") + File.separator + "assets";
+    public static final String ASSETS_DIR = AppConst.class.getResource("/static").getPath();
 
     public static final String DEFAULT_ROOT_PATH = System.getProperty("user.home");
 
