@@ -48,7 +48,7 @@ public class TokenPool extends Thread {
      */
     public static void renew(String val) {
         long time = System.currentTimeMillis();
-        tokenMap.put(val, time + DEFAULT_SECOND / 2 * 1000);
+        tokenMap.put(val, time + DEFAULT_SECOND * 1000);
     }
 
     @Override
