@@ -26,6 +26,11 @@
             <outputDirectory>/config</outputDirectory>
         </fileSet>
 
+        <fileSet>
+            <directory>static</directory>
+            <outputDirectory>/static</outputDirectory>
+        </fileSet>
+
         <!--拷贝启动脚本-->
         <fileSet>
             <directory>script</directory>
