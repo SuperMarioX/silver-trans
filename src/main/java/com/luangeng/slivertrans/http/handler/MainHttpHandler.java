@@ -102,6 +102,9 @@ public class MainHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest
 
     private boolean tokenOk(FullHttpRequest request) {
         String token = request.headers().get("Token");
+        if (token == null) {
+            token = HttpTool.getParams(request.uri()).get("token");
+        }
         return TokenPool.contain(token);
     }
 

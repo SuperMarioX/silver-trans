@@ -101,7 +101,7 @@ function list(str) {
     		}
     		for (i in data.files) {
     		    index++;
-    			var str = 'list.action?path=' + $("#path").val() + '/' + data.files[i].name;
+    			var str = 'list.action?path=' + $("#path").val() + '/' + data.files[i].name+'&token='+getCookie('token');
     			var name = $("#file_ico").html()+"<a href='" + str + "'>" + data.files[i].name + "</a>";
     			var view = "<a onclick=view(listData.files[i].name)>View</a>";
     			var s = tr.format(index, name, data.files[i].size, data.files[i].date, view);
